@@ -10,10 +10,13 @@
       </div>
       <div class="mt-16">
         <h1 class="text-lg text-center font-semibold" v-if='post.title'>{{ post.title.rendered }}</h1>
-        <p class="text-sm text-gray text-center" v-html='subtitleHTML( post )'></p>
+        <p class="text-sm text-gray text-center" v-html='getStatus( post )'></p>
       </div>
-      <div class="mt-6 pt-3 flex flex-wrap mx-6 border-t">
-        <div v-if='locationHTML( post )' class="text-xs mr-2 my-1 uppercase tracking-wider border px-2 text-indigo-600 border-indigo-600 hover:bg-indigo-600 hover:text-indigo-100 cursor-default">
+
+      <UserTags :user='post' />
+
+      <!--div class="mt-6 pt-3 flex flex-wrap mx-6 border-t">
+        <div v-if='getLocation( post )' class="text-xs mr-2 my-1 uppercase tracking-wider border px-2 text-indigo-600 border-indigo-600 hover:bg-indigo-600 hover:text-indigo-100 cursor-default">
           <span v-html='locationHTML( post )'></span>
         </div>
         <div v-if='genderHTML( post )' class="text-xs mr-2 my-1 uppercase tracking-wider border px-2 text-indigo-600 border-indigo-600 hover:bg-indigo-600 hover:text-indigo-100 cursor-default">
@@ -25,7 +28,7 @@
         <div v-if='professionHTML( post )' class="text-xs mr-2 my-1 uppercase tracking-wider border px-2 text-indigo-600 border-indigo-600 hover:bg-indigo-600 hover:text-indigo-100 cursor-default">
           <span v-html='professionHTML( post )'></span>
         </div>
-      </div>
+      </div-->
     </div>
   </div>
 </template>
@@ -34,6 +37,7 @@
 import API from '../api.js'
 
 import ItemAnimation from '../components/ItemAnimation.vue'
+import UserTags from '../components/UserTags.vue'
 
 import defaultMixin from '@/mixins/DefaultMixin.js'
 import userMixin from '@/mixins/UserMixin.js'
@@ -41,7 +45,8 @@ import userMixin from '@/mixins/UserMixin.js'
 export default {
   name: 'SingleMember',
   components: {
-    ItemAnimation
+    ItemAnimation,
+    UserTags
   },
   mixins: [ defaultMixin, userMixin ],
   data(){
@@ -78,13 +83,13 @@ export default {
       // SET PROCESSING
       component.$store.commit( 'setProcessing', true );
 
-      var url = this.account_url + 'wp/v2/inpursuit-members/' + component.id;
-      API.request( url ).then( ( response ) => {
+      API.requestUser( this.account_url, component.id ).then( ( response ) => {
         component.post = response.data;
 
         // RESET PROCESSING
         component.$store.commit( 'setProcessing', false );
       } );
+
     }
   }
 }

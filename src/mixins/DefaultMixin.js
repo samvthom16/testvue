@@ -17,8 +17,7 @@ export default {
 
     },
     setupAccountSettings(){
-      var url = this.account_url + '/inpursuit/v1/settings';
-      this.$store.commit( 'getAccountSettings', url );
+      this.$store.commit( 'getAccountSettings' );
     },
     getPostLink( post ){
 			var route = {

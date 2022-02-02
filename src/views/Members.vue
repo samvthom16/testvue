@@ -1,11 +1,11 @@
 <template>
   <div class="members">
-    <UsersList :users='users' :total='totalUsers' />
+    <UsersList :users='$store.state.posts' :total='totalUsers' />
   </div>
 </template>
 
 <script>
-import API from '../api.js'
+//import API from '../api.js'
 
 import UsersList from '@/components/UsersList.vue'
 
@@ -39,17 +39,21 @@ export default {
     },
     getUsers(){
 
-      //console.log( 'getUsers' );
+      // console.log( 'getUsers' );
 
       var component = this;
-
+      
       // SET PROCESSING
-      component.$store.commit( 'setProcessing', true );
+      //component.$store.commit( 'setProcessing', true );
 
-      var url = this.account_url + 'wp/v2/inpursuit-members/?orderby=title&order=asc&page=' + component.page;
+      component.$store.commit( 'getPosts', component.page );
+
+      /*
+
+      var url = this.account_url + '/wp-json/wp/v2/inpursuit-members/?orderby=title&order=asc&page=' + component.page;
       API.request( url ).then( ( response ) => {
 
-        component.totalUsers = response.headers['x-wp-total'];
+        component.totalUsers = parseInt( response.headers['x-wp-total'] );
 
         // APPEND EACH USER FROM THE RESULT SET TO THE LIST OF USERS
         for( var key in response.data ){
@@ -59,6 +63,7 @@ export default {
         // RESET PROCESSING
         component.$store.commit( 'setProcessing', false );
       } );
+      */
     },
     scroll(){
       var component = this;
