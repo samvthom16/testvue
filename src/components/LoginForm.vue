@@ -1,9 +1,6 @@
 <template>
   <div class="hello">
-    <form class='p-10 max-w-sm m-auto' @submit='submit()'>
-      <div class='max-w-full mb-20'>
-        <img src="../assets/logo.png">
-      </div>
+    <form class='p-10 max-w-sm m-auto' @submit='submit'>
       <TextField :field='formfield' v-model='formfield.value' v-for='(formfield,key) in form' :key='key' />
       <button :disabled='$store.state.processing' :class="{ 'cursor-not-allowed': $store.state.processing }" class='bg-purple inline-block w-full text-white mb-5 border-purple p-2 border rounded' type='submit'>
         <svg :class="{ 'inline': $store.state.processing, 'hidden': !$store.state.processing }" class="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -57,7 +54,11 @@ export default {
     validateURL( url ){
       return url.replace(/\/$/, "");
     },
-    submit(){
+    submit( e ){
+
+      e.preventDefault();
+
+      //console.log( e );
 
       if( this.$store.state.processing ) {
         console.log( 'Already processing something' );

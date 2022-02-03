@@ -51,6 +51,9 @@ export default createStore({
     saveLocalSettings( state, payload ){
       localStorage.inpursuit_settings = JSON.stringify( payload );
     },
+    flushLocalSettings(){
+      localStorage.inpursuit_settings = null;
+    },
 
     /*
     * THIS FUNCTION MAKES A SERVER REQUEST TO GET ALL
@@ -107,6 +110,9 @@ export default createStore({
     },
     saveLocalSettings( context, payload ){
       context.commit( 'saveLocalSettings', payload)
+    },
+    flushLocalSettings( context ){
+      context.commit( 'flushLocalSettings' );  
     },
     getAccountSettings( context, url ){
       context.commit( 'getAccountSettings', url );

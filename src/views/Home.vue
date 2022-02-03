@@ -18,7 +18,7 @@ export default {
     //var component = this;
     this.$store.commit( 'getLocalSettings' );
 
-    if( this.$store.settings && this.$store.state.settings.account_url ){
+    if( this.$store.state.settings && this.$store.state.settings.account_url ){
       this.$router.push( '/members' );
     }
     else{

@@ -21,8 +21,12 @@ const api = {
       url += '/' + options.id;
     }
     url += '?page=' + options.page;
-    console.log( url );
+    //console.log( url );
     return this.request( url );
+  },
+  requestProfile: function( options ){
+    var url = options.account_url + '/wp-json/wp/v2/users/me?context=edit';
+    return this.request( url, options.headers );
   }
 }
 
