@@ -74,7 +74,7 @@ export default createStore({
       } );
       return {};
     },
-    */
+
     getPosts( state, page ){
 
       state.processing = true;
@@ -95,6 +95,7 @@ export default createStore({
       } );
       return state.posts;
     },
+    */
     setProcessing( state, flag ){
       state.processing = flag;
       return state.processing;
@@ -110,13 +111,14 @@ export default createStore({
     getAccountSettings( context, url ){
       context.commit( 'getAccountSettings', url );
     },
-    getPosts( context, page ){
-      context.commit( 'getPosts', page );
-    },
+
     setProcessing( context, flag ){
       context.commit( 'setProcessing', flag );
     },
     /*
+    getPosts( context, page ){
+      context.commit( 'getPosts', page );
+    },
     testServer( context, url ){
       context.commit( 'testServer', url );
     }

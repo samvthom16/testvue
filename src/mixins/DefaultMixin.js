@@ -2,6 +2,11 @@ export default {
   mounted(){
     this.init();
   },
+  data(){
+    return {
+      account_url: ''
+    };
+  },
   methods: {
     init(){
       this.$store.commit( 'getLocalSettings' );

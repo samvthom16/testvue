@@ -1,10 +1,10 @@
 <template>
   <!-- This is an example component -->
-  <div class="max-w-2xl mx-auto">
-    <div class="p-4 max-w-md bg-white rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <div class="mx-auto">
+    <div class="p-4 bg-white sm:p-8 dark:bg-gray">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Members</h3>
-        <span class="text-sm font-medium text-gray dark:text-blue-500">
+        <h3 class="text-xl font-bold leading-none text-gray-900 dark:text-white"></h3>
+        <span class="text-sm font-medium text-gray dark:text-white">
             Total of {{ total }} items
         </span>
       </div>
@@ -16,10 +16,10 @@
                 <img class="w-8 h-8 rounded-full" :src="user.featured_image" :alt="user.title.rendered">
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-lg font-normal text-purple truncate dark:text-white">
+                <h1 class="text-xl font-semibold truncate dark:text-white">
                   <router-link :to='$parent.getPostLink( user )'>{{ user.title.rendered }}</router-link>
-                </p>
-                <UserTags :user='user' />
+                </h1>
+                <UserTags :user='user' class='mt-1' />
               </div>
             </div>
           </li>

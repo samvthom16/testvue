@@ -1,4 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+//import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Members from '../views/Members.vue'
@@ -26,11 +27,12 @@ const routes = [
     name			: 'SingleMember',
 		component	: SingleMember
 	},
-  
+
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  //history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
