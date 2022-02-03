@@ -6,8 +6,16 @@ export default {
     getLocation( post ){
       return this.getTermName( 'location', post.location );
 		},
-    getGender( user ){
-      return this.getTermName( 'gender', user.gender );
+    getGender( post ){
+      var age 		= post['age'] != null ? post['age'] : "",
+				meta 			= [],
+				subtitle 	= '',
+        gender    = this.getTermName( 'gender', post['gender'] );
+
+			if( gender.length ) meta.push( gender );
+			if( age.length ) meta.push( age + ' Years' );
+      if( meta.length ) subtitle = meta.join( ', ' );
+      return subtitle;
     },
     getGroup( user ){
       var terms = this.listTermNames( 'group', user.group );

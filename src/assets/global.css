@@ -1,3 +1,31 @@
-body{
-  border: red solid 1px;
+.fluentProgressBar-normal {
+ 	background-color: #0078d4;
+  	height: 4px;
+ }
+
+.fluentProgressBar-waiting {
+	background: #DB6933;
+  background: -moz-linear-gradient( 90deg, rgba(255,255,255,1) 0%, rgba(223,118,68,1) 35%, rgba(219,105,51,1) 100% );
+  background: -webkit-linear-gradient( 90deg, rgba(255,255,255,1) 0%, rgba(223,118,68,1) 35%, rgba(219,105,51,1) 100% );
+  background: -o-linear-gradient( 90deg, rgba(255,255,255,1) 0%, rgba(223,118,68,1) 35%, rgba(219,105,51,1) 100% );
+  background: -ms-linear-gradient( 90deg, rgba(255,255,255,1) 0%, rgba(223,118,68,1) 35%, rgba(219,105,51,1) 100% );
+  /*
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0078d4', endColorstr='#0078d4', GradientType=1 );
+  */
+  height: 4px;
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(223,118,68,1) 35%, rgba(219,105,51,1) 100%);
+  top: 0;
+  position: fixed;
+  z-index: 1000;
+  -webkit-animation: progressBarAnimation 2s linear infinite;
+	animation: progressBarAnimation 2s linear infinite;
+}
+
+@keyframes progressBarAnimation {
+	0% {
+		left: -50%;
+	}
+	100% {
+		left: 100%;
+	}
 }

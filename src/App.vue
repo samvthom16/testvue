@@ -1,4 +1,6 @@
 <template>
+  <div :class="{ 'overflow-hidden': $store.state.processing, 'hidden': !$store.state.processing }" class="w-full"><div class="w-full inline-block fluentProgressBar-waiting"></div></div>
+  <!--div class="w-full mt-24"><div class="fluentProgressBar-normal"></div></div-->
   <HeaderMenu />
   <div id="nav">
     <router-link to="/">Home</router-link> |

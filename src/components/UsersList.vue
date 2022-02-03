@@ -1,6 +1,6 @@
 <template>
   <!-- This is an example component -->
-  <div class="mx-auto">
+  <div class="mx-auto max-w-2xl">
     <div class="p-4 bg-white sm:p-8 dark:bg-gray">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-bold leading-none text-gray-900 dark:text-white"></h3>
@@ -12,8 +12,8 @@
         <ul role="list" class="divide-y divide-lightgray dark:divide-gray-700">
           <li class="py-3 sm:py-4" v-for='user in users' :key='user.id'>
             <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0">
-                <img class="w-8 h-8 rounded-full" :src="user.featured_image" :alt="user.title.rendered">
+              <div class="flex-shrink-1">
+                <img class="w-16 rounded-full" :src="user.featured_image" :alt="user.title.rendered">
               </div>
               <div class="flex-1 min-w-0">
                 <h1 class="text-xl font-semibold truncate dark:text-white">
@@ -24,18 +24,10 @@
             </div>
           </li>
         </ul>
-
         <ButtonAnimation v-if='$store.state.processing' />
-
-
       </div>
-
-
-
-
     </div>
-
-	</div>
+  </div>
 </template>
 
 <script>

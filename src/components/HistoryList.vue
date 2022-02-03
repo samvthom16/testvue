@@ -1,5 +1,6 @@
 <template>
   <div class="w-10/12 md:w-7/12 lg:6/12 mx-auto relative py-20">
+    <button>Add Comment</button>
     <div class="border-l-2 border-gray mt-3">
       <HistoryItem :item='item' v-for='item in items' :key='item.id' />
     </div>
