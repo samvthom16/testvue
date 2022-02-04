@@ -1,38 +1,53 @@
 <template>
-  <div class="w-10/12 md:w-7/12 lg:6/12 mx-auto relative py-20">
-    <button>Add Comment</button>
-    <div class="border-l-2 border-gray mt-3">
-      <HistoryItem :item='item' v-for='item in items' :key='item.id' />
-    </div>
+  <AddComment :id='id' v-if='id' />
+  <div class="border-l-2 border-gray mt-3">
+    <HistoryItem :item='item' v-for='item in items' :key='item.id' />
   </div>
+  <ItemAnimation v-if='$store.state.processing && !items.length' />
 </template>
 
 <script>
 import HistoryItem from './HistoryItem.vue'
 
+import AddComment from '@/components/AddComment.vue'
+import ItemAnimation from '@/components/ItemAnimation.vue'
+
 import defaultMixin from '@/mixins/DefaultMixin.js'
 import paginationMixin from '@/mixins/PaginationMixin.js'
+import apiMixin from '@/mixins/APIMixin.js'
 
-import API from '@/api.js'
 
 export default {
   name: 'HistoryList',
   components: {
-    HistoryItem
+    HistoryItem,
+    AddComment,
+    ItemAnimation
   },
   props:{
     id : Number
   },
-  mixins: [ defaultMixin, paginationMixin ],
+  mixins: [ defaultMixin, paginationMixin, apiMixin ],
   methods: {
     /* INHERITED FROM PAGINATION MIXIN */
     getAPI(){
-      return API.requestHistory( {
-        account_url : this.account_url,
-        id          : this.id,
-        page        : this.page
+      return this.requestHistory( {
+        id     : this.id,
+        page   : this.page
       } );
     },
+    /*
+    * THIS FUNCTION IS CALLED BY THE CHILD COMPONENT INCASE ANY NEW COMMENT IS ADDED
+    * AND IT FETCHES NEW COMMENTS
+    */
+    refreshItems(){
+      //console.log( 'refresh' );
+
+      var component = this;
+      component.items = [];
+      component.page = 1;
+      component.getItems();
+    }
   },
 }
 </script>

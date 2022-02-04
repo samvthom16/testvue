@@ -19,7 +19,7 @@ export default {
       // HANDLE SCROLL EVENTS
       this.scroll();
     },
-    
+
     /*
     * HAS TO BE INHERITED BY THE CHILD COMPONENTS
     * IS USED IN THE FUNCTION getItems()
@@ -35,6 +35,8 @@ export default {
 
       component.getAPI().then( ( response ) => {
 
+        //console.log( response.data );
+
         component.totalItems = parseInt( response.headers['x-wp-total'] );
         component.totalPages = parseInt( response.headers['x-wp-totalpages'] );
 
@@ -45,6 +47,10 @@ export default {
 
         // RESET PROCESSING
         component.$store.commit( 'setProcessing', false );
+      }, ( error ) => {
+
+        this.$store.commit( 'notifyError', error );
+
       } );
     },
     /*

@@ -15,3 +15,7 @@ export default {
 }
 
 </script>
+
+<style scoped>
+  #header-icons-menu{ display: none; }
+</style>

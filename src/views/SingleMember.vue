@@ -12,22 +12,23 @@
         <div class='text-center mt-3'>
           <UserTags :user='post' />
         </div>
-        <!--p class="text-md text-gray text-center" v-html='getStatus( post )'></p-->
       </div>
-      <HistoryList :id='id' v-if='id' />
+
+      <div class="w-10/12 md:w-7/12 lg:6/12 mx-auto relative py-20" v-if='id'>
+        <HistoryList :id='id' />
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
-import API from '../api.js'
-
-
 import UserTags from '../components/UserTags.vue'
 import HistoryList from '@/components/HistoryList.vue'
 
 import defaultMixin from '@/mixins/DefaultMixin.js'
 import userMixin from '@/mixins/UserMixin.js'
+import apiMixin from '@/mixins/APIMixin.js'
 
 export default {
   name: 'SingleMember',
@@ -35,12 +36,11 @@ export default {
     UserTags,
     HistoryList
   },
-  mixins: [ defaultMixin, userMixin ],
+  mixins: [ defaultMixin, userMixin, apiMixin ],
   data(){
     return {
       id        : 0,
       post      : {},
-      processing: false
     }
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
       if( post_id ){
         this.id = parseInt( post_id );
       }
-      console.log( this.id );
+      //console.log( this.id );
 
       // CHECK IF POST INFORMATION HAS BEEN PASSED IN THE ROUTE
       if( this.$route.params.post != undefined ){
@@ -66,20 +66,19 @@ export default {
     getPost(){
       var component = this;
 
-      component.processing = false;
-
       // SET PROCESSING
-      component.$store.commit( 'setProcessing', component.processing );
+      component.$store.commit( 'setProcessing', true );
 
-      API.requestUser( this.account_url, component.id ).then( ( response ) => {
+      component.requestUser( component.id ).then( ( response ) => {
         component.post = response.data;
 
         // RESET PROCESSING
-        component.processing = true;
-        component.$store.commit( 'setProcessing', component.processing );
+        component.$store.commit( 'setProcessing', false );
+      }, ( error ) => {
+        component.$store.commit( 'notifyError', error );
       } );
 
-    }
+    },
   }
 }
 

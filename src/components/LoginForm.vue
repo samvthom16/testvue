@@ -50,9 +50,54 @@ export default {
       },
     }
   },
+  mounted(){
+    //console.log( 'test' );
+    //this.signInRequest( 'http://localhost/wordpress', 'sam', '123123' );
+    //this.signInRequest( 'https://admin.lighthousechurch.in', 'sam', '!l0v3J35u5&k0ch3' );
+  },
   methods: {
     validateURL( url ){
       return url.replace(/\/$/, "");
+    },
+    setProcessing( flag ){
+      this.processing = flag;
+      this.$store.commit( 'setProcessing', this.processing );
+    },
+    signInRequest( base_url, username, password ){
+      var ukey = btoa( username );
+      var pkey = btoa( password );
+      var account_url = this.validateURL( base_url );
+      var url = account_url + '/wp-json/inpursuit/v1/auth';
+
+      var request = API.makeRequest( {
+        method : 'post',
+        url : url,
+        data: {
+          username: ukey,
+          password: pkey
+        }
+      } );
+
+      return {
+        'ukey'        : ukey,
+        'account_url' : account_url,
+        'request'      : request
+      };
+    },
+    whenSignInSuccessful( username, new_password, account_url ){
+
+      // SET PROCESSING SO THE LOADER IS OFF
+      this.setProcessing( false );
+
+      // SAVE TO LOCAL STORAGE
+      this.$store.commit( 'saveLocalSettings', {
+        username    : username,
+        password    : new_password,
+        account_url : account_url
+      } );
+
+      // REDIRECT TO MEMBERS LISTING
+      this.$router.push( '/members' );
     },
     submit( e ){
 
@@ -68,7 +113,8 @@ export default {
       var component = this;
 
       // SET THE PROCESSING FLAG TO INDICATE FORM HAS BEEN SUBMITTED
-      component.$store.commit( 'setProcessing', true );
+      component.setProcessing( true );
+      //component.$store.commit( 'setProcessing', true );
 
       var empty_flag = false;
       for( var key in component.form ){
@@ -85,35 +131,29 @@ export default {
 
       // IF ANY OF THE FIELDS IS EMPTY, SHOULD SHOW THE ERROR MESSAGE
       if( empty_flag ){
-        component.$store.commit( 'setProcessing', false );
+        component.setProcessing( false );
         return false;
       }
 
       // CHECK IF THE ACCOUNT URL IS RIGHT
+      var signInData  = component.signInRequest(
+        component.form.account_url.value, // THESE VALUES ARE TAKEN FROM THE CURRENT USER INPUT IN THE FORM
+        component.form.username.value,
+        component.form.password.value
+      );
 
-      var account_url = component.validateURL( component.form.account_url.value );
-      var url = account_url + '/wp-json/inpursuit/v1/auth';
-      var ukey = btoa( component.form.username.value );
-      var pkey = btoa( component.form.password.value );
+      signInData.request.then( ( response ) => {
 
-      API.post( url, { username: ukey, password: pkey } ).then( ( response ) => {
-        component.$store.commit( 'setProcessing', false );
+        // ON SUCCESSFULL SIGN IN
+        component.whenSignInSuccessful( signInData.ukey, response.data.new_password, signInData.account_url );
 
-        component.$store.commit( 'saveLocalSettings', {
-          username: ukey,
-          password: response.data.new_password,
-          account_url : account_url
-        } );
-
-        component.$router.push( '/members' );
-
-        //console.log( response.data.new_password );
       }, ( error ) => {
-        console.log( '' + error );
-        component.processing = false;
-        component.form.password.error_msg = 'Wrong credentials. Try again.'
+        //console.log( '' + error );
+        component.setProcessing( false );
+        component.form.password.error_msg = 'Try again. ' + error;
         return false;
       } );
+
     },
   }
 }

@@ -10,12 +10,19 @@ export default {
   methods: {
     init(){
       this.$store.commit( 'getLocalSettings' );
-      this.account_url = this.$store.state.settings.account_url;
-      if( this.account_url.length ){
 
-        // NEEDS TO BE CALLED ATLEAST ONCE FOR EVERY SESSION
-        this.setupAccountSettings();
-        this.ready();
+      if( this.$store.state.settings && this.$store.state.settings.account_url ){
+        this.account_url = this.$store.state.settings.account_url;
+        if( this.account_url.length ){
+
+          // NEEDS TO BE CALLED ATLEAST ONCE FOR EVERY SESSION
+          this.setupAccountSettings();
+          this.ready();
+        }
+      }
+      else{
+        console.log( 'Account URL is not valid' );
+        this.$router.push( '/login' );
       }
     },
     ready(){

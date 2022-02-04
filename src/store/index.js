@@ -1,22 +1,7 @@
 import { createStore } from 'vuex'
 import API from '../api.js'
 
-function request( url, headers = {}, callback ){
-  API.request( url, headers ).then( ( response ) => {
-    //console.log( response.data );
-    callback( response.data, response.headers );
-  }, ( error ) => {
-    console.log( '' + error );
-  } );
-}
-
-/*
-function nonAuthRequest( state, url, callback ){
-  return request( url, {}, callback );
-}
-*/
-
-function authRequest( state, url, callback ){
+function authRequest( state, url ){
   var username = state.settings.username;
   var password = state.settings.password;
 
@@ -29,8 +14,7 @@ function authRequest( state, url, callback ){
     };
     //console.log( headers );
   }
-  return request( url, headers, callback );
-
+  return API.makeRequest( { url: url, headers: headers, method: 'get' } );
 }
 
 export default createStore({
@@ -38,8 +22,7 @@ export default createStore({
     settings    : {},
     account     : {},
     processing  : false,
-    posts       : [],
-    totalPosts  : 0
+    errors      : []
   },
   mutations: {
     getLocalSettings( state ){
@@ -63,45 +46,26 @@ export default createStore({
     */
     getAccountSettings( state ){
       var url = state.settings.account_url + '/wp-json/inpursuit/v1/settings';
-      authRequest( state, url, function( response ){
-        return state.account = response;
+
+      authRequest( state, url ).then( ( response ) => {
+        return state.account = response.data;
+      }, ( error ) => {
+        state.error = '' + error;
+        //console.log( '' + error );
       } );
       return state.account;
     },
-    /*
-    testServer( state, url ){
-      url += '/wp-json/inpursuit/v1/settings';
-      nonAuthRequest( state, url, function( response ){
-        console.log( response );
-        return state.account = response;
-      } );
-      return {};
-    },
-
-    getPosts( state, page ){
-
-      state.processing = true;
-
-      var url = state.settings.account_url + '/wp-json/wp/v2/inpursuit-members/?orderby=title&order=asc&page=' + page;
-      authRequest( state, url, function( response, headers ){
-
-        state.processing = false;
-
-        state.totalUsers = parseInt( headers['x-wp-total'] );
-
-        // APPEND EACH POST FROM THE RESULT SET TO THE LIST OF POSTS
-        for( var key in response ){
-          state.posts.push( response[ key ] );
-        }
-
-        return state.posts;
-      } );
-      return state.posts;
-    },
-    */
     setProcessing( state, flag ){
       state.processing = flag;
       return state.processing;
+    },
+    notifyError( state, errorText ){
+      state.errors.push( errorText );
+      return state.errors;
+    },
+    flushError( state, index ){
+      state.errors.splice( index, 1 );
+      return state.errors;
     }
   },
   actions: {
@@ -112,23 +76,21 @@ export default createStore({
       context.commit( 'saveLocalSettings', payload)
     },
     flushLocalSettings( context ){
-      context.commit( 'flushLocalSettings' );  
+      context.commit( 'flushLocalSettings' );
     },
     getAccountSettings( context, url ){
       context.commit( 'getAccountSettings', url );
     },
-
     setProcessing( context, flag ){
       context.commit( 'setProcessing', flag );
     },
-    /*
-    getPosts( context, page ){
-      context.commit( 'getPosts', page );
+    notifyError( context, errorText ){
+      var text = '' + errorText;
+      context.commit( 'notifyError', text );
     },
-    testServer( context, url ){
-      context.commit( 'testServer', url );
-    }
-    */
+    flushError( context, index ){
+      context.commit( 'flushError', index );
+    },
   },
   modules: {
   }

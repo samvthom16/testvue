@@ -1,29 +1,32 @@
 <template>
   <div class='text-center p-2 pt-10'>
-    <h1 class='text-2xl' v-if='profile.name'>{{ profile.name }}</h1>
-    <ul class='text-gray'>
-      <li class='inline-block' v-if='profile.email'>{{ profile.email }}</li>
-      <li class='inline-block p-2' v-if='profile.roles && profile.email'>|</li>
-      <li class="capitalize inline-block" v-if='profile.roles'>{{ profile.roles.join(', ') }}</li>
-    </ul>
-    <router-link class='text-sm mt-10 bg-purple inline-block px-4 text-white mb-5 border-purple py-2 border rounded' to='/logout'>
-      Logout
-    </router-link>
+    <div v-if='$store.state.processing' class='max-w-sm mx-auto'><ItemAnimation /></div>
+    <div v-if='!$store.state.processing'>
+      <h1 class='text-2xl' v-if='profile.name'>{{ profile.name }}</h1>
+      <ul class='text-gray'>
+        <li class='inline-block' v-if='profile.email'>{{ profile.email }}</li>
+        <li class='inline-block p-2' v-if='profile.roles && profile.email'>|</li>
+        <li class="capitalize inline-block" v-if='profile.roles'>{{ profile.roles.join(', ') }}</li>
+      </ul>
+      <router-link class='text-sm mt-10 bg-purple inline-block px-4 text-white mb-5 border-purple py-2 border rounded' to='/logout'>
+        Logout
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-import API from '../api.js'
-
 import defaultMixin from '@/mixins/DefaultMixin.js'
+import apiMixin from '@/mixins/APIMixin.js'
 
+import ItemAnimation from '@/components/ItemAnimation.vue'
 
 export default {
   name: 'Profile',
   components: {
-
+    ItemAnimation
   },
-  mixins: [ defaultMixin ],
+  mixins: [ defaultMixin, apiMixin ],
   data(){
     return {
       profile: {}
@@ -43,33 +46,16 @@ export default {
       var component = this;
 
       // SET PROCESSING
-      component.$store.commit( 'setProcessing', component.processing );
+      component.$store.commit( 'setProcessing', true );
 
-      var username = component.$store.state.settings.username;
-      var password = component.$store.state.settings.password;
-
-      var headers = {};
-
-      if( username && password ){
-        headers = {
-          'Authorization': 'Basic ' + btoa( atob( username ) + ':' + password ),
-          'Content-Type': 'application/x-www-form-urlencoded'
-        };
-      }
-
-      //console.log( component.account_url );
-
-      API.requestProfile( {
-        account_url: component.account_url,
-        headers: headers
-      } ).then( ( response ) => {
-
-        console.log( response.data );
+      component.requestProfile().then( ( response ) => {
 
         component.profile = response.data;
 
         // RESET PROCESSING
-        component.$store.commit( 'setProcessing', component.processing );
+        component.$store.commit( 'setProcessing', false );
+      }, ( error ) => {
+        this.$store.commit( 'notifyError', error );
       } );
 
     }

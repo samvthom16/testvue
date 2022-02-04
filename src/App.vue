@@ -2,20 +2,19 @@
   <div :class="{ 'overflow-hidden': $store.state.processing, 'hidden': !$store.state.processing }" class="w-full"><div class="w-full inline-block fluentProgressBar-waiting"></div></div>
   <!--div class="w-full mt-24"><div class="fluentProgressBar-normal"></div></div-->
   <HeaderMenu />
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <!--router-link to="/about">About</router-link-->
-  </div>
   <router-view />
+  <ErrorNotification />
 </template>
 
 <script>
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import ErrorNotification from '@/components/ErrorNotification.vue'
 
 export default {
   name: 'App',
   components: {
-    HeaderMenu
+    HeaderMenu,
+    ErrorNotification
   }
 }
 </script>

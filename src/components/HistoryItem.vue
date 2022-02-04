@@ -8,7 +8,7 @@
     <div :class="{ 'bg-purple': item.type == 'event', 'bg-orange': item.type == 'comment' }" class="w-10 h-1 absolute opacity-70 -left-10 z-0"></div>
 
     <!-- Content that showing in the box -->
-    <div class="flex-auto">
+    <div class="flex-auto w-full">
       <div class='uppercase text-xs text-lightgray mb-1 font-bold' v-if='item.type'>
         <div class='inline' v-if='item.type == "event"'>
           <svg xmlns="http://www.w3.org/2000/svg" class="inline w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -24,7 +24,7 @@
         {{ item.type }}
         <div class='inline' v-if='item.type == "comment"'>by {{ item.author_name }}</div>
       </div>
-      <h1 class="text-md">{{ formatDate( item.date ) }}</h1>
+      <h1 class="text-md font-thin text-sm mb-2">{{ formatDate( item.date ) }}</h1>
       <h1 class="text-xl font-bold">{{ item.title.rendered }}</h1>
       <h3>{{ item.text }}</h3>
     </div>

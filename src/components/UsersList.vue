@@ -24,21 +24,21 @@
             </div>
           </li>
         </ul>
-        <ButtonAnimation v-if='$store.state.processing' />
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ButtonAnimation from './ButtonAnimation.vue'
+
 import UserTags from './UserTags.vue'
 
 import userMixin from '@/mixins/UserMixin.js'
 
 export default {
   name: 'UsersList',
-  components: { ButtonAnimation, UserTags },
+  components: { UserTags },
   mixins: [ userMixin ],
   props:{
     users: Array,
