@@ -35,7 +35,7 @@ export default {
 
       component.getAPI().then( ( response ) => {
 
-        component.$store.commit( 'notifyError', response );
+        component.$store.commit( 'notifyError', response.data.length );
 
         //console.log( response.data );
 

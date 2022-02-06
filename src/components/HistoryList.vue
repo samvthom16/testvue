@@ -1,6 +1,7 @@
 <template>
   <AddComment :id='id' v-if='id' />
   <div class="border-l-2 border-gray mt-3">
+    {{ items.length }}
     <HistoryItem :item='item' v-for='item in items' :key='item.id' />
   </div>
   <ItemAnimation v-if='$store.state.processing && !items.length' />
