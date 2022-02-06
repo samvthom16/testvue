@@ -39,8 +39,8 @@ export default {
   },
   methods: {
     formatDate( dateString ) {
-      return dateString;
-      //const date = new Date(dateString);
+      //return dateString;
+      return new Date(dateString).toLocaleString();
       //return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
     }
   }
