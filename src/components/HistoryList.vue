@@ -3,12 +3,12 @@
   <div class="border-l-2 border-gray mt-3">
     <HistoryItem :item='item' v-for='item in items' :key='item.id' />
   </div>
-  <div class='border border-red' v-for='item in items' :key='item.id'>{{ item.text }}</div>
+  <!--div class='border border-red' v-for='item in items' :key='item.id'>{{ item.text }}</div-->
   <ItemAnimation v-if='$store.state.processing && !items.length' />
 </template>
 
 <script>
-import HistoryItem from './HistoryItem.vue'
+import HistoryItem from '@/components/HistoryItem.vue'
 
 import AddComment from '@/components/AddComment.vue'
 import ItemAnimation from '@/components/ItemAnimation.vue'
