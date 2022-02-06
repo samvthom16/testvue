@@ -35,6 +35,8 @@ export default {
 
       component.getAPI().then( ( response ) => {
 
+        component.$store.commit( 'notifyError', response );
+
         //console.log( response.data );
 
         component.totalItems = parseInt( response.headers['x-wp-total'] );
@@ -49,7 +51,11 @@ export default {
         component.$store.commit( 'setProcessing', false );
       }, ( error ) => {
 
-        this.$store.commit( 'notifyError', error );
+        // NOTIFY ERROR
+        component.$store.commit( 'notifyError', error );
+
+        // RESET PROCESSING
+        component.$store.commit( 'setProcessing', false );
 
       } );
     },
