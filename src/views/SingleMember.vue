@@ -7,7 +7,7 @@
       <div class="relative shadow mx-auto h-28 w-28 -my-12 border-white rounded-full overflow-hidden border-4">
         <img class="object-cover w-full h-full" :src="post.featured_image">
       </div>
-      <div class="mt-16">
+      <div class="mt-16 px-2">
         <h1 class="text-xl text-center font-semibold" v-if='post.title'>{{ post.title.rendered }}</h1>
         <div class='text-center mt-3'>
           <UserTags :user='post' />
