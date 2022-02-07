@@ -16,7 +16,9 @@
           <li class="py-3 sm:py-4" v-for='user in users' :key='user.id'>
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-1">
-                <img class="w-16 rounded-full" :src="user.featured_image" :alt="user.title.rendered">
+                <div class='bg-lightgray w-16 h-16 rounded-full overflow-hidden'>
+                  <img class="w-16 rounded-full" :src="user.featured_image" :alt="user.title.rendered" />
+                </div>
               </div>
               <div class="flex-1 min-w-0">
                 <h1 class="text-xl font-semibold truncate dark:text-white">
