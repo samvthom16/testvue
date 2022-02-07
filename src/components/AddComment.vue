@@ -38,7 +38,7 @@
           Add Comment
         </div>
       </button>
-      <a target='_blank' href='http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=Follow up with Samuel' class="text-base  rounded-l-none border-l-0  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 hover:text-white hover:border-black rounded font-bold cursor-pointer hover:bg-darkorange bg-orange border duration-200 ease-in-out transition">
+      <a target='_blank' :href='getScheduleLink()' class="text-base  rounded-l-none border-l-0  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 hover:text-white hover:border-black rounded font-bold cursor-pointer hover:bg-darkorange bg-orange border duration-200 ease-in-out transition">
         <div class="flex leading-5">Set Reminder</div>
       </a>
     </div>
@@ -62,7 +62,8 @@ import apiMixin from '@/mixins/APIMixin.js'
 export default{
   name: 'AddComment',
   props:{
-    id : Number
+    id : Number,
+    item : Object
   },
   mixins: [ apiMixin ],
   data(){
@@ -74,6 +75,16 @@ export default{
     }
   },
   methods: {
+
+    getScheduleLink(){
+      var link = 'http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=';
+      var item = this.item;
+      if( item.title && item.title.rendered ){
+        link += 'Follow up with ' + item.title.rendered;
+      }
+      return link;
+    },
+
     /*
     * SET PROCESSING
     */

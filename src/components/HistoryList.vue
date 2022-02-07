@@ -1,5 +1,5 @@
 <template>
-  <AddComment :id='id' v-if='id' />
+  <AddComment :id='id' v-if='id' :item='item' />
   <div class="border-l-2 border-gray mt-3">
     <HistoryItem :item='item' v-for='item in items' :key='item.id' />
   </div>
@@ -25,7 +25,8 @@ export default {
     ItemAnimation
   },
   props:{
-    id : Number
+    id  : Number,
+    item: Object
   },
   mixins: [ defaultMixin, paginationMixin, apiMixin ],
   methods: {
@@ -36,7 +37,7 @@ export default {
         page   : this.page
       } );
     },
-    
+
   },
 }
 </script>
