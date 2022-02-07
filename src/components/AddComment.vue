@@ -38,7 +38,7 @@
           Add Comment
         </div>
       </button>
-      <a v-if='item.title' target='_blank' @click='schedule' :href='getScheduleLink()' class="text-base  rounded-l-none border-l-0  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 hover:text-white hover:border-black rounded font-bold cursor-pointer hover:bg-darkorange bg-orange border duration-200 ease-in-out transition">
+      <a v-if='item.title' target='_blank' :href='getScheduleLink()' class="text-base  rounded-l-none border-l-0  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 hover:text-white hover:border-black rounded font-bold cursor-pointer hover:bg-darkorange bg-orange border duration-200 ease-in-out transition">
         <div class="flex leading-5">Set Reminder</div>
       </a>
     </div>
@@ -76,10 +76,14 @@ export default{
   },
   methods: {
 
+
+
+    /*
+
     isIOSDevice(){
       return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
     },
-
+    
     schedule( ev ){
       if( this.isIOSDevice() ){
         ev.preventDefault();
@@ -92,6 +96,7 @@ export default{
         //window.open( "data:text/calendar;charset=utf8," + escape( icsMSG ) );
       }
     },
+    */
 
     getScheduleLink(){
       var link = 'http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=';
