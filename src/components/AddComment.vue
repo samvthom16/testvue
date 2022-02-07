@@ -84,7 +84,12 @@ export default{
       if( this.isIOSDevice() ){
         ev.preventDefault();
         var icsMSG = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Our Company//NONSGML v1.0//EN\nBEGIN:VEVENT\nUID:me@google.com\nDTSTAMP:20120315T170000Z\nATTENDEE;CN=My Self ;RSVP=TRUE:MAILTO:me@gmail.com\nORGANIZER;CN=Me:MAILTO::me@gmail.com\nSUMMARY:Our Meeting Office\nEND:VEVENT\nEND:VCALENDAR";
-        window.open( "data:text/calendar;charset=utf8," + escape( icsMSG ) );
+        let blob = new Blob( icsMSG, { type: 'text/calendar' } );
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL( blob );
+        link.download = 'Reminders.ics';
+        link.click();
+        //window.open( "data:text/calendar;charset=utf8," + escape( icsMSG ) );
       }
     },
 
