@@ -56,7 +56,7 @@ export default {
   methods: {
     formatDate( dateString ) {
       //return dateString;
-      return new Date(dateString);
+      return new Date( dateString.replace(" ", "T") ).toLocaleString();
       //return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
     },
     deleteItem(){
@@ -79,7 +79,7 @@ export default {
 
           // NOTIFY ERROR
           component.$store.commit( 'notifyError', error );
-          
+
           // RESET PROCESSING
           component.setProcessing( false );
         } );

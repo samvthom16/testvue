@@ -30,12 +30,16 @@
       </div>
     </div>
   </div>
-  <button @click='openComment = true' class='hover:bg-red text-left text-sm bg-lightred text-white inline-block mb-5 border-red p-2 px-4 border rounded'>
-    <svg xmlns="http://www.w3.org/2000/svg" class="inline w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-    </svg>
-    Add Comment
-  </button>
+
+  <div class='bg-white fixed left-0 bottom-0 h-8 w-full z-10 shadow-vue text-center'>
+    <button @click='openComment = true' class='m-auto -my-8 p-4 block h-14 w-14 content-center z-10 rounded-full hover:ring-2 text-left text-sm bg-darkorange border-darkorange  text-white mb-5'>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+    </button>
+  </div>
+
+
 </template>
 
 <script>
