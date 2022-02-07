@@ -4,7 +4,7 @@
       <div class="relative h-40 bg-purple">
         <!--router-link to='../members' class='text-xs text-white mt-2 p-2'>&#8592;&nbsp;List Of Members</router-link-->
       </div>
-      <div class="relative shadow mx-auto h-28 w-28 -my-12 border-white rounded-full overflow-hidden border-4">
+      <div class="bg-gray relative shadow mx-auto h-28 w-28 -my-12 border-white rounded-full overflow-hidden border-4">
         <img class="object-cover w-full h-full" :src="post.featured_image">
       </div>
       <div class="mt-16 px-2">

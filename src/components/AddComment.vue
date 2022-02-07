@@ -31,7 +31,21 @@
     </div>
   </div>
 
-  <div class='bg-white fixed left-0 bottom-0 h-8 w-full z-10 shadow-vue text-center'>
+  <div class="flex justify-left items-baseline flex-wrap">
+    <div class="flex mb-5">
+      <button @click='openComment = true' class="text-base rounded-r-none  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-darkorange hover:text-white hover:border-black bg-orange border duration-200 ease-in-out transition">
+        <div class="flex leading-5">
+          Add Comment
+        </div>
+      </button>
+      <a target='_blank' href='http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=Follow up with Samuel' class="text-base  rounded-l-none border-l-0  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 hover:text-white hover:border-black rounded font-bold cursor-pointer hover:bg-darkorange bg-orange border duration-200 ease-in-out transition">
+        <div class="flex leading-5">Set Reminder</div>
+      </a>
+    </div>
+  </div>
+
+
+  <div class='hidden bg-white fixed left-0 bottom-0 h-10 w-full z-10 shadow-vue text-center'>
     <button @click='openComment = true' class='m-auto -my-8 p-4 block h-14 w-14 content-center z-10 rounded-full hover:ring-2 text-left text-sm bg-darkorange border-darkorange  text-white mb-5'>
       <svg xmlns="http://www.w3.org/2000/svg" class="w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
