@@ -25,7 +25,16 @@ const api = {
 			api = axios.delete( options.url, { data: options.data, headers: headers } );
 		}
 		else{
-      api = axios.get( options.url, { headers: headers } );
+
+      var params = {};
+      if( options.data ){
+        params = options.data;
+      }
+
+      api = axios.get( options.url, {
+        params : params,
+        headers: headers
+      } );
 		}
 
 		return api;

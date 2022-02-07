@@ -22,7 +22,7 @@ export default createStore({
     settings    : {},
     account     : {},
     processing  : false,
-    errors      : []
+    errors      : [],
   },
   mutations: {
     getLocalSettings( state ){
@@ -66,7 +66,7 @@ export default createStore({
     flushError( state, index ){
       state.errors.splice( index, 1 );
       return state.errors;
-    }
+    },
   },
   actions: {
     getLocalSettings( context ){

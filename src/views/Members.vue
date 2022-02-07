@@ -19,12 +19,29 @@ export default {
     UsersList
   },
   mixins: [ defaultMixin, paginationMixin, apiMixin ],
+  data(){
+    return {
+      search    : '',
+    }
+  },
+  watch:{
+    search(){
+      var component = this;
+      component.debounceEvent( function(){
+        component.refreshItems();
+        //console.log( component.search );
+      } );
+    }
+  },
   methods: {
     /* INHERITED FROM PAGINATION MIXIN */
     getAPI(){
-      return this.requestUsers( this.page );
+      return this.requestUsers( this.page, this.search );
     },
-  }
+    getPageTitle(){
+      return 'InPursuit - Members';
+    }
+  },
 }
 
 </script>

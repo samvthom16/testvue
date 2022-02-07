@@ -7,6 +7,7 @@ export default {
       page        : 1
     }
   },
+
   methods: {
     /*
     * FUNCTION THAT IS FIRED FIRST AS SOON AS ALL THE DEFAULT INITILIZATION IS OVER
@@ -51,14 +52,22 @@ export default {
         component.$store.commit( 'setProcessing', false );
       }, ( error ) => {
 
-        // NOTIFY ERROR
-        component.$store.commit( 'notifyError', error );
-
-        // RESET PROCESSING
-        component.$store.commit( 'setProcessing', false );
+        component.throwError( error );
 
       } );
     },
+    /*
+    * THIS FUNCTION IS CALLED TO FETCH NEW ITEMS
+    * AND RESET THE ENTIRE LIST
+    */
+    refreshItems(){
+      //console.log( 'refresh' );
+      var component = this;
+      component.items = [];
+      component.page = 1;
+      component.getItems();
+    },
+
     /*
     * EVENT HANDLE ON SCROLL OF DOCUMENT
     */

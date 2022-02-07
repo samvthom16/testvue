@@ -89,8 +89,11 @@ export default{
         component.$parent.refreshItems();
 
       }, ( error ) => {
-        console.log( '' + error );
+
+        // NOTIFY ERROR
+        component.$store.commit( 'notifyError', error );
         component.setProcessing( false );
+
         component.error_msg = "" + error;
         return false;
       } );

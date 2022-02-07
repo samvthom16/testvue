@@ -1,6 +1,6 @@
 <template>
   <!-- Card 1 -->
-  <div :class="{ 'bg-purple': item.type == 'event', 'bg-orange': item.type == 'comment' }" class="transform transition cursor-pointer hover:-translate-y-2 ml-10 relative flex items-center px-6 py-4 text-white rounded mb-10 flex-col md:flex-row space-y-4 md:space-y-0">
+  <div :class="{ 'bg-purple': item.type == 'event', 'bg-orange': item.type == 'comment', 'hidden': deletedFlag, 'opacity-80': processing }" class="transform transition cursor-pointer hover:-translate-y-2 ml-10 relative flex items-center px-6 py-4 text-white rounded mb-10 flex-col md:flex-row space-y-4 md:space-y-0">
     <!-- Dot Follwing the Left Vertical Line -->
     <div :class="{ 'bg-purple': item.type == 'event', 'bg-orange': item.type == 'comment' }" class="w-5 h-5 absolute -left-10 transform -translate-x-2/4 rounded-full z-10 mt-2 md:mt-0"></div>
 
@@ -26,22 +26,70 @@
       </div>
       <h1 class="text-md font-thin text-sm mb-2">{{ formatDate( item.date ) }}</h1>
       <h1 class="text-xl font-bold">{{ item.title.rendered }}</h1>
-      <h3>{{ item.text }}</h3>
+      <p contenteditable class='opacity-85 text-md'>{{ item.text }}</p>
+      <div class='absolute right-2 top-2' v-if='item.type == "comment"'>
+        <button @click='deleteItem' type="button" class="rounded-sm text-white outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import apiMixin from '@/mixins/APIMixin.js'
+
 export default {
   name: 'HistoryItem',
   props: {
     item: Object
   },
+  mixins: [ apiMixin ],
+  data(){
+    return {
+      deletedFlag : false,
+      processing  : false
+    };
+  },
   methods: {
     formatDate( dateString ) {
       //return dateString;
-      return new Date(dateString).toLocaleString();
+      return new Date(dateString);
       //return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
+    },
+    deleteItem(){
+			var component = this;
+
+      // SET PROCESSING
+      component.setProcessing( true );
+
+			if( confirm( "Are you sure you want to delete this?" ) ){
+
+        component.deleteComment( this.item.id ).then( () => {
+
+          // HIDE THAT ITEM FROM THE VIEW
+          component.deletedFlag = true;
+
+          // RESET PROCESSING
+          component.setProcessing( false );
+
+        }, ( error ) => {
+
+          // NOTIFY ERROR
+          component.$store.commit( 'notifyError', error );
+          
+          // RESET PROCESSING
+          component.setProcessing( false );
+        } );
+
+
+			}
+		},
+    setProcessing( flag ){
+      this.processing = flag;
+      this.$store.commit( 'setProcessing', flag );
     }
   }
 }

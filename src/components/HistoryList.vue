@@ -36,18 +36,7 @@ export default {
         page   : this.page
       } );
     },
-    /*
-    * THIS FUNCTION IS CALLED BY THE CHILD COMPONENT INCASE ANY NEW COMMENT IS ADDED
-    * AND IT FETCHES NEW COMMENTS
-    */
-    refreshItems(){
-      //console.log( 'refresh' );
-
-      var component = this;
-      component.items = [];
-      component.page = 1;
-      component.getItems();
-    }
+    
   },
 }
 </script>

@@ -28,12 +28,18 @@ export default{
       } );
     },
 
-    requestUsers( page ){
+    requestUsers( page, search = '' ){
       var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-members/?orderby=title&order=asc&page=' + page;
+      var endpoint = '/wp-json/wp/v2/inpursuit-members/';
       return API.makeRequest( {
         url     : component.$store.state.settings.account_url + endpoint,
         method  : 'get',
+        data    : {
+          'orderby' : 'title',
+          'order'   : 'asc',
+          'page'    : page,
+          'search'  : search
+        },
         headers : component.getAuthHeaders()
       } );
     },
@@ -62,6 +68,17 @@ export default{
         url     : component.$store.state.settings.account_url + endpoint,
         method  : 'get',
         headers : component.getAuthHeaders()
+      } );
+    },
+
+    deleteComment( comment_id ){
+      var component = this;
+      var endpoint = '/wp-json/inpursuit/v1/comments/' + comment_id;
+      var headers = component.getAuthHeaders();
+      return API.makeRequest( {
+        url     : component.$store.state.settings.account_url + endpoint,
+        method  : 'delete',
+        headers : headers
       } );
     },
 

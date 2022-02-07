@@ -3,10 +3,13 @@
   <div class="mx-auto max-w-2xl">
     <div class="p-4 bg-white sm:p-8 dark:bg-gray">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold leading-none text-gray-900 dark:text-white"></h3>
+        <h3 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Members ({{ users.length }})</h3>
         <span class="text-sm font-medium text-gray dark:text-white">
             Total of {{ total }} items
         </span>
+      </div>
+      <div class='mb-3'>
+        <input type='text' class='border-black rounded w-full p-2 outline-none focus:border-red border-2' placeholder="Search" v-model='$parent.search' />
       </div>
       <div class="flow-root">
         <ul role="list" class="divide-y divide-lightgray dark:divide-gray-700">

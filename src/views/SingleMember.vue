@@ -79,6 +79,10 @@ export default {
       } );
 
     },
+    getPageTitle(){
+      var title = 'InPursuit - Single Member';
+      return title;
+    }
   }
 }
 
