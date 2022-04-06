@@ -4,8 +4,9 @@
     v-if="isModalVisible"
     class="w-full h-screen fixed bg-black bg-opacity-60"
   >
-    <div class="relative w-2/4 h-2/4 my-16 m-auto rounded-xl bg-white p-20">
+    <div class="relative w-2/4 h-3/4 my-16 m-auto rounded-xl bg-white p-20">
       <button
+        type="button"
         @click="closeModal"
         class="
           absolute
@@ -20,100 +21,94 @@
       >
         &times;
       </button>
-      <h3
-        class="
-          text-xl
-          py-4
-          font-bold
-          leading-none
-          text-gray-900
-          dark:text-white
-        "
-      >
-        Filter By
-      </h3>
-      <ul class="text-sm dark:text-gray-400">
-        <FilterTags :tag="`Location`" :tagData="locationdata" />
-        <FilterTags :tag="`Gender`" :tagData="genderData" />
-        <FilterTags :tag="`Group`" :tagData="groupData" />
-        <FilterTags :tag="`Profession`" :tagData="professionData" />
+      <form @submit="filterFormSubmit" id="filterForm">
+        <h3
+          class="
+            text-xl
+            mb-4
+            font-bold
+            leading-none
+            text-gray-900
+            dark:text-white
+          "
+        >
+          Search Filter
+        </h3>
+        <div class="text-sm dark:text-gray-400">
+          <FilterTags
+            v-on:filterTags="getFilterTagData($event)"
+            tagkey="location"
+            tag="Location"
+            :tagData="locationdata"
+          />
+          <FilterTags
+            v-on:filterTags="getFilterTagData($event)"
+            tagkey="gender"
+            tag="Gender"
+            :tagData="genderData"
+          />
+          <FilterTags
+            v-on:filterTags="getFilterTagData($event)"
+            tagkey="group"
+            tag="Group Leader"
+            :tagData="groupData"
+          />
+          <FilterTags
+            v-on:filterTags="getFilterTagData($event)"
+            tagkey="profession"
+            tag="Profession"
+            :tagData="professionData"
+          />
+        </div>
+        <input
+          class="
+            my-4
+            border border-orange
+            font-semibold
+            p-2
+            px-4
+            rounded-lg
+            bg-orange
+            text-sm
+            btn btn-block
+          "
+          @click="filterFormSubmit"
+          type="submit"
+          value="Apply"
+        />
 
-        <!-- <li class="inline-block truncate">
-          <div class="mr-2 p-1 px-2 rounded bg-lightpurple text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-4 inline"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            Gender
-          </div>
-        </li>
-        <li class="inline-block truncate">
-          <div class="mr-2 p-1 px-2 rounded bg-lightred text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-4 inline"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            Group
-          </div>
-        </li>
-        <li class="inline-block truncate">
-          <div class="mr-2 p-1 px-2 rounded bg-gray text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-4 inline"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            Profession
-          </div>
-        </li> -->
-      </ul>
+        <!-- <button
+          class="
+            my-4
+            border border-orange
+            font-semibold
+            p-2
+            px-4
+            rounded-lg
+            bg-orange
+            text-sm
+          "
+        >
+          Apply
+        </button> -->
+        <button
+          type="button"
+          @click="closeModal"
+          class="
+            my-4
+            ml-4
+            border
+            p-2
+            font-semibold
+            px-4
+            rounded-lg
+            bg-transparent
+            text-sm
+          "
+        >
+          Cancel
+        </button>
+      </form>
     </div>
   </div>
 
@@ -270,6 +265,12 @@ export default {
       genderData: {},
       groupData: {},
       professionData: {},
+      selectedFiltersData: {
+        location: "",
+        gender: "",
+        group: "",
+        profession: "",
+      },
     };
   },
   async created() {
@@ -284,9 +285,6 @@ export default {
       this.genderData = request.data["gender"];
       this.groupData = request.data["group"];
       this.professionData = request.data["profession"];
-
-      console.log(request.data);
-      console.log(location);
     } catch (e) {
       console.error(e);
     }
@@ -297,6 +295,31 @@ export default {
       this.isModalVisible = true;
     },
     closeModal() {
+      this.isModalVisible = false;
+    },
+
+    getFilterTagData(e) {
+      this.selectedFiltersData[e["tag"]] = e["filterIds"];
+    },
+
+    setFilterData() {
+      this.$emit("applyFilterTags", this.selectedFiltersData);
+    },
+
+    filterFormSubmit(ev) {
+      // console.log("ev == ", ev);
+      ev.preventDefault();
+
+      this.setFilterData();
+      // var $form = document.getElementById("filterForm");
+
+      // console.log("form == ", $form);
+
+      // var selectedFilters = Object.fromEntries(new FormData($form).entries());
+
+      // console.log("selectedFilters == ", selectedFilters);
+      this.$parent.refreshItems();
+
       this.isModalVisible = false;
     },
   },

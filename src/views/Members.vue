@@ -1,6 +1,10 @@
 <template>
   <div class="members">
-    <UsersList :users="items" :total="totalItems" />
+    <UsersList
+      v-on:applyFilterTags="filterTagData($event)"
+      :users="items"
+      :total="totalItems"
+    />
   </div>
 </template>
 
@@ -22,6 +26,7 @@ export default {
   data() {
     return {
       search: "",
+      filterData: {},
     };
   },
   watch: {
@@ -34,9 +39,24 @@ export default {
     },
   },
   methods: {
+    filterTagData(e) {
+      this.filterData = e;
+    },
     /* INHERITED FROM PAGINATION MIXIN */
     getAPI() {
-      return this.requestUsers(this.page, this.search);
+      // var filterData = {};
+
+      // var $form = document.getElementById("filterForm");
+
+      // console.log("form ==", $form);
+
+      // if ($form) {
+      //   filterData = Object.fromEntries(new FormData($form).entries());
+      // }
+
+      // console.log(filterData);
+
+      return this.requestUsers(this.page, this.search, this.filterData);
     },
     getPageTitle() {
       return "InPursuit - Members";
