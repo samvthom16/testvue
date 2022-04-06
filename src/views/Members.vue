@@ -1,47 +1,46 @@
 <template>
   <div class="members">
-    <UsersList :users='items' :total='totalItems' />
+    <UsersList :users="items" :total="totalItems" />
   </div>
 </template>
 
 <script>
 //import API from '../api.js'
 
-import UsersList from '@/components/UsersList.vue'
+import UsersList from "@/components/UsersList.vue";
 
-import defaultMixin from '@/mixins/DefaultMixin.js'
-import paginationMixin from '@/mixins/PaginationMixin.js'
-import apiMixin from '@/mixins/APIMixin.js'
+import defaultMixin from "@/mixins/DefaultMixin.js";
+import paginationMixin from "@/mixins/PaginationMixin.js";
+import apiMixin from "@/mixins/APIMixin.js";
 
 export default {
-  name: 'Members',
+  name: "Members",
   components: {
-    UsersList
+    UsersList,
   },
-  mixins: [ defaultMixin, paginationMixin, apiMixin ],
-  data(){
+  mixins: [defaultMixin, paginationMixin, apiMixin],
+  data() {
     return {
-      search    : '',
-    }
+      search: "",
+    };
   },
-  watch:{
-    search(){
+  watch: {
+    search() {
       var component = this;
-      component.debounceEvent( function(){
+      component.debounceEvent(function () {
         component.refreshItems();
         //console.log( component.search );
-      } );
-    }
+      });
+    },
   },
   methods: {
     /* INHERITED FROM PAGINATION MIXIN */
-    getAPI(){
-      return this.requestUsers( this.page, this.search );
+    getAPI() {
+      return this.requestUsers(this.page, this.search);
     },
-    getPageTitle(){
-      return 'InPursuit - Members';
-    }
+    getPageTitle() {
+      return "InPursuit - Members";
+    },
   },
-}
-
+};
 </script>
