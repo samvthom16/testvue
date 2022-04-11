@@ -91,6 +91,24 @@
         >
           Apply
         </button> -->
+
+        <button
+          type="button"
+          @click="clearFilters"
+          class="
+            my-4
+            ml-4
+            border
+            p-2
+            font-semibold
+            px-4
+            rounded-lg
+            bg-transparent
+            text-sm
+          "
+        >
+          Clear
+        </button>
         <button
           type="button"
           @click="closeModal"
@@ -295,6 +313,19 @@ export default {
       this.isModalVisible = true;
     },
     closeModal() {
+      this.isModalVisible = false;
+    },
+
+    clearFilters() {
+      this.selectedFiltersData = {
+        location: "",
+        gender: "",
+        group: "",
+        profession: "",
+      };
+      this.setFilterData();
+
+      this.$parent.refreshItems();
       this.isModalVisible = false;
     },
 

@@ -70,7 +70,17 @@ export default {
     tagkey: String,
     tag: String,
     tagData: Object,
+    // selectedFilterData: String,
   },
+
+  // created() {
+  //   if (this.selectedFilterData !== undefined) {
+  //     console.warn("selectedFilterData in filterTag " + this.selectedFilters);
+  //     this.selectedFilters = this.selectedFilterData.split(",");
+  //   } else {
+  //     console.warn("nope " + this.selectedFilters);
+  //   }
+  // },
   methods: {
     getFilterData() {
       this.$emit("filterTags", this.filterTagAndIds);
