@@ -4,36 +4,16 @@
     v-if="isModalVisible"
     class="w-full h-screen fixed bg-black bg-opacity-60"
   >
-    <div class="relative w-2/4 h-3/4 my-16 m-auto rounded-xl bg-white p-20">
+    <div class='absolute w-full h-full bg-black' @click="closeModal"></div>
+    <div class="relative w-2/4 h-3/4 overflow-y-scroll my-8 m-auto bg-white p-4 px-6">
       <button
         type="button"
         @click="closeModal"
-        class="
-          absolute
-          right-2
-          top-0
-          text-2xl
-          font-bold
-          leading-none
-          text-darkorange
-          dark:text-white
-        "
+        class="absolute right-2 top-4 text-3xl font-bold leading-none text-darkorange dark:text-white"
       >
         &times;
       </button>
       <form @submit="filterFormSubmit" id="filterForm">
-        <h3
-          class="
-            text-xl
-            mb-4
-            font-bold
-            leading-none
-            text-gray-900
-            dark:text-white
-          "
-        >
-          Search Filter
-        </h3>
         <div class="text-sm dark:text-gray-400">
           <FilterTags
             v-on:filterTags="getFilterTagData($event)"
@@ -77,20 +57,7 @@
           value="Apply"
         />
 
-        <!-- <button
-          class="
-            my-4
-            border border-orange
-            font-semibold
-            p-2
-            px-4
-            rounded-lg
-            bg-orange
-            text-sm
-          "
-        >
-          Apply
-        </button> -->
+
 
         <button
           type="button"
@@ -237,7 +204,7 @@
                   "
                 >
                   <img
-                    class="w-16 rounded-full"
+                    class="w-full h-full object-cover rounded-full"
                     :src="user.featured_image"
                     :alt="user.title.rendered"
                   />

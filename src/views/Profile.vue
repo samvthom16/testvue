@@ -14,25 +14,25 @@
           {{ profile.roles.join(", ") }}
         </li>
       </ul>
-      <router-link
-        class="
-          text-sm
-          mt-10
-          bg-purple
-          inline-block
-          px-4
-          text-white
-          mb-5
-          border-purple
-          py-2
-          border
-          rounded
-        "
-        to="/logout"
-      >
-        Logout
-      </router-link>
     </div>
+    <router-link
+      class="
+        text-sm
+        mt-10
+        bg-purple
+        inline-block
+        px-4
+        text-white
+        mb-5
+        border-purple
+        py-2
+        border
+        rounded
+      "
+      to="/logout"
+    >
+      Logout
+    </router-link>
   </div>
 </template>
 

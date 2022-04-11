@@ -10,7 +10,6 @@
 
 <script>
 //import API from '../api.js'
-
 import UsersList from "@/components/UsersList.vue";
 
 import defaultMixin from "@/mixins/DefaultMixin.js";
