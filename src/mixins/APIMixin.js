@@ -59,9 +59,7 @@ export default {
       };
 
       let finalData = Object.assign(data, filterData);
-
-      console.warn("locations : " + finalData['location']);
-
+      
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
         method: 'get',

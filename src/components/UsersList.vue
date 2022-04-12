@@ -4,12 +4,33 @@
     v-if="isModalVisible"
     class="w-full h-screen fixed bg-black bg-opacity-60"
   >
-    <div class='absolute w-full h-full bg-black' @click="closeModal"></div>
-    <div class="relative w-2/4 h-3/4 overflow-y-scroll my-8 m-auto bg-white p-4 px-6">
+    <div class="absolute w-full h-full bg-black" @click="closeModal"></div>
+    <div
+      class="
+        relative
+        w-2/4
+        h-3/4
+        overflow-y-scroll
+        my-8
+        m-auto
+        bg-white
+        p-4
+        px-6
+      "
+    >
       <button
         type="button"
         @click="closeModal"
-        class="absolute right-2 top-4 text-3xl font-bold leading-none text-darkorange dark:text-white"
+        class="
+          absolute
+          right-2
+          top-4
+          text-3xl
+          font-bold
+          leading-none
+          text-darkorange
+          dark:text-white
+        "
       >
         &times;
       </button>
@@ -20,24 +41,28 @@
             tagkey="location"
             tag="Location"
             :tagData="locationdata"
+            :selectedFilterData="this.selectedFiltersData.location"
           />
           <FilterTags
             v-on:filterTags="getFilterTagData($event)"
             tagkey="gender"
             tag="Gender"
             :tagData="genderData"
+            :selectedFilterData="this.selectedFiltersData.gender"
           />
           <FilterTags
             v-on:filterTags="getFilterTagData($event)"
             tagkey="group"
             tag="Group Leader"
             :tagData="groupData"
+            :selectedFilterData="this.selectedFiltersData.group"
           />
           <FilterTags
             v-on:filterTags="getFilterTagData($event)"
             tagkey="profession"
             tag="Profession"
             :tagData="professionData"
+            :selectedFilterData="this.selectedFiltersData.profession"
           />
         </div>
         <input
@@ -56,8 +81,6 @@
           type="submit"
           value="Apply"
         />
-
-
 
         <button
           type="button"
