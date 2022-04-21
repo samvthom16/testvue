@@ -1,47 +1,65 @@
 <template>
   <div class="members">
-    <UsersList :users='items' :total='totalItems' />
+    <UsersList
+      v-on:applyFilterTags="filterTagData($event)"
+      :users="items"
+      :total="totalItems"
+    />
   </div>
 </template>
 
 <script>
 //import API from '../api.js'
+import UsersList from "@/components/UsersList.vue";
 
-import UsersList from '@/components/UsersList.vue'
-
-import defaultMixin from '@/mixins/DefaultMixin.js'
-import paginationMixin from '@/mixins/PaginationMixin.js'
-import apiMixin from '@/mixins/APIMixin.js'
+import defaultMixin from "@/mixins/DefaultMixin.js";
+import paginationMixin from "@/mixins/PaginationMixin.js";
+import apiMixin from "@/mixins/APIMixin.js";
 
 export default {
-  name: 'Members',
+  name: "Members",
   components: {
-    UsersList
+    UsersList,
   },
-  mixins: [ defaultMixin, paginationMixin, apiMixin ],
-  data(){
+  mixins: [defaultMixin, paginationMixin, apiMixin],
+  data() {
     return {
-      search    : '',
-    }
+      search: "",
+      filterData: {},
+    };
   },
-  watch:{
-    search(){
+  watch: {
+    search() {
       var component = this;
-      component.debounceEvent( function(){
+      component.debounceEvent(function () {
         component.refreshItems();
         //console.log( component.search );
-      } );
-    }
+      });
+    },
   },
   methods: {
-    /* INHERITED FROM PAGINATION MIXIN */
-    getAPI(){
-      return this.requestUsers( this.page, this.search );
+    filterTagData(e) {
+      this.filterData = e;
     },
-    getPageTitle(){
-      return 'InPursuit - Members';
-    }
-  },
-}
+    /* INHERITED FROM PAGINATION MIXIN */
+    getAPI() {
+      // var filterData = {};
 
+      // var $form = document.getElementById("filterForm");
+
+      // console.log("form ==", $form);
+
+      // if ($form) {
+      //   filterData = Object.fromEntries(new FormData($form).entries());
+      // }
+
+      // console.log(filterData);
+
+      return this.requestUsers(this.page, this.search, this.filterData);
+    },
+    getPageTitle() {
+      return "InPursuit - Members";
+    },
+  },
+};
 </script>

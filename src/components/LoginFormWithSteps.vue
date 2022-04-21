@@ -2,12 +2,54 @@
   <div class="hello">
     <form class="p-10 max-w-sm m-auto" @submit="submit">
       <TextField
+        class="mt-10"
         :field="formfield"
+        :isHidden="formSteps[currentStep] !== key"
         v-model="formfield.value"
         v-for="(formfield, key) in form"
         :key="key"
       />
+
+      <div class="flex flex-row justify-between">
+        <button
+          v-if="currentStep !== 0"
+          type="button"
+          @click="previous"
+          class="
+            my-2
+            border-purple
+            p-2
+            font-semibold
+            px-4
+            rounded-lg
+            bg-purple
+            text-sm text-white
+          "
+        >
+          Previous
+        </button>
+
+        <button
+          v-if="currentStep < formSteps.length - 1"
+          type="button"
+          @click="next"
+          class="
+            my-2
+            border-purple
+            p-2
+            font-semibold
+            px-4
+            rounded-lg
+            bg-purple
+            text-sm text-white
+          "
+        >
+          Next
+        </button>
+      </div>
+
       <button
+        v-if="currentStep === formSteps.length - 1"
         :disabled="$store.state.processing"
         :class="{ 'cursor-not-allowed': $store.state.processing }"
         class="
@@ -16,6 +58,7 @@
           w-full
           text-white
           mb-5
+          mt-5
           border-purple
           p-2
           border
@@ -60,13 +103,14 @@ import API from "../api.js";
 import TextField from "./TextField.vue";
 
 export default {
-  name: "LoginForm",
+  name: "LoginFormWithSteps",
   props: {
     msg: String,
   },
   components: { TextField },
   data() {
     return {
+      currentStep: 0,
       processing: false,
       form: {
         account_url: {
@@ -88,6 +132,7 @@ export default {
           type: "password",
         },
       },
+      formSteps: ["account_url", "username", "password"],
     };
   },
   mounted() {
@@ -96,6 +141,21 @@ export default {
     //this.signInRequest( 'https://admin.lighthousechurch.in', 'sam', '!l0v3J35u5&k0ch3' );
   },
   methods: {
+    getBoolValue() {
+      if (this.currentStep == 0) return true;
+    },
+    next() {
+      if (!this.form[this.formSteps[this.currentStep]].value) {
+        this.form[this.formSteps[this.currentStep]].error_msg =
+          "This field cannot be left empty.";
+      } else {
+        this.form[this.formSteps[this.currentStep]].error_msg = "";
+        this.currentStep += 1;
+      }
+    },
+    previous() {
+      this.currentStep -= 1;
+    },
     validateURL(url) {
       return url.replace(/\/$/, "");
     },
