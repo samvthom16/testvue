@@ -12,7 +12,7 @@ export default {
       var headers = {};
       if (username && password) {
         headers = {
-          'Authorization': 'Basic ' + btoa( username + ':' + password ),
+          'Authorization': 'Basic ' + btoa(username + ':' + password),
           'Content-Type': 'application/x-www-form-urlencoded'
         };
       }
@@ -32,6 +32,20 @@ export default {
     requestUsers(page, search = '', filterData = {}) {
       var component = this;
       var endpoint = '/wp-json/wp/v2/inpursuit-members/';
+
+      //console.log(filterData);
+
+      // var str = '';
+      // var i = 0;
+      // for (var key in filterData) {
+      //   if (parseInt(filterData[key])) {
+      //     if (i == 0) str += '?';
+      //     str += key + '=' + filterData[key];
+      //     if (i < (Object.keys(filterData).length - 1)) str += '&';
+      //     i++;
+      //   }
+      // }
+      // endpoint += str;
 
       var data = {
         'orderby': 'title',

@@ -1,40 +1,40 @@
 import { createStore } from 'vuex'
 import API from '../api.js'
 
-function authRequest( state, url ){
+function authRequest(state, url) {
   var username = state.settings.username;
   var password = state.settings.password;
 
   var headers = {};
 
-  if( username && password ){
+  if (username && password) {
     headers = {
       'Authorization': 'Basic ' + btoa( username + ':' + password ),
       'Content-Type': 'application/x-www-form-urlencoded'
     };
     //console.log( headers );
   }
-  return API.makeRequest( { url: url, headers: headers, method: 'get' } );
+  return API.makeRequest({ url: url, headers: headers, method: 'get' });
 }
 
 export default createStore({
   state: {
-    settings    : {},
-    account     : {},
-    processing  : false,
-    errors      : [],
+    settings: {},
+    account: {},
+    processing: false,
+    errors: [],
   },
   mutations: {
-    getLocalSettings( state ){
-      if( localStorage.inpursuit_settings ){
-        state.settings = JSON.parse( localStorage.inpursuit_settings )
+    getLocalSettings(state) {
+      if (localStorage.inpursuit_settings) {
+        state.settings = JSON.parse(localStorage.inpursuit_settings)
       }
       return state.settings;
     },
-    saveLocalSettings( state, payload ){
-      localStorage.inpursuit_settings = JSON.stringify( payload );
+    saveLocalSettings(state, payload) {
+      localStorage.inpursuit_settings = JSON.stringify(payload);
     },
-    flushLocalSettings(){
+    flushLocalSettings() {
       localStorage.inpursuit_settings = null;
     },
 
@@ -44,52 +44,52 @@ export default createStore({
     * IMPORTANT FUNCTION CALL THAT IS CALLED ONCE FOR EVERY BROWSER RELOAD
     * THIS FUNCTION SHOULD BE CALLED BEFORE PULLING ANY OTHER DATA
     */
-    getAccountSettings( state ){
+    getAccountSettings(state) {
       var url = state.settings.account_url + '/wp-json/inpursuit/v1/settings';
 
-      authRequest( state, url ).then( ( response ) => {
+      authRequest(state, url).then((response) => {
         return state.account = response.data;
-      }, ( error ) => {
+      }, (error) => {
         state.error = '' + error;
         //console.log( '' + error );
-      } );
+      });
       return state.account;
     },
-    setProcessing( state, flag ){
+    setProcessing(state, flag) {
       state.processing = flag;
       return state.processing;
     },
-    notifyError( state, errorText ){
-      state.errors.push( errorText );
+    notifyError(state, errorText) {
+      state.errors.push(errorText);
       return state.errors;
     },
-    flushError( state, index ){
-      state.errors.splice( index, 1 );
+    flushError(state, index) {
+      state.errors.splice(index, 1);
       return state.errors;
     },
   },
   actions: {
-    getLocalSettings( context ){
-      context.commit( 'getLocalSettings' );
+    getLocalSettings(context) {
+      context.commit('getLocalSettings');
     },
-    saveLocalSettings( context, payload ){
-      context.commit( 'saveLocalSettings', payload)
+    saveLocalSettings(context, payload) {
+      context.commit('saveLocalSettings', payload)
     },
-    flushLocalSettings( context ){
-      context.commit( 'flushLocalSettings' );
+    flushLocalSettings(context) {
+      context.commit('flushLocalSettings');
     },
-    getAccountSettings( context, url ){
-      context.commit( 'getAccountSettings', url );
+    getAccountSettings(context, url) {
+      context.commit('getAccountSettings', url);
     },
-    setProcessing( context, flag ){
-      context.commit( 'setProcessing', flag );
+    setProcessing(context, flag) {
+      context.commit('setProcessing', flag);
     },
-    notifyError( context, errorText ){
+    notifyError(context, errorText) {
       var text = '' + errorText;
-      context.commit( 'notifyError', text );
+      context.commit('notifyError', text);
     },
-    flushError( context, index ){
-      context.commit( 'flushError', index );
+    flushError(context, index) {
+      context.commit('flushError', index);
     },
   },
   modules: {
