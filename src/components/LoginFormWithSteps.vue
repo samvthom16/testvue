@@ -177,7 +177,7 @@ export default {
           component.currentStep += 1;
         },
         (error) => {
-          // console.log(error);
+          console.log(error);
           component.$store.state.processing = false;
           component.form.account_url.error_msg =
             "URL does not support the application.";
@@ -214,7 +214,7 @@ export default {
             component.currentStep += 1;
           },
           (error) => {
-            // console.log(error);
+            console.log(error);
             component.form.email_address.error_msg =
               "Email Address does not exist";
             component.$store.state.processing = false;
