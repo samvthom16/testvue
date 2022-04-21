@@ -9,7 +9,7 @@ function authRequest( state, url ){
 
   if( username && password ){
     headers = {
-      'Authorization': 'Basic ' + btoa( atob( username ) + ':' + password ),
+      'Authorization': 'Basic ' + btoa( username + ':' + password ),
       'Content-Type': 'application/x-www-form-urlencoded'
     };
     //console.log( headers );

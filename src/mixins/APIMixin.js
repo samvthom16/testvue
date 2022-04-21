@@ -33,24 +33,6 @@ export default {
       var component = this;
       var endpoint = '/wp-json/wp/v2/inpursuit-members/';
 
-      //console.log(filterData);
-
-      // var str = '';
-      // var i = 0;
-      // for (var key in filterData) {
-      //   if (parseInt(filterData[key])) {
-      //     if (i == 0) str += '?';
-      //     str += key + '=' + filterData[key];
-      //     if (i < (Object.keys(filterData).length - 1)) str += '&';
-      //     i++;
-      //   }
-      // }
-
-      // console.warn("str == " + str);
-
-      // endpoint += str;
-
-
       var data = {
         'orderby': 'title',
         'order': 'asc',
