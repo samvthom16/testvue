@@ -90,11 +90,7 @@ export default {
       },
     };
   },
-  mounted() {
-    //console.log( 'test' );
-    //this.signInRequest( 'http://localhost/wordpress', 'sam', '123123' );
-    //this.signInRequest( 'https://admin.lighthousechurch.in', 'sam', '!l0v3J35u5&k0ch3' );
-  },
+
   methods: {
     validateURL(url) {
       return url.replace(/\/$/, "");
@@ -140,8 +136,6 @@ export default {
     },
     submit(e) {
       e.preventDefault();
-
-      //console.log( e );
 
       if (this.$store.state.processing) {
         console.log("Already processing something");

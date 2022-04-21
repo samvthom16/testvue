@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <form class="p-10 max-w-sm m-auto" @submit='submit'>
+    <form class="p-10 max-w-sm m-auto" @submit="submit">
       <TextField
         class="mt-10"
         :field="formfield"
@@ -17,7 +17,17 @@
           v-if="currentStep < formSteps.length - 1"
           type="button"
           @click="submit"
-          class="my-2 border-purple p-2 font-semibold px-4 rounded-lg bg-purple text-sm text-white w-full"
+          class="
+            my-2
+            border-purple
+            p-2
+            font-semibold
+            px-4
+            rounded-lg
+            bg-purple
+            text-sm text-white
+            w-full
+          "
         >
           Next
         </button>
@@ -121,19 +131,18 @@ export default {
     };
   },
 
-
   methods: {
     getBoolValue() {
       if (this.currentStep == 0) return true;
     },
-    getAccountURL(){
-      return this.validateURL( this.form.account_url.value.trim() );
+    getAccountURL() {
+      return this.validateURL(this.form.account_url.value.trim());
     },
 
     previous() {
       this.currentStep -= 1;
     },
-    isValidHttpUrl( string ) {
+    isValidHttpUrl(string) {
       let url;
 
       try {
@@ -154,29 +163,26 @@ export default {
       for (let i = 0; i < 6; i++) {
         OTP += digits[Math.floor(Math.random() * 10)];
       }
-      console.warn("OTP :::" + OTP);
       return OTP;
     },
 
-    testAccountURL( account_url ){
-
+    testAccountURL(account_url) {
       var component = this;
 
       component.$store.state.processing = true;
 
-      API.makeRequest( { url: account_url + '/wp-json/inpursuit/v1' } ).then(
+      API.makeRequest({ url: account_url + "/wp-json/inpursuit/v1" }).then(
         () => {
           component.$store.state.processing = false;
-          component.currentStep += 1
+          component.currentStep += 1;
         },
-        ( error ) => {
-          console.log( error );
+        (error) => {
+          // console.log(error);
           component.$store.state.processing = false;
-          component.form.account_url.error_msg = "URL does not support the application.";
+          component.form.account_url.error_msg =
+            "URL does not support the application.";
         }
-      )
-
-
+      );
     },
 
     sendEmailOTP() {
@@ -189,27 +195,28 @@ export default {
 
       var email_address = component.form.email_address.value.trim();
 
-      if ( email_address && email_address.match( validRegex ) ) {
+      if (email_address && email_address.match(validRegex)) {
         component.form.email_address.error_msg = "";
         this.sent_otp = this.generateOTP();
 
         component.$store.state.processing = true;
 
-        API.makeRequest( {
-          url   : account_url + '/wp-json/inpursuit/v1/verify/',
-          data  : {
-            email_address : btoa( email_address ),
-            email_otp     : btoa( this.sent_otp ),
+        API.makeRequest({
+          url: account_url + "/wp-json/inpursuit/v1/verify/",
+          data: {
+            email_address: btoa(email_address),
+            email_otp: btoa(this.sent_otp),
           },
-          method: 'post'
-        } ).then(
+          method: "post",
+        }).then(
           () => {
             component.$store.state.processing = false;
-            component.currentStep += 1
+            component.currentStep += 1;
           },
-          ( error ) => {
-            console.log( error );
-            component.form.email_address.error_msg = "Email Address does not exist";
+          (error) => {
+            // console.log(error);
+            component.form.email_address.error_msg =
+              "Email Address does not exist";
             component.$store.state.processing = false;
           }
         );
@@ -226,27 +233,30 @@ export default {
     verifyOTP() {
       var component = this;
 
-      if ( !component.form.otp.value || component.form.otp.value != this.sent_otp ) {
+      if (
+        !component.form.otp.value ||
+        component.form.otp.value != this.sent_otp
+      ) {
         component.form.otp.error_msg = "Invalid OTP";
         return false;
       }
       component.form.otp.error_msg = "";
 
       component.$store.state.processing = true;
-      API.makeRequest( {
-        url   : this.getAccountURL() + '/wp-json/inpursuit/v1/authentication/',
-        data  : {
-          email_address: btoa( component.form.email_address.value.trim() ),
+      API.makeRequest({
+        url: this.getAccountURL() + "/wp-json/inpursuit/v1/authentication/",
+        data: {
+          email_address: btoa(component.form.email_address.value.trim()),
         },
-        method : 'post'
-      } ).then(
-        ( response ) => {
+        method: "post",
+      }).then(
+        (response) => {
           component.$store.state.processing = false;
-          component.afterAuthentication( response );
+          component.afterAuthentication(response);
         },
-        ( error ) => {
+        (error) => {
           component.$store.state.processing = false;
-          alert( error.response.data.message );
+          alert(error.response.data.message);
         }
       );
       return true;
@@ -254,18 +264,14 @@ export default {
 
     afterAuthentication(response) {
       var component = this;
-      // this.processing = false;
 
+      //STORING THE USER DATA AND URL
       if (response.data && response.data.password && response.data.user) {
-        //console.warn("uname = " + response.data.user.user_login);
-        //console.warn("pass = " + response.data.password);
-        //console.warn("url = " + component.form.account_url.value);
-
-        this.$store.commit( "saveLocalSettings", {
-          username    : response.data.user.user_login,
-          password    : response.data.password,
-          account_url : component.getAccountURL(),
-        } );
+        this.$store.commit("saveLocalSettings", {
+          username: response.data.user.user_login,
+          password: response.data.password,
+          account_url: component.getAccountURL(),
+        });
 
         // REDIRECT TO MEMBERS LISTING
         this.$router.push("/members");
@@ -275,8 +281,6 @@ export default {
     submit(e) {
       e.preventDefault();
 
-      //console.log( 'submit' );
-
       if (!this.form[this.formSteps[this.currentStep]].value) {
         this.form[this.formSteps[this.currentStep]].error_msg =
           "This field cannot be left empty.";
@@ -284,25 +288,21 @@ export default {
         this.form[this.formSteps[this.currentStep]].error_msg = "";
 
         // FIRST STEP - ACCOUNT URL
-        if( !this.currentStep ){
-
+        if (!this.currentStep) {
           var account_url = this.getAccountURL();
-          if( this.isValidHttpUrl( account_url ) ){
-            this.testAccountURL( account_url );
-          }
-          else{
+          if (this.isValidHttpUrl(account_url)) {
+            this.testAccountURL(account_url);
+          } else {
             this.form.account_url.error_msg = "Invalid URL";
           }
         }
         // SECOND STEP - SEND EMAIL OTP
-        else if ( this.currentStep === 1 ) {
+        else if (this.currentStep === 1) {
           this.sendEmailOTP();
-        }
-        else if( this.currentStep ===2 ){
+        } else if (this.currentStep === 2) {
           this.verifyOTP();
         }
       }
-
     },
   },
 };

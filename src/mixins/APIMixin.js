@@ -12,7 +12,7 @@ export default {
       var headers = {};
       if (username && password) {
         headers = {
-          'Authorization': 'Basic ' + btoa( username + ':' + password ),
+          'Authorization': 'Basic ' + btoa(username + ':' + password),
           'Content-Type': 'application/x-www-form-urlencoded'
         };
       }
@@ -45,11 +45,7 @@ export default {
       //     i++;
       //   }
       // }
-
-      // console.warn("str == " + str);
-
       // endpoint += str;
-
 
       var data = {
         'orderby': 'title',
