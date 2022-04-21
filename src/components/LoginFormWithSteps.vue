@@ -206,7 +206,7 @@ export default {
         console.warn("btoa email add:" + btoa(email_address));
         console.warn("btoa otp:" + btoa(this.sent_otp));
 
-        API.requestVerifyMail({
+        API.requestVerifyMail(component.form.account_url.value.trim(), {
           email_address: btoa(email_address),
           email_otp: btoa(this.sent_otp),
         }).then(() => (this.currentStep += 1));
@@ -229,9 +229,12 @@ export default {
       }
       component.form.otp.error_msg = "";
 
-      API.requestAuthenticateEmailAddress({
-        email_address: btoa(component.form.email_address.value.trim()),
-      }).then((response) => this.afterAuthentication(response));
+      API.requestAuthenticateEmailAddress(
+        component.form.account_url.value.trim(),
+        {
+          email_address: btoa(component.form.email_address.value.trim()),
+        }
+      ).then((response) => this.afterAuthentication(response));
 
       return true;
     },
@@ -240,10 +243,6 @@ export default {
       var component = this;
       // this.processing = false;
       if (response.data && response.data.password && response.data.user) {
-        console.warn("uname = " + response.data.user.user_login);
-        console.warn("pass = " + response.data.password);
-        console.warn("url = " + component.form.account_url.value);
-
         this.$store.commit("saveLocalSettings", {
           username: response.data.user.user_login,
           password: response.data.password,

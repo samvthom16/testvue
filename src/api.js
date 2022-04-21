@@ -40,23 +40,25 @@ const api = {
     return api;
   },
 
-  requestVerifyMail: function (params = {}) {
+  requestVerifyMail: function (base_url, params = {}) {
+
+    var url = base_url + '/wp-json/inpursuit/v1/verify/';
     return this.makeRequest({
-      url: 'http://localhost:8888/wordpress/wp-json/inpursuit/v1/verify/',
+      url: url,
       method: 'post',
       data: params,
     });
   },
 
-  requestAuthenticateEmailAddress: function (params = {}) {
+  requestAuthenticateEmailAddress: function (base_url, params = {}) {
+
+    var url = base_url + '/wp-json/inpursuit/v1/authentication/';
     return this.makeRequest({
-      url: 'http://localhost:8888/wordpress/wp-json/inpursuit/v1/authentication/',
+      url: url,
       method: 'post',
       data: params,
     });
   },
-
-
 
 }
 
