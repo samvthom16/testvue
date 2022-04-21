@@ -10,29 +10,13 @@
         :key="key"
       />
 
-      <div class="flex flex-row justify-between">
+      <div class="" v-if="currentStep < formSteps.length - 1">
         <button
-          v-if="currentStep !== 0"
-          type="button"
-          @click="previous"
-          class="
-            my-2
-            border-purple
-            p-2
-            font-semibold
-            px-4
-            rounded-lg
-            bg-purple
-            text-sm text-white
-          "
-        >
-          Previous
-        </button>
-
-        <button
+          :disabled="$store.state.processing"
+          :class="{ 'cursor-not-allowed': $store.state.processing }"
           v-if="currentStep < formSteps.length - 1"
           type="button"
-          @click="next"
+          @click="submit"
           class="
             my-2
             border-purple
@@ -42,9 +26,18 @@
             rounded-lg
             bg-purple
             text-sm text-white
+            w-full
           "
         >
           Next
+        </button>
+        <button
+          v-if="currentStep !== 0"
+          type="button"
+          @click="currentStep -= 1"
+          class="mt-6 text-sm underline text-center w-full"
+        >
+          Go Back
         </button>
       </div>
 
@@ -64,7 +57,8 @@
           border
           rounded
         "
-        type="submit"
+        type="button"
+        @click="submit"
       >
         <svg
           :class="{
@@ -119,147 +113,197 @@ export default {
           value: "",
           type: "text",
         },
-        username: {
-          label: "Username",
+        email_address: {
+          label: "Email Address",
           error_msg: "",
           value: "",
           type: "text",
         },
-        password: {
-          label: "Password",
+        otp: {
+          label: "OTP",
           error_msg: "",
           value: "",
-          type: "password",
+          type: "text",
         },
       },
-      formSteps: ["account_url", "username", "password"],
+      formSteps: ["account_url", "email_address", "otp"],
+      sent_otp: "",
     };
   },
-  mounted() {
-    //console.log( 'test' );
-    //this.signInRequest( 'http://localhost/wordpress', 'sam', '123123' );
-    //this.signInRequest( 'https://admin.lighthousechurch.in', 'sam', '!l0v3J35u5&k0ch3' );
-  },
+
   methods: {
     getBoolValue() {
       if (this.currentStep == 0) return true;
     },
-    next() {
+    getAccountURL() {
+      return this.validateURL(this.form.account_url.value.trim());
+    },
+
+    previous() {
+      this.currentStep -= 1;
+    },
+    isValidHttpUrl(string) {
+      let url;
+
+      try {
+        url = new URL(string);
+      } catch (_) {
+        return false;
+      }
+
+      return url.protocol === "http:" || url.protocol === "https:";
+    },
+    validateURL(url) {
+      return url.replace(/\/$/, "");
+    },
+
+    generateOTP() {
+      var digits = "0123456789";
+      let OTP = "";
+      for (let i = 0; i < 6; i++) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+      }
+      return OTP;
+    },
+
+    testAccountURL(account_url) {
+      var component = this;
+
+      component.$store.state.processing = true;
+
+      API.makeRequest({ url: account_url + "/wp-json/inpursuit/v1" }).then(
+        () => {
+          component.$store.state.processing = false;
+          component.currentStep += 1;
+        },
+        (error) => {
+          console.log(error);
+          component.$store.state.processing = false;
+          component.form.account_url.error_msg =
+            "URL does not support the application.";
+        }
+      );
+    },
+
+    sendEmailOTP() {
+      var component = this;
+
+      var account_url = this.getAccountURL();
+
+      var validRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+      var email_address = component.form.email_address.value.trim();
+
+      if (email_address && email_address.match(validRegex)) {
+        component.form.email_address.error_msg = "";
+        this.sent_otp = this.generateOTP();
+
+        component.$store.state.processing = true;
+
+        API.makeRequest({
+          url: account_url + "/wp-json/inpursuit/v1/verify/",
+          data: {
+            email_address: btoa(email_address),
+            email_otp: btoa(this.sent_otp),
+          },
+          method: "post",
+        }).then(
+          () => {
+            component.$store.state.processing = false;
+            component.currentStep += 1;
+          },
+          (error) => {
+            console.log(error);
+            component.form.email_address.error_msg =
+              "Email Address does not exist";
+            component.$store.state.processing = false;
+          }
+        );
+
+        return true;
+      }
+
+      component.form.email_address.error_msg =
+        "Please type your email ID above instead of copying to avoid error.";
+
+      return false;
+    },
+
+    verifyOTP() {
+      var component = this;
+
+      if (
+        !component.form.otp.value ||
+        component.form.otp.value != this.sent_otp
+      ) {
+        component.form.otp.error_msg = "Invalid OTP";
+        return false;
+      }
+      component.form.otp.error_msg = "";
+
+      component.$store.state.processing = true;
+      API.makeRequest({
+        url: this.getAccountURL() + "/wp-json/inpursuit/v1/authentication/",
+        data: {
+          email_address: btoa(component.form.email_address.value.trim()),
+        },
+        method: "post",
+      }).then(
+        (response) => {
+          component.$store.state.processing = false;
+          component.afterAuthentication(response);
+        },
+        (error) => {
+          component.$store.state.processing = false;
+          alert(error.response.data.message);
+        }
+      );
+      return true;
+    },
+
+    afterAuthentication(response) {
+      var component = this;
+
+      //STORING THE USER DATA AND URL
+      if (response.data && response.data.password && response.data.user) {
+        this.$store.commit("saveLocalSettings", {
+          username: response.data.user.user_login,
+          password: response.data.password,
+          account_url: component.getAccountURL(),
+        });
+
+        // REDIRECT TO MEMBERS LISTING
+        this.$router.push("/members");
+      }
+    },
+
+    submit(e) {
+      e.preventDefault();
+
       if (!this.form[this.formSteps[this.currentStep]].value) {
         this.form[this.formSteps[this.currentStep]].error_msg =
           "This field cannot be left empty.";
       } else {
         this.form[this.formSteps[this.currentStep]].error_msg = "";
-        this.currentStep += 1;
-      }
-    },
-    previous() {
-      this.currentStep -= 1;
-    },
-    validateURL(url) {
-      return url.replace(/\/$/, "");
-    },
-    setProcessing(flag) {
-      this.processing = flag;
-      this.$store.commit("setProcessing", this.processing);
-    },
-    signInRequest(base_url, username, password) {
-      var ukey = btoa(username);
-      var pkey = btoa(password);
-      var account_url = this.validateURL(base_url);
-      var url = account_url + "/wp-json/inpursuit/v1/auth";
 
-      var request = API.makeRequest({
-        method: "post",
-        url: url,
-        data: {
-          username: ukey,
-          password: pkey,
-        },
-      });
-
-      return {
-        ukey: ukey,
-        account_url: account_url,
-        request: request,
-      };
-    },
-    whenSignInSuccessful(username, new_password, account_url) {
-      // SET PROCESSING SO THE LOADER IS OFF
-      this.setProcessing(false);
-
-      // SAVE TO LOCAL STORAGE
-      this.$store.commit("saveLocalSettings", {
-        username: username,
-        password: new_password,
-        account_url: account_url,
-      });
-
-      // REDIRECT TO MEMBERS LISTING
-      this.$router.push("/members");
-    },
-    submit(e) {
-      e.preventDefault();
-
-      //console.log( e );
-
-      if (this.$store.state.processing) {
-        console.log("Already processing something");
-        return false;
-      }
-
-      var component = this;
-
-      // SET THE PROCESSING FLAG TO INDICATE FORM HAS BEEN SUBMITTED
-      component.setProcessing(true);
-      //component.$store.commit( 'setProcessing', true );
-
-      var empty_flag = false;
-      for (var key in component.form) {
-        // RESET ERROR MESSAGE
-        component.form[key].error_msg = "";
-
-        // CHECK FOR EMPTY FIELD
-        if (!component.form[key].value) {
-          component.form[key].error_msg = "This field cannot be left empty.";
-          empty_flag = true;
+        // FIRST STEP - ACCOUNT URL
+        if (!this.currentStep) {
+          var account_url = this.getAccountURL();
+          if (this.isValidHttpUrl(account_url)) {
+            this.testAccountURL(account_url);
+          } else {
+            this.form.account_url.error_msg = "Invalid URL";
+          }
+        }
+        // SECOND STEP - SEND EMAIL OTP
+        else if (this.currentStep === 1) {
+          this.sendEmailOTP();
+        } else if (this.currentStep === 2) {
+          this.verifyOTP();
         }
       }
-
-      // IF ANY OF THE FIELDS IS EMPTY, SHOULD SHOW THE ERROR MESSAGE
-      if (empty_flag) {
-        component.setProcessing(false);
-        return false;
-      }
-
-      // CHECK IF THE ACCOUNT URL IS RIGHT
-      var signInData = component.signInRequest(
-        component.form.account_url.value, // THESE VALUES ARE TAKEN FROM THE CURRENT USER INPUT IN THE FORM
-        component.form.username.value,
-        component.form.password.value
-      );
-
-      signInData.request.then(
-        (response) => {
-          // ON SUCCESSFULL SIGN IN
-          component.whenSignInSuccessful(
-            signInData.ukey,
-            response.data.new_password,
-            signInData.account_url
-          );
-        },
-        (error) => {
-          //console.log( '' + error );
-          component.setProcessing(false);
-          component.form.password.error_msg = "Try again. " + error;
-          return false;
-        }
-      );
     },
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

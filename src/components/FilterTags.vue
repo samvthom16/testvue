@@ -1,36 +1,4 @@
 <template>
-  <!-- <li class="inline-block p-2 w-1/2">
-    <select :name="tag" class="border p-2 px-4 w-full">
-      <option value="0">Choose {{ tag }}</option>
-      <option :value="id" v-for="(subtag, id) in tagData" :key="subtag">
-        {{ subtag }}
-      </option>
-    </select>
-  </li> -->
-
-  <!-- <li class="inline-block p-1">
-    <div :name="tag" class="text-sm font-semibold mb-2">{{ tag }}</div>
-    <template :value="id" v-for="(subTag, id) in tagData" :key="subTag">
-      <div class="flex flex-wrap float-left">
-        <button
-          type="button"
-          class="
-            border border-gray
-            rounded-md
-            px-3
-            py-1
-            text-sm
-            mr-2
-            mb-2
-            truncate
-          "
-          @click="onChipClicked"
-        >
-          {{ subTag }}
-        </button>
-      </div>
-    </template>
-  </li> -->
   <div class="grid grid-row-2 content-start">
     <div class="text-sm font-semibold mb-2">{{ tag }}</div>
 
@@ -110,17 +78,8 @@ export default {
 </script>
 
 <style scoped>
-body,
-html {
-  margin: 0;
-  padding: 0;
-}
 
-body {
-  display: flex;
-  align-items: left;
-  justify-content: center;
-}
+
 
 ul.ks-cboxtags {
   list-style: none;

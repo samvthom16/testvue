@@ -43,18 +43,6 @@ export default {
     },
     /* INHERITED FROM PAGINATION MIXIN */
     getAPI() {
-      // var filterData = {};
-
-      // var $form = document.getElementById("filterForm");
-
-      // console.log("form ==", $form);
-
-      // if ($form) {
-      //   filterData = Object.fromEntries(new FormData($form).entries());
-      // }
-
-      // console.log(filterData);
-
       return this.requestUsers(this.page, this.search, this.filterData);
     },
     getPageTitle() {
