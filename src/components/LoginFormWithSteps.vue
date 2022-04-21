@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <form class="p-10 max-w-sm m-auto">
+    <form class="p-10 max-w-sm m-auto" @submit='submit'>
       <TextField
         class="mt-10"
         :field="formfield"
@@ -10,41 +10,24 @@
         :key="key"
       />
 
-      <div class="flex flex-row justify-between">
+      <div class="" v-if="currentStep < formSteps.length - 1">
+        <button
+          :disabled="$store.state.processing"
+          :class="{ 'cursor-not-allowed': $store.state.processing }"
+          v-if="currentStep < formSteps.length - 1"
+          type="button"
+          @click="submit"
+          class="my-2 border-purple p-2 font-semibold px-4 rounded-lg bg-purple text-sm text-white w-full"
+        >
+          Next
+        </button>
         <button
           v-if="currentStep !== 0"
           type="button"
-          @click="previous"
-          class="
-            my-2
-            border-purple
-            p-2
-            font-semibold
-            px-4
-            rounded-lg
-            bg-purple
-            text-sm text-white
-          "
+          @click="currentStep -= 1"
+          class="mt-6 text-sm underline text-center w-full"
         >
-          Previous
-        </button>
-
-        <button
-          v-if="currentStep < formSteps.length - 1"
-          type="button"
-          @click="next"
-          class="
-            my-2
-            border-purple
-            p-2
-            font-semibold
-            px-4
-            rounded-lg
-            bg-purple
-            text-sm text-white
-          "
-        >
-          Next
+          Go Back
         </button>
       </div>
 
@@ -120,18 +103,6 @@ export default {
           value: "",
           type: "text",
         },
-        // username: {
-        //   label: "Username",
-        //   error_msg: "",
-        //   value: "",
-        //   type: "text",
-        // },
-        // password: {
-        //   label: "Password",
-        //   error_msg: "",
-        //   value: "",
-        //   type: "password",
-        // },
         email_address: {
           label: "Email Address",
           error_msg: "",
@@ -145,37 +116,33 @@ export default {
           type: "text",
         },
       },
-      // formSteps: ["account_url", "username", "password"],
       formSteps: ["account_url", "email_address", "otp"],
       sent_otp: "",
     };
   },
-  mounted() {
-    //console.log( 'test' );
-    //this.signInRequest( 'http://localhost/wordpress', 'sam', '123123' );
-    //this.signInRequest( 'https://admin.lighthousechurch.in', 'sam', '!l0v3J35u5&k0ch3' );
-  },
+
 
   methods: {
     getBoolValue() {
       if (this.currentStep == 0) return true;
     },
-    next() {
-      if (!this.form[this.formSteps[this.currentStep]].value) {
-        this.form[this.formSteps[this.currentStep]].error_msg =
-          "This field cannot be left empty.";
-      } else {
-        this.form[this.formSteps[this.currentStep]].error_msg = "";
-
-        if (this.currentStep === 1) {
-          this.sendEmailOTP();
-        } else {
-          this.currentStep += 1;
-        }
-      }
+    getAccountURL(){
+      return this.validateURL( this.form.account_url.value.trim() );
     },
+
     previous() {
       this.currentStep -= 1;
+    },
+    isValidHttpUrl( string ) {
+      let url;
+
+      try {
+        url = new URL(string);
+      } catch (_) {
+        return false;
+      }
+
+      return url.protocol === "http:" || url.protocol === "https:";
     },
     validateURL(url) {
       return url.replace(/\/$/, "");
@@ -191,64 +158,114 @@ export default {
       return OTP;
     },
 
+    testAccountURL( account_url ){
+
+      var component = this;
+
+      component.$store.state.processing = true;
+
+      API.makeRequest( { url: account_url + '/wp-json/inpursuit/v1' } ).then(
+        () => {
+          component.$store.state.processing = false;
+          component.currentStep += 1
+        },
+        ( error ) => {
+          console.log( error );
+          component.$store.state.processing = false;
+          component.form.account_url.error_msg = "URL does not support the application.";
+        }
+      )
+
+
+    },
+
     sendEmailOTP() {
       var component = this;
+
+      var account_url = this.getAccountURL();
 
       var validRegex =
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
       var email_address = component.form.email_address.value.trim();
 
-      if (email_address && email_address.match(validRegex)) {
+      if ( email_address && email_address.match( validRegex ) ) {
         component.form.email_address.error_msg = "";
         this.sent_otp = this.generateOTP();
 
-        console.warn("btoa email add:" + btoa(email_address));
-        console.warn("btoa otp:" + btoa(this.sent_otp));
+        component.$store.state.processing = true;
 
-        API.requestVerifyMail({
-          email_address: btoa(email_address),
-          email_otp: btoa(this.sent_otp),
-        }).then(() => (this.currentStep += 1));
+        API.makeRequest( {
+          url   : account_url + '/wp-json/inpursuit/v1/verify/',
+          data  : {
+            email_address : btoa( email_address ),
+            email_otp     : btoa( this.sent_otp ),
+          },
+          method: 'post'
+        } ).then(
+          () => {
+            component.$store.state.processing = false;
+            component.currentStep += 1
+          },
+          ( error ) => {
+            console.log( error );
+            component.form.email_address.error_msg = "Email Address does not exist";
+            component.$store.state.processing = false;
+          }
+        );
+
         return true;
       }
+
       component.form.email_address.error_msg =
-        "Please type your email ID above instead of copying it to avoid error.";
+        "Please type your email ID above instead of copying to avoid error.";
+
       return false;
     },
 
     verifyOTP() {
       var component = this;
 
-      if (
-        !component.form.otp.value ||
-        component.form.otp.value != this.sent_otp
-      ) {
+      if ( !component.form.otp.value || component.form.otp.value != this.sent_otp ) {
         component.form.otp.error_msg = "Invalid OTP";
         return false;
       }
       component.form.otp.error_msg = "";
 
-      API.requestAuthenticateEmailAddress({
-        email_address: btoa(component.form.email_address.value.trim()),
-      }).then((response) => this.afterAuthentication(response));
-
+      component.$store.state.processing = true;
+      API.makeRequest( {
+        url   : this.getAccountURL() + '/wp-json/inpursuit/v1/authentication/',
+        data  : {
+          email_address: btoa( component.form.email_address.value.trim() ),
+        },
+        method : 'post'
+      } ).then(
+        ( response ) => {
+          component.$store.state.processing = false;
+          component.afterAuthentication( response );
+        },
+        ( error ) => {
+          component.$store.state.processing = false;
+          alert( error.response.data.message );
+        }
+      );
       return true;
     },
 
     afterAuthentication(response) {
       var component = this;
       // this.processing = false;
-      if (response.data && response.data.password && response.data.user) {
-        console.warn("uname = " + response.data.user.user_login);
-        console.warn("pass = " + response.data.password);
-        console.warn("url = " + component.form.account_url.value);
 
-        this.$store.commit("saveLocalSettings", {
-          username: response.data.user.user_login,
-          password: response.data.password,
-          account_url: component.form.account_url.value,
-        });
+      if (response.data && response.data.password && response.data.user) {
+        //console.warn("uname = " + response.data.user.user_login);
+        //console.warn("pass = " + response.data.password);
+        //console.warn("url = " + component.form.account_url.value);
+
+        this.$store.commit( "saveLocalSettings", {
+          username    : response.data.user.user_login,
+          password    : response.data.password,
+          account_url : component.getAccountURL(),
+        } );
 
         // REDIRECT TO MEMBERS LISTING
         this.$router.push("/members");
@@ -258,9 +275,34 @@ export default {
     submit(e) {
       e.preventDefault();
 
-      // var component = this;
+      //console.log( 'submit' );
 
-      this.verifyOTP();
+      if (!this.form[this.formSteps[this.currentStep]].value) {
+        this.form[this.formSteps[this.currentStep]].error_msg =
+          "This field cannot be left empty.";
+      } else {
+        this.form[this.formSteps[this.currentStep]].error_msg = "";
+
+        // FIRST STEP - ACCOUNT URL
+        if( !this.currentStep ){
+
+          var account_url = this.getAccountURL();
+          if( this.isValidHttpUrl( account_url ) ){
+            this.testAccountURL( account_url );
+          }
+          else{
+            this.form.account_url.error_msg = "Invalid URL";
+          }
+        }
+        // SECOND STEP - SEND EMAIL OTP
+        else if ( this.currentStep === 1 ) {
+          this.sendEmailOTP();
+        }
+        else if( this.currentStep ===2 ){
+          this.verifyOTP();
+        }
+      }
+
     },
   },
 };

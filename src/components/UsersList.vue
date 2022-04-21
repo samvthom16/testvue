@@ -283,6 +283,7 @@ export default {
   },
   async created() {
     try {
+      
       var request = await API.makeRequest({
         method: "get",
         url: "https://admin.lighthousechurch.in/wp-json/inpursuit/v1/settings",

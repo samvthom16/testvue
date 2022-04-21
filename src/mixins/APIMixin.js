@@ -12,7 +12,7 @@ export default {
       var headers = {};
       if (username && password) {
         headers = {
-          'Authorization': 'Basic ' + btoa(atob(username) + ':' + password),
+          'Authorization': 'Basic ' + btoa( username + ':' + password ),
           'Content-Type': 'application/x-www-form-urlencoded'
         };
       }
@@ -33,7 +33,7 @@ export default {
       var component = this;
       var endpoint = '/wp-json/wp/v2/inpursuit-members/';
 
-      console.log(filterData);
+      //console.log(filterData);
 
       // var str = '';
       // var i = 0;
@@ -59,7 +59,7 @@ export default {
       };
 
       let finalData = Object.assign(data, filterData);
-      
+
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
         method: 'get',
