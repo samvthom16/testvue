@@ -39,6 +39,25 @@ const api = {
 
     return api;
   },
+
+  requestVerifyMail: function (params = {}) {
+    return this.makeRequest({
+      url: 'http://localhost:8888/wordpress/wp-json/inpursuit/v1/verify/',
+      method: 'post',
+      data: params,
+    });
+  },
+
+  requestAuthenticateEmailAddress: function (params = {}) {
+    return this.makeRequest({
+      url: 'http://localhost:8888/wordpress/wp-json/inpursuit/v1/authentication/',
+      method: 'post',
+      data: params,
+    });
+  },
+
+
+
 }
 
 export default api

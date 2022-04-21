@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <form class="p-10 max-w-sm m-auto" @submit="submit">
+    <form class="p-10 max-w-sm m-auto">
       <TextField
         class="mt-10"
         :field="formfield"
@@ -64,7 +64,8 @@
           border
           rounded
         "
-        type="submit"
+        type="button"
+        @click="submit"
       >
         <svg
           :class="{
@@ -119,20 +120,34 @@ export default {
           value: "",
           type: "text",
         },
-        username: {
-          label: "Username",
+        // username: {
+        //   label: "Username",
+        //   error_msg: "",
+        //   value: "",
+        //   type: "text",
+        // },
+        // password: {
+        //   label: "Password",
+        //   error_msg: "",
+        //   value: "",
+        //   type: "password",
+        // },
+        email_address: {
+          label: "Email Address",
           error_msg: "",
           value: "",
           type: "text",
         },
-        password: {
-          label: "Password",
+        otp: {
+          label: "OTP",
           error_msg: "",
           value: "",
-          type: "password",
+          type: "text",
         },
       },
-      formSteps: ["account_url", "username", "password"],
+      // formSteps: ["account_url", "username", "password"],
+      formSteps: ["account_url", "email_address", "otp"],
+      sent_otp: "",
     };
   },
   mounted() {
@@ -140,6 +155,7 @@ export default {
     //this.signInRequest( 'http://localhost/wordpress', 'sam', '123123' );
     //this.signInRequest( 'https://admin.lighthousechurch.in', 'sam', '!l0v3J35u5&k0ch3' );
   },
+
   methods: {
     getBoolValue() {
       if (this.currentStep == 0) return true;
@@ -150,7 +166,12 @@ export default {
           "This field cannot be left empty.";
       } else {
         this.form[this.formSteps[this.currentStep]].error_msg = "";
-        this.currentStep += 1;
+
+        if (this.currentStep === 1) {
+          this.sendEmailOTP();
+        } else {
+          this.currentStep += 1;
+        }
       }
     },
     previous() {
@@ -159,102 +180,87 @@ export default {
     validateURL(url) {
       return url.replace(/\/$/, "");
     },
-    setProcessing(flag) {
-      this.processing = flag;
-      this.$store.commit("setProcessing", this.processing);
+
+    generateOTP() {
+      var digits = "0123456789";
+      let OTP = "";
+      for (let i = 0; i < 6; i++) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+      }
+      console.warn("OTP :::" + OTP);
+      return OTP;
     },
-    signInRequest(base_url, username, password) {
-      var ukey = btoa(username);
-      var pkey = btoa(password);
-      var account_url = this.validateURL(base_url);
-      var url = account_url + "/wp-json/inpursuit/v1/auth";
 
-      var request = API.makeRequest({
-        method: "post",
-        url: url,
-        data: {
-          username: ukey,
-          password: pkey,
-        },
-      });
+    sendEmailOTP() {
+      var component = this;
 
-      return {
-        ukey: ukey,
-        account_url: account_url,
-        request: request,
-      };
+      var validRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+      var email_address = component.form.email_address.value.trim();
+
+      if (email_address && email_address.match(validRegex)) {
+        component.form.email_address.error_msg = "";
+        this.sent_otp = this.generateOTP();
+
+        console.warn("btoa email add:" + btoa(email_address));
+        console.warn("btoa otp:" + btoa(this.sent_otp));
+
+        API.requestVerifyMail({
+          email_address: btoa(email_address),
+          email_otp: btoa(this.sent_otp),
+        }).then(() => (this.currentStep += 1));
+        return true;
+      }
+      component.form.email_address.error_msg =
+        "Please type your email ID above instead of copying it to avoid error.";
+      return false;
     },
-    whenSignInSuccessful(username, new_password, account_url) {
-      // SET PROCESSING SO THE LOADER IS OFF
-      this.setProcessing(false);
 
-      // SAVE TO LOCAL STORAGE
-      this.$store.commit("saveLocalSettings", {
-        username: username,
-        password: new_password,
-        account_url: account_url,
-      });
+    verifyOTP() {
+      var component = this;
 
-      // REDIRECT TO MEMBERS LISTING
-      this.$router.push("/members");
+      if (
+        !component.form.otp.value ||
+        component.form.otp.value != this.sent_otp
+      ) {
+        component.form.otp.error_msg = "Invalid OTP";
+        return false;
+      }
+      component.form.otp.error_msg = "";
+
+      API.requestAuthenticateEmailAddress({
+        email_address: btoa(component.form.email_address.value.trim()),
+      }).then((response) => this.afterAuthentication(response));
+
+      return true;
     },
+
+    afterAuthentication(response) {
+      var component = this;
+      // this.processing = false;
+      if (response.data && response.data.password && response.data.user) {
+        console.warn("uname = " + response.data.user.user_login);
+        console.warn("pass = " + response.data.password);
+        console.warn("url = " + component.form.account_url.value);
+
+        this.$store.commit("saveLocalSettings", {
+          username: response.data.user.user_login,
+          password: response.data.password,
+          account_url: component.form.account_url.value,
+        });
+
+        // REDIRECT TO MEMBERS LISTING
+        this.$router.push("/members");
+      }
+    },
+
     submit(e) {
       e.preventDefault();
 
-      //console.log( e );
+      // var component = this;
 
-      if (this.$store.state.processing) {
-        console.log("Already processing something");
-        return false;
-      }
-
-      var component = this;
-
-      // SET THE PROCESSING FLAG TO INDICATE FORM HAS BEEN SUBMITTED
-      component.setProcessing(true);
-      //component.$store.commit( 'setProcessing', true );
-
-      var empty_flag = false;
-      for (var key in component.form) {
-        // RESET ERROR MESSAGE
-        component.form[key].error_msg = "";
-
-        // CHECK FOR EMPTY FIELD
-        if (!component.form[key].value) {
-          component.form[key].error_msg = "This field cannot be left empty.";
-          empty_flag = true;
-        }
-      }
-
-      // IF ANY OF THE FIELDS IS EMPTY, SHOULD SHOW THE ERROR MESSAGE
-      if (empty_flag) {
-        component.setProcessing(false);
-        return false;
-      }
-
-      // CHECK IF THE ACCOUNT URL IS RIGHT
-      var signInData = component.signInRequest(
-        component.form.account_url.value, // THESE VALUES ARE TAKEN FROM THE CURRENT USER INPUT IN THE FORM
-        component.form.username.value,
-        component.form.password.value
-      );
-
-      signInData.request.then(
-        (response) => {
-          // ON SUCCESSFULL SIGN IN
-          component.whenSignInSuccessful(
-            signInData.ukey,
-            response.data.new_password,
-            signInData.account_url
-          );
-        },
-        (error) => {
-          //console.log( '' + error );
-          component.setProcessing(false);
-          component.form.password.error_msg = "Try again. " + error;
-          return false;
-        }
-      );
+      this.verifyOTP();
     },
   },
 };
