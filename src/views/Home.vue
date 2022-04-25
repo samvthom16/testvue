@@ -18,7 +18,7 @@ export default {
     this.$store.commit("getLocalSettings");
 
     if (this.$store.state.settings && this.$store.state.settings.account_url) {
-      this.$router.push("/homeScreen");
+      this.$router.push("/members");
     } else {
       this.$router.push("/login");
     }

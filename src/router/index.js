@@ -7,7 +7,6 @@ import Members from '@/views/Members.vue'
 import SingleMember from '@/views/SingleMember.vue'
 import Profile from '@/views/Profile.vue'
 import Events from '@/views/Events.vue'
-import HomeScreen from '@/views/HomeScreen.vue'
 
 const routes = [
   {
@@ -41,12 +40,6 @@ const routes = [
     name: 'SingleMember',
     component: SingleMember
   },
-  {
-    path: '/homeScreen',
-    name: 'HomeScreen',
-    component: HomeScreen
-  },
-
   {
     path: '/events',
     name: 'Events',
