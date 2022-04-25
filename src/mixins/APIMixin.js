@@ -64,6 +64,27 @@ export default {
       });
     },
 
+    requestEvents(page, search = '', filterData = {}) {
+      var component = this;
+      var endpoint = '/wp-json/wp/v2/inpursuit-events/';
+
+      var data = {
+        'orderby': 'title',
+        'order': 'asc',
+        'page': page,
+        'search': search,
+      };
+
+      let finalData = Object.assign(data, filterData);
+
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: 'get',
+        data: finalData,
+        headers: component.getAuthHeaders()
+      });
+    },
+
     requestHistory(options) {
       var component = this;
       var endpoint = '/wp-json/inpursuit/v1/history';

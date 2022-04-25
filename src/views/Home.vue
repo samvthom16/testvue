@@ -1,5 +1,5 @@
 <template>
-  <div class='home'>
+  <div class="home">
     <ItemAnimation class="mt-5" />
     <ItemAnimation class="mt-5" />
     <ItemAnimation class="mt-5" />
@@ -7,23 +7,21 @@
 </template>
 
 <script>
-import ItemAnimation from '../components/ItemAnimation.vue'
+import ItemAnimation from "../components/ItemAnimation.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    ItemAnimation
+    ItemAnimation,
   },
-  mounted(){
-    //var component = this;
-    this.$store.commit( 'getLocalSettings' );
+  mounted() {
+    this.$store.commit("getLocalSettings");
 
-    if( this.$store.state.settings && this.$store.state.settings.account_url ){
-      this.$router.push( '/members' );
+    if (this.$store.state.settings && this.$store.state.settings.account_url) {
+      this.$router.push("/homeScreen");
+    } else {
+      this.$router.push("/login");
     }
-    else{
-      this.$router.push( '/login' );
-    }
-  }
-}
+  },
+};
 </script>

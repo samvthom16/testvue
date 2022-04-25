@@ -273,8 +273,9 @@ export default {
           account_url: component.getAccountURL(),
         });
 
-        // REDIRECT TO MEMBERS LISTING
-        this.$router.push("/members");
+        // REDIRECT TO HOMESCREEN LISTING
+        this.$router.push("/homeScreen");
+
       }
     },
 
