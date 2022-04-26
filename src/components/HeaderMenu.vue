@@ -37,20 +37,7 @@
               <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="#1F2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg-->
             <router-link to="/members" class="hover:opacity-80">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
+              <Icon type="Home" />
             </router-link>
             <div
               class="
@@ -82,114 +69,11 @@
           </div>
 
           <router-link to="/events" class="hover:opacity-80">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              viewBox="0 0 452.986 452.986"
-            >
-              <g>
-                <g>
-                  <g>
-                    <path
-                      d="M404.344,0H48.642C21.894,0,0,21.873,0,48.664v355.681c0,26.726,21.894,48.642,48.642,48.642     h355.702c26.726,0,48.642-21.916,48.642-48.642V48.664C452.986,21.873,431.07,0,404.344,0z M148.429,33.629h156.043v40.337     H148.429V33.629z M410.902,406.372H42.041v-293.88h368.86V406.372z"
-                    />
-                    <rect
-                      x="79.273"
-                      y="246.23"
-                      style="fill: #010002"
-                      width="48.642"
-                      height="48.664"
-                    />
-                    <rect
-                      x="79.273"
-                      y="323.26"
-                      style="fill: #010002"
-                      width="48.642"
-                      height="48.642"
-                    />
-                    <rect
-                      x="160.853"
-                      y="169.223"
-                      style="fill: #010002"
-                      width="48.621"
-                      height="48.642"
-                    />
-                    <rect
-                      x="160.853"
-                      y="246.23"
-                      style="fill: #010002"
-                      width="48.621"
-                      height="48.664"
-                    />
-                    <rect
-                      x="160.853"
-                      y="323.26"
-                      style="fill: #010002"
-                      width="48.621"
-                      height="48.642"
-                    />
-                    <rect
-                      x="242.369"
-                      y="169.223"
-                      style="fill: #010002"
-                      width="48.664"
-                      height="48.642"
-                    />
-                    <rect
-                      x="242.369"
-                      y="246.23"
-                      style="fill: #010002"
-                      width="48.664"
-                      height="48.664"
-                    />
-                    <rect
-                      x="242.369"
-                      y="323.26"
-                      style="fill: #010002"
-                      width="48.664"
-                      height="48.642"
-                    />
-                    <rect
-                      x="323.907"
-                      y="169.223"
-                      style="fill: #010002"
-                      width="48.664"
-                      height="48.642"
-                    />
-                    <rect
-                      x="323.907"
-                      y="246.23"
-                      style="fill: #010002"
-                      width="48.664"
-                      height="48.664"
-                    />
-                  </g>
-                </g>
-              </g>
-            </svg>
+            <Icon type="Event" />
           </router-link>
 
           <router-link to="/profile" class="hover:opacity-80">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
+            <Icon type="Profile" />
           </router-link>
 
           <!--svg class="cursor-pointer  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray " width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -223,8 +107,13 @@
 </template>
 
 <script>
+import Icon from "@/components/Icon.vue";
+
 export default {
   name: "HeaderMenu",
+  components: {
+    Icon,
+  },
   data() {
     return {
       menuItems: [
