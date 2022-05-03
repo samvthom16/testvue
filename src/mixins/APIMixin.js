@@ -73,6 +73,7 @@ export default {
         'order': 'asc',
         'page': page,
         'search': search,
+        'status': 'publish',
       };
 
       let finalData = Object.assign(data, filterData);
@@ -138,6 +139,28 @@ export default {
         },
         headers: headers
       });
+    },
+
+    addEvent(title, date, description, event_type, location, status) {
+      var component = this;
+      var endpoint = '/wp-json/wp/v2/inpursuit-events';
+      var headers = component.getAuthHeaders();
+      headers['Content-Type'] = 'application/json';
+
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: 'post',
+        data: {
+          title: title,
+          date: date,
+          description: description,
+          'inpursuit-event-type': event_type,
+          location: location,
+          status: status
+        },
+        headers: headers
+      });
+
     }
   }
 }

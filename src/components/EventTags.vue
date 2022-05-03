@@ -3,7 +3,7 @@
     <li class="inline-block truncate" v-if="getLocation(event)">
       <div class="mr-2 p-1 px-2 rounded bg-orange text-white">
         <Icon type="Location" />
-        {{ getLocation(user) }}
+        {{ getLocation(event) }}
       </div>
     </li>
     <li class="inline-block truncate" v-if="getEventType(event)">

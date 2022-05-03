@@ -1,5 +1,31 @@
 <template>
   <div>
+    <Modal v-show="isModalVisible" @close="closeModal()">
+      <template v-slot:modalcontent>
+        <AddEvent
+          v-on:close="closeAddEvent($event)"
+          :eventTypeData="eventTypeData"
+          :locationData="locationData"
+        />
+        <!-- <form @submit="filterFormSubmit" id="filterForm">
+          <div>yohohoho</div>
+          <div class="my-4">
+            <button class="button" @click="filterFormSubmit" type="submit">
+              Apply
+            </button>
+            <span class="mx-4 text-sm">or</span>
+            <button
+              type="button"
+              @click="clearFilters"
+              class="text-sm underline"
+            >
+              Clear
+            </button>
+          </div>
+        </form> -->
+      </template>
+    </Modal>
+
     <div class="mx-auto max-w-2xl">
       <div class="p-4 bg-white sm:p-8 dark:bg-gray">
         <div class="flex justify-between items-center mb-4">
@@ -8,28 +34,39 @@
             Total of {{ total }} items
           </span>
         </div>
-        <div
-          class="
-            flex
-            mb-3
-            border-black
-            rounded
-            w-full
-            p-2
-            outline-none
-            focus:border-red
-            border-2
-          "
-        >
-          <div class="w-11/12">
-            <input
-              class="w-full outline-none focus:none align-middle"
-              type="text"
-              placeholder="Search"
-              v-model="$parent.search"
-            />
+
+        <div class="flex justify-between items-center mb-5">
+          <div
+            class="
+              flex
+              border-black
+              rounded
+              w-full
+              p-2
+              outline-none
+              focus:border-red
+              border-2
+            "
+          >
+            <div class="w-11/12">
+              <input
+                class="w-full outline-none focus:none align-middle"
+                type="text"
+                placeholder="Search"
+                v-model="$parent.search"
+              />
+            </div>
           </div>
+
+          <button
+            class="ml-2 inline-block whitespace-nowrap button"
+            @click="showModal"
+            type="button"
+          >
+            ADD EVENT
+          </button>
         </div>
+
         <div class="flow-root">
           <ul
             role="list"
@@ -71,21 +108,65 @@
 </template>
 
 <script>
+import AddEvent from "./AddEvent.vue";
 import EventTags from "./EventTags.vue";
+import Modal from "@/components/Modal";
+
+import store from "@/store";
+import API from "../api.js";
+import { ref } from "vue";
+import apiMixin from "@/mixins/APIMixin.js";
 
 export default {
   name: "EventList",
-  components: { EventTags },
+  components: { AddEvent, EventTags, Modal },
+  mixins: [apiMixin],
+  setup() {
+    const eventTypeData = ref({});
+    const locationData = ref({});
 
+    store.commit("getLocalSettings");
+
+    var account_url = store.state.settings.account_url;
+
+    API.makeRequest({
+      method: "get",
+      url: account_url + "/wp-json/inpursuit/v1/settings",
+    }).then((response) => {
+      eventTypeData.value = response.data["event_type"];
+      locationData.value = response.data["location"];
+    });
+    return {
+      eventTypeData,
+      locationData,
+    };
+  },
+  data() {
+    return {
+      isModalVisible: false,
+    };
+  },
   props: {
     events: Array,
     total: Number,
+  },
+  methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    closeAddEvent(e) {
+      this.isModalVisible = e;
+      this.$parent.refreshItems();
+    },
   },
 };
 </script>
 <style scoped>
 .button {
-  @apply border border-orange font-semibold p-2 px-4 rounded-lg bg-orange text-sm;
+  @apply border border-purple font-semibold p-2 px-4 rounded-lg bg-purple text-sm text-white;
 }
 .title {
   @apply text-xl font-bold leading-none;
