@@ -157,6 +157,24 @@ export default {
         headers: headers
       });
 
+    },
+
+    updateAttendance(member_id, event_id, attended) {
+      var component = this;
+      var endpoint = '/wp-json/wp/v2/inpursuit-members/' + member_id;
+      var headers = component.getAuthHeaders();
+      headers['Content-Type'] = 'application/json';
+
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: 'post',
+        data: {
+          event_id: event_id,
+          attended: attended,
+        },
+        headers: headers
+      });
+
     }
   }
 }

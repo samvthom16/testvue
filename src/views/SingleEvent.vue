@@ -31,6 +31,10 @@
         </div>
       </div>
 
+      <div>
+        <ProgressBarItem :contentProgress="post.attendants_percentage" />
+      </div>
+
       <div class="w-10/12 md:w-7/12 lg:6/12 relative py-20 mx-auto">
         <h1 class="text-xl font-semibold ml-2 truncate dark:text-white">
           Members ({{ totalItems }})
@@ -73,9 +77,11 @@
                     <UserTags :user="user" class="mt-1" />
                   </div>
                 </div>
-
                 <div class="ml-2">
-                  <Switch v-model:checked="user.attended" />
+                  <Switch
+                    v-model:checked="user.attended"
+                    @click="onAttendanceChange(user)"
+                  />
                 </div>
               </div>
             </li>
@@ -95,6 +101,7 @@ import apiMixin from "@/mixins/APIMixin.js";
 import EventTags from "@/components/EventTags.vue";
 import UserTags from "@/components/UserTags.vue";
 import Switch from "@/components/switch.vue";
+import ProgressBarItem from "@/components/ProgressBarItem.vue";
 
 export default {
   name: "SingleEvent",
@@ -102,6 +109,7 @@ export default {
     EventTags,
     UserTags,
     Switch,
+    ProgressBarItem,
   },
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
   data() {
@@ -137,7 +145,10 @@ export default {
 
     getAPI() {
       var post_id = this.$route.params.id;
-      return this.requestUsers(this.page, this.search, { event_id: post_id });
+
+      return this.requestUsers(this.page, this.search, {
+        event_id: post_id,
+      });
     },
 
     /*
@@ -153,7 +164,6 @@ export default {
       component.requestEvent(component.id).then(
         (response) => {
           component.post = response.data;
-
           // RESET PROCESSING
           component.$store.commit("setProcessing", false);
         },
@@ -166,6 +176,28 @@ export default {
     getPageTitle() {
       var title = "InPursuit - Single Event";
       return title;
+    },
+
+    // UPDATE IN ATTENDANCE DATABASE
+    onAttendanceChange(user) {
+      var post_id = this.$route.params.id;
+
+      var isAttended;
+
+      if (!user.attended) {
+        isAttended = 1;
+      } else {
+        isAttended = 0;
+      }
+
+      this.updateAttendance(user.id, post_id, isAttended).then(
+        () => {
+          setTimeout(() => this.getPost(), 500);
+        },
+        (error) => {
+          console.log("" + error);
+        }
+      );
     },
   },
 };
