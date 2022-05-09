@@ -75,7 +75,8 @@
             <li class="py-3 sm:py-4" v-for="event in events" :key="event.id">
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-1">
-                  <div
+                  <router-link
+                    :to="$parent.getPostLink(event)"
                     class="
                       bg-lightgray
                       w-16
@@ -90,11 +91,13 @@
                       :src="event.featured_image"
                       :alt="event.title.rendered"
                     />
-                  </div>
+                  </router-link>
                 </div>
                 <div class="flex-1 min-w-0">
                   <h1 class="text-xl font-semibold truncate dark:text-white">
-                    {{ event.title.rendered }}
+                    <router-link :to="$parent.getPostLink(event)">{{
+                      event.title.rendered
+                    }}</router-link>
                   </h1>
                   <EventTags :event="event" class="mt-1" />
                 </div>

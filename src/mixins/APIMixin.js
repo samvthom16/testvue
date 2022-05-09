@@ -33,20 +33,6 @@ export default {
       var component = this;
       var endpoint = '/wp-json/wp/v2/inpursuit-members/';
 
-      //console.log(filterData);
-
-      // var str = '';
-      // var i = 0;
-      // for (var key in filterData) {
-      //   if (parseInt(filterData[key])) {
-      //     if (i == 0) str += '?';
-      //     str += key + '=' + filterData[key];
-      //     if (i < (Object.keys(filterData).length - 1)) str += '&';
-      //     i++;
-      //   }
-      // }
-      // endpoint += str;
-
       var data = {
         'orderby': 'title',
         'order': 'asc',
@@ -60,6 +46,16 @@ export default {
         url: component.$store.state.settings.account_url + endpoint,
         method: 'get',
         data: finalData,
+        headers: component.getAuthHeaders()
+      });
+    },
+
+    requestEvent(event_id) {
+      var component = this;
+      var endpoint = '/wp-json/wp/v2/inpursuit-events/' + event_id;
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: 'get',
         headers: component.getAuthHeaders()
       });
     },
