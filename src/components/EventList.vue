@@ -161,8 +161,9 @@ export default {
       this.isModalVisible = false;
     },
     closeAddEvent(e) {
-      this.isModalVisible = e;
+      this.isModalVisible = e.modal;
       this.$parent.refreshItems();
+      this.$router.push("/events/" + e.id);
     },
   },
 };

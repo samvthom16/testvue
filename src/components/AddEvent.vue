@@ -175,9 +175,9 @@ export default {
           "publish"
         )
         .then(
-          () => {
+          (respone) => {
             this.setProcessing(false);
-            this.closeModal();
+            this.closeModal(respone.data.id);
           },
           (error) => {
             console.log("" + error);
@@ -186,8 +186,8 @@ export default {
           }
         );
     },
-    closeModal() {
-      this.$emit("close", false);
+    closeModal(id) {
+      this.$emit("close", { modal: false, id: id });
     },
   },
 };
