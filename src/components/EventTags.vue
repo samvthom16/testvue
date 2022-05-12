@@ -14,8 +14,8 @@
     </li>
 
     <li class="inline-block truncate" v-if="getDate(event)">
-      <div class="mr-2 p-1 px-2 rounded bg-purple text-white">
-        <Icon type="Group" />
+      <div class="mr-2 p-1 px-2 rounded bg-lightred  text-white">
+        <Icon type="Status" />
         {{ getDate(event) }}
       </div>
     </li>

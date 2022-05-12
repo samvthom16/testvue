@@ -1,11 +1,11 @@
 <template>
   <div class="w-10/12 md:w-7/12 lg:6/12 relative pt-10 mx-auto">
-    <h1 class="text-xl font-semibold ml-2 truncate dark:text-white">
-      Attandance
+    <h1 class="text-xl ml-2 truncate dark:text-white">
+      {{ label }}
     </h1>
     <!-- <h2 class="ml-6 pt-3 text-lg font-semibold">label</h2> -->
 
-    <div class="flex flex-wrap py-2 mt-4 mx-">
+    <div class="flex flex-wrap py-2 mt-1 mx-">
       <base-progress
         :percentage="contentProgress"
         :color="color"
@@ -33,7 +33,7 @@ export default {
     },
     label: {
       type: String,
-      default: "Attandance",
+      default: "Attendance",
     },
     // label: String,
     contentProgress: Number,

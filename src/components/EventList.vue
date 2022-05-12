@@ -29,43 +29,46 @@
     <div class="mx-auto max-w-2xl">
       <div class="p-4 bg-white sm:p-8 dark:bg-gray">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="title">Events ({{ events.length }})</h3>
+          <div class="flex items-center">
+            <h3 class="title">Events ({{ events.length }})</h3>
+            <button
+              class="inline-block whitespace-nowrap button ml-3"
+              @click="showModal"
+              type="button"
+            >
+              ADD EVENT
+            </button>
+          </div>
           <span class="text-sm font-medium text-gray dark:text-white">
             Total of {{ total }} items
           </span>
         </div>
 
-        <div class="flex justify-between items-center mb-5">
-          <div
-            class="
-              flex
-              border-black
-              rounded
-              w-full
-              p-2
-              outline-none
-              focus:border-red
-              border-2
-            "
-          >
-            <div class="w-11/12">
-              <input
-                class="w-full outline-none focus:none align-middle"
-                type="text"
-                placeholder="Search"
-                v-model="$parent.search"
-              />
-            </div>
+        <!-- <div class="flex justify-between items-center mb-5"> -->
+        <div
+          class="
+            flex
+            mb-3
+            border-black
+            rounded
+            w-full
+            p-2
+            outline-none
+            focus:border-red
+            border-2
+          "
+        >
+          <div class="w-11/12">
+            <input
+              class="w-full outline-none focus:none align-middle"
+              type="text"
+              placeholder="Search"
+              v-model="$parent.search"
+            />
           </div>
-
-          <button
-            class="ml-2 inline-block whitespace-nowrap button"
-            @click="showModal"
-            type="button"
-          >
-            ADD EVENT
-          </button>
         </div>
+
+        <!-- </div> -->
 
         <div class="flow-root">
           <ul
@@ -75,7 +78,7 @@
             <li class="py-3 sm:py-4" v-for="event in events" :key="event.id">
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-1">
-                  <router-link
+                  <!-- <router-link
                     :to="$parent.getPostLink(event)"
                     class="
                       bg-lightgray
@@ -91,7 +94,10 @@
                       :src="event.featured_image"
                       :alt="event.title.rendered"
                     />
-                  </router-link>
+                  </router-link> -->
+                  <CircularProgressBar
+                    :contentProgress="event.attendants_percentage"
+                  ></CircularProgressBar>
                 </div>
                 <div class="flex-1 min-w-0">
                   <h1 class="text-xl font-semibold truncate dark:text-white">
@@ -120,9 +126,11 @@ import API from "../api.js";
 import { ref } from "vue";
 import apiMixin from "@/mixins/APIMixin.js";
 
+import CircularProgressBar from "@/components/CircularProgressBar.vue";
+
 export default {
   name: "EventList",
-  components: { AddEvent, EventTags, Modal },
+  components: { AddEvent, EventTags, CircularProgressBar, Modal },
   mixins: [apiMixin],
   setup() {
     const eventTypeData = ref({});
@@ -170,7 +178,7 @@ export default {
 </script>
 <style scoped>
 .button {
-  @apply border border-purple font-semibold p-2 px-4 rounded-lg bg-purple text-sm text-white;
+  @apply border border-purple py-1 px-3 rounded-lg bg-purple text-sm text-white;
 }
 .title {
   @apply text-xl font-bold leading-none;

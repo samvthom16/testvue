@@ -32,7 +32,7 @@ export default {
                 month = '0' + month;
             }
 
-            return year + '-' + month + '-' + dt;
+            return dt + '/' + month + '/' + year;
         },
     }
 };
