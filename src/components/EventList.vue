@@ -95,9 +95,12 @@
                       :alt="event.title.rendered"
                     />
                   </router-link> -->
-                  <CircularProgressBar
-                    :contentProgress="event.attendants_percentage"
-                  ></CircularProgressBar>
+                  <router-link :to="$parent.getPostLink(event)">
+                    <CircularProgressBar
+                      :contentProgress="event.attendants_percentage"
+                      :size="70"
+                    ></CircularProgressBar>
+                  </router-link>
                 </div>
                 <div class="flex-1 min-w-0">
                   <h1 class="text-xl font-semibold truncate dark:text-white">
@@ -120,13 +123,13 @@
 import AddEvent from "./AddEvent.vue";
 import EventTags from "./EventTags.vue";
 import Modal from "@/components/Modal";
+import CircularProgressBar from "@/components/CircularProgressBar.vue";
 
 import store from "@/store";
 import API from "../api.js";
 import { ref } from "vue";
 import apiMixin from "@/mixins/APIMixin.js";
 
-import CircularProgressBar from "@/components/CircularProgressBar.vue";
 
 export default {
   name: "EventList",
@@ -178,7 +181,7 @@ export default {
 </script>
 <style scoped>
 .button {
-  @apply border border-purple py-1 px-3 rounded-lg bg-purple text-sm text-white;
+  @apply border-2 border-purple  py-1 px-2 rounded-md bg-white text-sm text-purple;
 }
 .title {
   @apply text-xl font-bold leading-none;

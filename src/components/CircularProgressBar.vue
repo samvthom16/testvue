@@ -1,7 +1,7 @@
 <template>
   <circle-progress
     :percent="contentProgress"
-    :size="70"
+    :size="size"
     :border-width="6"
     :border-bg-width="6"
     :show-percent="true"
@@ -20,6 +20,7 @@ export default {
   components: { CircleProgress },
   props: {
     contentProgress: Number,
+    size: Number,
   },
 };
 </script>

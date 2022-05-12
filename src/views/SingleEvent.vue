@@ -5,9 +5,10 @@
     >
       <div class="relative h-40 bg-purple"></div>
 
-      <div
-        class="
-          bg-gray
+      <CircularProgressBar
+        :contentProgress="post.attendants_percentage"
+        :size="120"
+        class="bg-white
           relative
           shadow
           h-28
@@ -17,11 +18,9 @@
           border-white
           rounded-full
           overflow-hidden
-          border-4
-        "
-      >
-        <img class="object-cover w-full h-full" :src="post.featured_image" />
-      </div>
+          border-8"
+      ></CircularProgressBar>
+
       <div class="mt-16 px-2">
         <h1 class="text-xl text-center font-semibold" v-if="post.title">
           {{ post.title.rendered }}
@@ -31,9 +30,9 @@
         </div>
       </div>
 
-      <div>
+      <!-- <div>
         <ProgressBarItem :contentProgress="post.attendants_percentage" />
-      </div>
+      </div> -->
 
       <div class="w-10/12 md:w-7/12 lg:6/12 relative py-20 mx-auto">
         <h1 class="text-xl font-semibold ml-2 truncate dark:text-white">
@@ -101,7 +100,8 @@ import apiMixin from "@/mixins/APIMixin.js";
 import EventTags from "@/components/EventTags.vue";
 import UserTags from "@/components/UserTags.vue";
 import Switch from "@/components/switch.vue";
-import ProgressBarItem from "@/components/ProgressBarItem.vue";
+// import ProgressBarItem from "@/components/ProgressBarItem.vue";
+import CircularProgressBar from "@/components/CircularProgressBar.vue";
 
 export default {
   name: "SingleEvent",
@@ -109,7 +109,8 @@ export default {
     EventTags,
     UserTags,
     Switch,
-    ProgressBarItem,
+    // ProgressBarItem,
+    CircularProgressBar,
   },
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
   data() {
