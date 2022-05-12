@@ -8,7 +8,8 @@
         p-2
         border-2 border-solid
         rounded
-        mb-1 mt-5
+        mb-1
+        mt-2
         border-black
         outline-white
         focus:border-red

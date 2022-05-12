@@ -6,6 +6,8 @@ import Logout from '@/views/Logout.vue'
 import Members from '@/views/Members.vue'
 import SingleMember from '@/views/SingleMember.vue'
 import Profile from '@/views/Profile.vue'
+import Events from '@/views/Events.vue'
+import SingleEvent from '@/views/SingleEvent.vue'
 
 const routes = [
   {
@@ -33,12 +35,21 @@ const routes = [
     name: 'Members',
     component: Members
   },
-
   {
-		path			: '/members/:id',
-    name			: 'SingleMember',
-		component	: SingleMember
-	},
+    path: '/members/:id',
+    name: 'SingleMember',
+    component: SingleMember
+  },
+  {
+    path: '/events',
+    name: 'Events',
+    component: Events
+  },
+  {
+    path: '/events/:id',
+    name: 'SingleEvent',
+    component: SingleEvent
+  },
 
 ]
 
