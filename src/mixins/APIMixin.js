@@ -137,6 +137,32 @@ export default {
       });
     },
 
+    addMember(name, email_address, phone_number, birth_date, wedding_date, gender, location, status) {
+
+      var component = this;
+      var endpoint = '/wp-json/wp/v2/inpursuit-members';
+      var headers = component.getAuthHeaders();
+      headers['Content-Type'] = 'application/json';
+
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: 'post',
+        data: {
+          title: name,
+          gender: gender,
+          email: email_address,
+          phone: phone_number,
+          location: location,
+          'special_events[birthday]': birth_date,
+          'special_events[wedding]': wedding_date,
+          status: status
+        },
+        headers: headers
+      });
+
+
+    },
+
     addEvent(title, date, description, event_type, location, status) {
       var component = this;
       var endpoint = '/wp-json/wp/v2/inpursuit-events';

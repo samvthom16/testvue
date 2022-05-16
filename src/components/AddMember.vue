@@ -1,10 +1,9 @@
 <template>
-  <div class="add_event">
+  <div class="add_member">
     <form class="p-10 max-w-sm m-auto" @submit="submit">
-      <h1 class="font-semibold mb-5 text-lg">Add New Event</h1>
-
+      <h1 class="font-semibold mb-5 text-lg">Add New Member</h1>
       <TextField
-        class="mt-10"
+        class="mt-5"
         :field="formfield"
         v-model="formfield.value"
         v-for="(formfield, key) in form"
@@ -14,9 +13,9 @@
       />
 
       <DropDownField
-        :field="formDropDown.type"
-        v-model="formDropDown.type.value"
-        :options="eventTypeData"
+        :field="formDropDown.gender"
+        v-model="formDropDown.gender.value"
+        :options="genderData"
       />
 
       <DropDownField
@@ -78,48 +77,60 @@ import DropDownField from "./DropDownField.vue";
 import apiMixin from "@/mixins/APIMixin.js";
 
 export default {
-  name: "AddEvent",
+  name: "AddMember",
   components: { TextField, DropDownField },
   mixins: [apiMixin],
   props: {
-    eventTypeData: Object,
     locationData: Object,
+    genderData: Object,
   },
   data() {
     return {
       processing: false,
       form: {
         title: {
-          label: "Event Title",
+          label: "Full Name",
           error_msg: "",
           value: "",
           type: "text",
         },
-        date: {
-          label: "Event Date",
+        emailAddress: {
+          label: "Email Address",
+          error_msg: "",
+          value: "",
+          type: "text",
+        },
+        phoneNumber: {
+          label: "Phone Number",
+          error_msg: "",
+          value: "",
+          type: "text",
+        },
+        dateOfBirth: {
+          label: "Date of Birth",
           error_msg: "",
           value: "",
           type: "date",
         },
-        description: {
-          label: "Event Description",
+        dateOfWedding: {
+          label: "Date of Wedding",
           error_msg: "",
           value: "",
-          type: "text",
+          type: "date",
         },
       },
       formDropDown: {
-        type: {
-          label: "Event Type",
+        gender: {
+          label: "Gender",
           error_msg: "",
           value: "",
-          type: "text",
+          type: "",
         },
         location: {
           label: "Event Location",
           error_msg: "",
           value: "",
-          type: "password",
+          type: "",
         },
       },
     };
@@ -143,33 +154,78 @@ export default {
       component.setProcessing(true);
 
       var empty_flag = false;
-      for (var key in component.form) {
-        // RESET ERROR MESSAGE
-        component.form[key].error_msg = "";
-        // CHECK FOR EMPTY FIELD
-        if (!component.form[key].value) {
-          component.form[key].error_msg = "This field cannot be left empty.";
+
+      //VALIDATE NAME FIELD
+      if (!component.form.title.value) {
+        component.form.title.error_msg = "This field cannot be left empty.";
+        empty_flag = true;
+      } else {
+        component.form.title.error_msg = "";
+      }
+
+      //VALIDATE GENDER FIELD
+      if (!component.formDropDown.gender.value) {
+        component.formDropDown.gender.error_msg =
+          "This field cannot be left empty.";
+        empty_flag = true;
+      } else {
+        component.formDropDown.gender.error_msg = "";
+      }
+
+      //VALIDATE EMAIL-ID
+      var email_address = component.form.emailAddress.value.trim();
+      if (email_address) {
+        var validRegex =
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+        if (!email_address.match(validRegex)) {
+          component.form.emailAddress.error_msg = "Invalid Email Address";
           empty_flag = true;
+        } else {
+          component.form.emailAddress.error_msg = "";
         }
       }
 
-      //TODO: validation for dropdown fields if mandatory
+      //VALIDATE PHONE NUMBER
+      var phone_number = component.form.phoneNumber.value.trim();
+      if (phone_number) {
+        var validPhoneRegex = /^[6-9]\d{9}$/gi;
+
+        if (!phone_number.match(validPhoneRegex)) {
+          component.form.phoneNumber.error_msg = "Invalid phone Address";
+          empty_flag = true;
+        } else {
+          component.form.phoneNumber.error_msg = "";
+        }
+      }
 
       // IF ANY OF THE FIELDS IS EMPTY, SHOULD SHOW THE ERROR MESSAGE
       if (empty_flag) {
         component.setProcessing(false);
         return false;
       }
-      //CONVERT DATE
-      var dateEntered = new Date(component.form.date.value);
-      var eventDate = dateEntered.toISOString();
+
+      //CONVERT DATES
+      var dateOfBirth = "";
+      var dateOfWedding = "";
+
+      if (component.form.dateOfBirth.value) {
+        dateOfBirth = component.convertDate(component.form.dateOfBirth.value);
+      }
+      if (component.form.dateOfWedding.value) {
+        dateOfWedding = component.convertDate(
+          component.form.dateOfWedding.value
+        );
+      }
 
       component
-        .addEvent(
+        .addMember(
           component.form.title.value,
-          eventDate,
-          component.form.description.value,
-          component.formDropDown.type.value,
+          component.form.emailAddress.value,
+          component.form.phoneNumber.value,
+          dateOfBirth,
+          dateOfWedding,
+          component.formDropDown.gender.value,
           component.formDropDown.location.value,
           "publish"
         )
@@ -184,6 +240,12 @@ export default {
             return false;
           }
         );
+    },
+    convertDate(dateString) {
+      var date = new Date(dateString),
+        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+      return [date.getFullYear(), mnth, day].join("-");
     },
     closeModal(id) {
       this.$emit("close", { modal: false, id: id });

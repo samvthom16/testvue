@@ -1,5 +1,31 @@
 <template>
   <div>
+    <Modal v-show="isAddMemberModalVisible" @close="closeAddMemberModal()">
+      <template v-slot:modalcontent>
+        <AddMember
+          v-on:close="closeAddMember($event)"
+          :locationData="locationData"
+          :genderData="genderData"
+        />
+        <!-- <form @submit="filterFormSubmit" id="filterForm">
+          <div>yohohoho</div>
+          <div class="my-4">
+            <button class="button" @click="filterFormSubmit" type="submit">
+              Apply
+            </button>
+            <span class="mx-4 text-sm">or</span>
+            <button
+              type="button"
+              @click="clearFilters"
+              class="text-sm underline"
+            >
+              Clear
+            </button>
+          </div>
+        </form> -->
+      </template>
+    </Modal>
+
     <Modal v-show="isModalVisible" @close="closeModal()">
       <template v-slot:modalcontent>
         <form @submit="filterFormSubmit" id="filterForm">
@@ -53,11 +79,21 @@
     <div class="mx-auto max-w-2xl">
       <div class="p-4 bg-white sm:p-8 dark:bg-gray">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="title">Members ({{ users.length }})</h3>
+          <div class="flex items-center">
+            <h3 class="title">Members ({{ users.length }})</h3>
+            <button
+              class="inline-block whitespace-nowrap button ml-3"
+              @click="showAddMemberModal"
+              type="button"
+            >
+              ADD MEMBER
+            </button>
+          </div>
           <span class="text-sm font-medium text-gray dark:text-white">
             Total of {{ total }} items
           </span>
         </div>
+
         <div
           class="
             flex
@@ -135,6 +171,7 @@ import UserTags from "./UserTags.vue";
 import FilterTags from "./FilterTags.vue";
 import Icon from "@/components/Icon";
 import Modal from "@/components/Modal";
+import AddMember from "@/components/AddMember.vue";
 
 import userMixin from "@/mixins/UserMixin.js";
 
@@ -146,7 +183,7 @@ import { ref } from "vue";
 
 export default {
   name: "UsersList",
-  components: { UserTags, FilterTags, Icon, Modal },
+  components: { UserTags, FilterTags, Icon, Modal, AddMember },
   mixins: [userMixin],
   props: {
     users: Array,
@@ -155,6 +192,7 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      isAddMemberModalVisible: false,
       filterdata: {},
       //locationdata: {},
       //genderData: {},
@@ -196,6 +234,18 @@ export default {
   },
 
   methods: {
+    showAddMemberModal() {
+      this.isAddMemberModalVisible = true;
+    },
+    closeAddMemberModal() {
+      this.isAddMemberModalVisible = false;
+    },
+    closeAddMember(e) {
+      this.isAddMemberModalVisible = e.modal;
+      this.$parent.refreshItems();
+      this.$router.push("/members/" + e.id);
+    },
+
     showModal() {
       this.isModalVisible = true;
     },
@@ -236,7 +286,7 @@ export default {
 </script>
 <style scoped>
 .button {
-  @apply border border-orange font-semibold p-2 px-4 rounded-lg bg-orange text-sm;
+  @apply border-2 border-purple  py-1 px-2 rounded-md bg-white text-sm text-purple;
 }
 .title {
   @apply text-xl font-bold leading-none;
