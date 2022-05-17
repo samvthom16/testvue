@@ -4,7 +4,7 @@
       <h1 class="font-semibold mb-5 text-lg">Add New Event</h1>
 
       <TextField
-        class="mt-10"
+        class="mt-5"
         :field="formfield"
         v-model="formfield.value"
         v-for="(formfield, key) in form"
@@ -14,12 +14,14 @@
       />
 
       <DropDownField
+        class="mt-5"
         :field="formDropDown.type"
         v-model="formDropDown.type.value"
         :options="eventTypeData"
       />
 
       <DropDownField
+        class="mt-5"
         :field="formDropDown.location"
         v-model="formDropDown.location.value"
         :options="locationData"
