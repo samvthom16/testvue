@@ -24,6 +24,9 @@ const api = {
       //console.log( headers );
       api = axios.delete(options.url, { data: options.data, headers: headers });
     }
+    else if (options.method == 'put') {
+      api = axios.put(options.url, options.data, { headers: headers });
+    }
     else {
 
       var params = {};

@@ -1,28 +1,14 @@
 <template>
   <div>
-    <Modal v-show="isModalVisible" @close="closeModal()">
+    <Modal v-if="isModalVisible" @close="closeModal()">
       <template v-slot:modalcontent>
         <AddEvent
           v-on:close="closeAddEvent($event)"
           :eventTypeData="eventTypeData"
           :locationData="locationData"
+          :eventPost="eventPost"
+          :isEditEvent="isEditEvent"
         />
-        <!-- <form @submit="filterFormSubmit" id="filterForm">
-          <div>yohohoho</div>
-          <div class="my-4">
-            <button class="button" @click="filterFormSubmit" type="submit">
-              Apply
-            </button>
-            <span class="mx-4 text-sm">or</span>
-            <button
-              type="button"
-              @click="clearFilters"
-              class="text-sm underline"
-            >
-              Clear
-            </button>
-          </div>
-        </form> -->
       </template>
     </Modal>
 
@@ -33,7 +19,7 @@
             <h3 class="title">Events ({{ events.length }})</h3>
             <button
               class="inline-block whitespace-nowrap button ml-3"
-              @click="showModal"
+              @click="showModal(false, {})"
               type="button"
             >
               ADD EVENT
@@ -110,6 +96,15 @@
                   </h1>
                   <EventTags :event="event" class="mt-1" />
                 </div>
+                <div>
+                  <button
+                    type="button"
+                    @click="showModal(true, event)"
+                    class="mt-6 text-sm underline text-center w-full"
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
             </li>
           </ul>
@@ -129,7 +124,6 @@ import store from "@/store";
 import API from "../api.js";
 import { ref } from "vue";
 import apiMixin from "@/mixins/APIMixin.js";
-
 
 export default {
   name: "EventList",
@@ -158,6 +152,8 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      isEditEvent: false,
+      eventPost: {},
     };
   },
   props: {
@@ -165,7 +161,14 @@ export default {
     total: Number,
   },
   methods: {
-    showModal() {
+    showModal(isEdit, event) {
+      if (isEdit) {
+        this.eventPost = event;
+        this.isEditEvent = true;
+      } else {
+        this.eventPost = {};
+        this.isEditEvent = false;
+      }
       this.isModalVisible = true;
     },
     closeModal() {

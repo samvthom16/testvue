@@ -1,31 +1,33 @@
 <template>
   <div class="add_event">
     <form class="p-10 max-w-sm m-auto" @submit="submit">
-      <h1 class="font-semibold mb-5 text-lg">Add New Event</h1>
+      <h1 class="font-semibold mb-5 text-lg">
+        {{ isEditEvent ? "Edit Event" : "Add New Event" }}
+      </h1>
+      <div>
+        <TextField
+          class="mt-5"
+          :field="formfield"
+          v-model="formfield.value"
+          v-for="(formfield, key) in form"
+          :key="key"
+          :isHidden="false"
+        />
 
-      <TextField
-        class="mt-5"
-        :field="formfield"
-        v-model="formfield.value"
-        v-for="(formfield, key) in form"
-        :key="key"
-        :isHidden="false"
-        :isDropDown="false"
-      />
+        <DropDownField
+          class="mt-5"
+          :field="formDropDown.type"
+          v-model="formDropDown.type.value"
+          :options="eventTypeData"
+        />
 
-      <DropDownField
-        class="mt-5"
-        :field="formDropDown.type"
-        v-model="formDropDown.type.value"
-        :options="eventTypeData"
-      />
-
-      <DropDownField
-        class="mt-5"
-        :field="formDropDown.location"
-        v-model="formDropDown.location.value"
-        :options="locationData"
-      />
+        <DropDownField
+          class="mt-5"
+          :field="formDropDown.location"
+          v-model="formDropDown.location.value"
+          :options="locationData"
+        />
+      </div>
 
       <button
         :disabled="$store.state.processing"
@@ -67,7 +69,9 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
           ></path>
         </svg>
-        <span v-if="!$store.state.processing">Add Event</span>
+        <span v-if="!$store.state.processing">
+          {{ isEditEvent ? "Update Event" : "Add Event" }}</span
+        >
         <span v-if="$store.state.processing">Processing</span>
       </button>
     </form>
@@ -75,21 +79,25 @@
 </template>
 
 <script>
-import TextField from "./TextField.vue";
-import DropDownField from "./DropDownField.vue";
 import apiMixin from "@/mixins/APIMixin.js";
+import DropDownField from "./DropDownField.vue";
+import TextField from "./TextField.vue";
+import EventMixin from "../mixins/EventMixin";
 
 export default {
   name: "AddEvent",
   components: { TextField, DropDownField },
-  mixins: [apiMixin],
+  mixins: [apiMixin, EventMixin],
   props: {
     eventTypeData: Object,
     locationData: Object,
+    eventPost: Object,
+    isEditEvent: Boolean,
   },
   data() {
     return {
       processing: false,
+      showData: false,
       form: {
         title: {
           label: "Event Title",
@@ -126,6 +134,25 @@ export default {
       },
     };
   },
+  created() {
+    if (this.isEditEvent) {
+      var component = this;
+      var event = component.eventPost;
+      component.form.title.value = event.title.rendered ?? "";
+      if (event.date) {
+        component.form.date.value = this.getDateAsYMD(event) ?? "";
+      }
+      component.form.description.value = event.content.raw ?? "";
+      if (event.event_type) {
+        component.formDropDown.type.value = this.getEventType(event);
+      }
+      if (event.location) {
+        component.formDropDown.location.value = this.getLocation(event);
+      }
+    }
+
+    this.showData = true;
+  },
   methods: {
     setProcessing(flag) {
       this.processing = flag;
@@ -154,38 +181,60 @@ export default {
           empty_flag = true;
         }
       }
-
-      //TODO: validation for dropdown fields if mandatory
-
       // IF ANY OF THE FIELDS IS EMPTY, SHOULD SHOW THE ERROR MESSAGE
       if (empty_flag) {
         component.setProcessing(false);
         return false;
       }
+
       //CONVERT DATE
       var dateEntered = new Date(component.form.date.value);
       var eventDate = dateEntered.toISOString();
 
-      component
-        .addEvent(
-          component.form.title.value,
-          eventDate,
-          component.form.description.value,
-          component.formDropDown.type.value,
-          component.formDropDown.location.value,
-          "publish"
-        )
-        .then(
-          (respone) => {
-            this.setProcessing(false);
-            this.closeModal(respone.data.id);
-          },
-          (error) => {
-            console.log("" + error);
-            component.setProcessing(false);
-            return false;
-          }
-        );
+      if (this.isEditEvent) {
+        component
+          .updateEvent(
+            component.form.title.value,
+            eventDate,
+            component.form.description.value,
+            component.formDropDown.type.value,
+            component.formDropDown.location.value,
+            "publish",
+            component.eventPost.id
+          )
+          .then(
+            (respone) => {
+              this.setProcessing(false);
+              this.closeModal(respone.data.id);
+            },
+            (error) => {
+              console.log("" + error);
+              component.setProcessing(false);
+              return false;
+            }
+          );
+      } else {
+        component
+          .addEvent(
+            component.form.title.value,
+            eventDate,
+            component.form.description.value,
+            component.formDropDown.type.value,
+            component.formDropDown.location.value,
+            "publish"
+          )
+          .then(
+            (respone) => {
+              this.setProcessing(false);
+              this.closeModal(respone.data.id);
+            },
+            (error) => {
+              console.log("" + error);
+              component.setProcessing(false);
+              return false;
+            }
+          );
+      }
     },
     closeModal(id) {
       this.$emit("close", { modal: false, id: id });

@@ -175,7 +175,29 @@ export default {
         data: {
           title: title,
           date: date,
-          description: description,
+          content: description,
+          'inpursuit-event-type': event_type,
+          location: location,
+          status: status
+        },
+        headers: headers
+      });
+
+    },
+
+    updateEvent(title, date, description, event_type, location, status, event_id) {
+      var component = this;
+      var endpoint = '/wp-json/wp/v2/inpursuit-events/' + event_id;
+      var headers = component.getAuthHeaders();
+      headers['Content-Type'] = 'application/json';
+
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: 'put',
+        data: {
+          title: title,
+          date: date,
+          content: description,
           'inpursuit-event-type': event_type,
           location: location,
           status: status

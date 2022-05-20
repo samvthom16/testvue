@@ -30,6 +30,11 @@ export default {
     field: Object,
     isHidden: Boolean,
   },
+  mounted() {
+    if (this.field.value) {
+      this.value = this.field.value;
+    }
+  },
   data() {
     return {
       value: "",
