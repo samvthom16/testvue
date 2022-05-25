@@ -6,9 +6,10 @@
       <div class="relative h-40 bg-purple"></div>
 
       <CircularProgressBar
-        :contentProgress="post.attendants_percentage"
+        :contentProgress="postData.attendants_percentage"
         :size="120"
-        class="bg-white
+        class="
+          bg-white
           relative
           shadow
           h-28
@@ -18,21 +19,18 @@
           border-white
           rounded-full
           overflow-hidden
-          border-8"
+          border-8
+        "
       ></CircularProgressBar>
 
       <div class="mt-16 px-2">
-        <h1 class="text-xl text-center font-semibold" v-if="post.title">
-          {{ post.title.rendered }}
+        <h1 class="text-xl text-center font-semibold" v-if="postData.title">
+          {{ postData.title.rendered }}
         </h1>
         <div class="text-center mt-3">
-          <EventTags :event="post" />
+          <EventTags :event="postData" />
         </div>
       </div>
-
-      <!-- <div>
-        <ProgressBarItem :contentProgress="post.attendants_percentage" />
-      </div> -->
 
       <div class="w-10/12 md:w-7/12 lg:6/12 relative py-20 mx-auto">
         <h1 class="text-xl font-semibold ml-2 truncate dark:text-white">
@@ -100,7 +98,6 @@ import apiMixin from "@/mixins/APIMixin.js";
 import EventTags from "@/components/EventTags.vue";
 import UserTags from "@/components/UserTags.vue";
 import Switch from "@/components/switch.vue";
-// import ProgressBarItem from "@/components/ProgressBarItem.vue";
 import CircularProgressBar from "@/components/CircularProgressBar.vue";
 
 export default {
@@ -109,47 +106,51 @@ export default {
     EventTags,
     UserTags,
     Switch,
-    // ProgressBarItem,
     CircularProgressBar,
   },
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
   data() {
     return {
-      id: 0,
-      post: {},
+      isAttended: 0,
+      postData: {},
     };
   },
   watch: {
-    search() {
-      var component = this;
-      component.debounceEvent(function () {
-        component.refreshItems();
-        //console.log( component.search );
-      });
-    },
-  },
-  mounted() {
-    var post_id = this.$route.params.id;
-
-    if (post_id) {
-      this.id = parseInt(post_id);
-    }
-    // CHECK IF POST INFORMATION HAS BEEN PASSED IN THE ROUTE
-    if (this.$route.params.post != undefined) {
-      this.post = JSON.parse(this.$route.params.post);
-    } else {
-      this.getPost();
-    }
+    // search() {
+    //   var component = this;
+    //   component.debounceEvent(function () {
+    //     component.refreshItems();
+    //     //console.log( component.search );
+    //   });
+    // },
   },
   methods: {
     /* INHERITED FROM PAGINATION MIXIN */
 
     getAPI() {
-      var post_id = this.$route.params.id;
+      const post_id = this.$route.params.id;
+      if (this.$route.params.post) {
+        this.postData = JSON.parse(this.$route.params.post);
+        const date = this.addDays(this.postData.date, 1);
+        return this.requestUsers(this.page, this.search, {
+          event_id: post_id,
+          before: date,
+        });
+      } else {
+        return this.getPost().then(() => {
+          const date = this.addDays(this.postData.date, 1);
+          return this.requestUsers(this.page, this.search, {
+            event_id: post_id,
+            before: date,
+          });
+        });
+      }
+    },
 
-      return this.requestUsers(this.page, this.search, {
-        event_id: post_id,
-      });
+    addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
     },
 
     /*
@@ -162,9 +163,11 @@ export default {
       // SET PROCESSING
       component.$store.commit("setProcessing", true);
 
-      component.requestEvent(component.id).then(
+      return component.requestEvent(this.$route.params.id).then(
         (response) => {
-          component.post = response.data;
+          component.postData = response.data;
+          // this.showData = true;
+
           // RESET PROCESSING
           component.$store.commit("setProcessing", false);
         },
