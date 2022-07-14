@@ -22,7 +22,7 @@
       ></CircularProgressBar>
 
       <div class="mt-16 px-2">
-        <h1 class="text-xl text-center font-semibold" v-if="post.title">
+        <h1 class="text-2xl text-center font-semibold" v-if="post.title">
           {{ post.title.rendered }}
         </h1>
         <div class="text-center mt-3">
@@ -35,23 +35,19 @@
       </div> -->
 
       <div class="w-full px-6 md:w-7/12 lg:6/12 relative py-20 mx-auto">
-        <h1 class="text-xl font-semibold ml-2 truncate dark:text-white">
+        <h1 class="text-xl font-semibold truncate dark:text-white">
           Members ({{ totalItems }})
         </h1>
-        <div class="flow-root">
-          <ul role="list" class="grid grid-cols-1 lg:grid-cols-2">
-            <li class="py-1 sm:py-2" v-for="user in items" :key="user.id">
-              <div
-                class="
-                  border
-                  border-lightgray
-                  m-2
-                  p-3
-                  items-center
-                  grid grid-cols-4
-                  justify-between
-                "
-              >
+        <input
+          class="mt-2 p-2 w-full rounded-sm outline-none focus:none align-middle border-black border-2"
+          type="text"
+          placeholder="Search"
+          v-model="search"
+        />
+        <div class="flow-root mt-4">
+          <ul role="list" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <li class="py-1 p-4 sm:py-2 border border-gray rounded-sm" v-for="user in items" :key="user.id">
+              <div class="items-center justify-between">
                 <div class="col-span-3 my-2 items-center flex flex-row">
                   <div class="flex-shrink-1">
                     <div
@@ -62,6 +58,7 @@
                         rounded-full
                         overflow-hidden
                         inline-block
+                        border border-gray
                       "
                     >
                       <img
@@ -73,19 +70,18 @@
                   </div>
 
 
-                  <div class="ml-4">
+                  <div class="ml-4 flex-1">
                     <h1 class="text-xl font-semibold truncate dark:text-white">
                       {{ user.title.rendered }}
                     </h1>
-                    <UserTags :user="user" class="mt-1" />
+                    <UserTags :user="user" class="my-2" />
+                    <Switch
+                      v-model:checked="user.attended"
+                      @click="onAttendanceChange(user)"
+                    />
                   </div>
                 </div>
-                <div class="ml-2">
-                  <Switch
-                    v-model:checked="user.attended"
-                    @click="onAttendanceChange(user)"
-                  />
-                </div>
+
               </div>
             </li>
           </ul>
@@ -119,8 +115,9 @@ export default {
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
   data() {
     return {
-      id: 0,
-      post: {},
+      id      : 0,
+      post    : {},
+      search  : ''
     };
   },
   watch: {
