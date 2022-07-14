@@ -328,7 +328,31 @@ export default {
 
     focusInput( element_id ){
       const input = document.getElementById( element_id );
-      input.focus();
+
+      //document.dispatchEvent(new KeyboardEvent("keypress", { key: "H" }));
+
+      // create invisible dummy input to receive the focus first
+      const fakeInput = document.createElement('input')
+      fakeInput.setAttribute('type', 'text')
+      fakeInput.style.position = 'absolute'
+      fakeInput.style.opacity = 0
+      fakeInput.style.height = 0
+      fakeInput.style.fontSize = '16px' // disable auto zoom
+
+      // you may need to append to another element depending on the browser's auto
+      // zoom/scroll behavior
+      document.body.prepend(fakeInput)
+
+      // focus so that subsequent async focus will work
+      fakeInput.focus()
+
+      this.delay( 1000 ).then( () => {
+        input.focus();
+        //input.click();
+        fakeInput.remove();
+      } );
+
+
     }
   },
   mounted(){
