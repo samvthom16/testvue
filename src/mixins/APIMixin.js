@@ -65,11 +65,11 @@ export default {
       var endpoint = '/wp-json/wp/v2/inpursuit-events/';
 
       var data = {
-        'orderby': 'title',
-        'order': 'asc',
-        'page': page,
-        'search': search,
-        'status': 'publish',
+        //'orderby' : 'ID',
+        //'order'   : 'asc',
+        'page'    : page,
+        'search'  : search,
+        'status'  : 'publish',
       };
 
       let finalData = Object.assign(data, filterData);

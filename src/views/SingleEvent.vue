@@ -52,22 +52,25 @@
                 "
               >
                 <div class="col-span-3 my-2 items-center flex flex-row">
-                  <div
-                    class="
-                      bg-lightgray
-                      w-16
-                      h-16
-                      rounded-full
-                      overflow-hidden
-                      inline-block
-                    "
-                  >
-                    <img
-                      class="w-full h-full object-cover rounded-full"
-                      :src="user.featured_image"
-                      :alt="user.title.rendered"
-                    />
+                  <div class="flex-shrink-1">
+                    <div
+                      class="
+                        bg-lightgray
+                        w-16
+                        h-16
+                        rounded-full
+                        overflow-hidden
+                        inline-block
+                      "
+                    >
+                      <img
+                        class="w-full h-full object-cover rounded-full"
+                        :src="user.featured_image"
+                        :alt="user.title.rendered"
+                      />
+                    </div>
                   </div>
+
 
                   <div class="ml-4">
                     <h1 class="text-xl font-semibold truncate dark:text-white">
