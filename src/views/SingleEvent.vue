@@ -34,7 +34,7 @@
         <ProgressBarItem :contentProgress="post.attendants_percentage" />
       </div> -->
 
-      <div class="w-10/12 md:w-7/12 lg:6/12 relative py-20 mx-auto">
+      <div class="w-full px-6 md:w-7/12 lg:6/12 relative py-20 mx-auto">
         <h1 class="text-xl font-semibold ml-2 truncate dark:text-white">
           Members ({{ totalItems }})
         </h1>
@@ -43,7 +43,8 @@
             <li class="py-1 sm:py-2" v-for="user in items" :key="user.id">
               <div
                 class="
-                  border border-lightgray
+                  border
+                  border-lightgray
                   m-2
                   p-3
                   items-center
