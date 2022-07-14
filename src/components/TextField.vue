@@ -2,6 +2,8 @@
   <div class="mb-5" v-if="!isHidden">
     <label class="block font-semibold text-black">{{ field.label }}</label>
     <input
+      :id="field.id"
+      :placeholder="field.placeholder ? field.placeholder : field.label"
       class="
         inline-block
         w-full
@@ -14,7 +16,6 @@
         outline-white
         focus:border-red
       "
-      :placeholder="field.label"
       :type="field.type"
       v-model="value"
       @input="$emit('update:modelValue', $event.target.value)"

@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <form class="p-10 max-w-sm m-auto" @submit="submit">
+    <form class="p-4 max-w-lg m-auto" @submit="submit">
       <TextField
         class="mt-10"
         :field="formfield"
@@ -34,7 +34,7 @@
         <button
           v-if="currentStep !== 0"
           type="button"
-          @click="currentStep -= 1"
+          @click="openPreviousForm()"
           class="mt-6 text-sm underline text-center w-full"
         >
           Go Back
@@ -108,22 +108,26 @@ export default {
       processing: false,
       form: {
         account_url: {
-          label: "Account URL",
-          error_msg: "",
-          value: "",
-          type: "text",
+          id        : 'account_url',
+          label     : "Account URL",
+          error_msg : "",
+          value     : "",
+          type      : "text",
+          placeholder: 'https://',
         },
         email_address: {
-          label: "Email Address",
-          error_msg: "",
-          value: "",
-          type: "text",
+          id        : 'email_address',
+          label     : "Email Address",
+          error_msg : "",
+          value     : "",
+          type      : "text",
         },
         otp: {
-          label: "OTP",
-          error_msg: "",
-          value: "",
-          type: "text",
+          id        : 'otp',
+          label     : "OTP",
+          error_msg : "",
+          value     : "",
+          type      : "text",
         },
       },
       formSteps: ["account_url", "email_address", "otp"],
@@ -172,10 +176,7 @@ export default {
       component.$store.state.processing = true;
 
       API.makeRequest({ url: account_url + "/wp-json/inpursuit/v1" }).then(
-        () => {
-          component.$store.state.processing = false;
-          component.currentStep += 1;
-        },
+        () => component.openNextForm(),
         (error) => {
           console.log(error);
           component.$store.state.processing = false;
@@ -183,6 +184,29 @@ export default {
             "URL does not support the application.";
         }
       );
+    },
+
+    delay( time ) {
+      return new Promise( resolve => setTimeout( resolve, time ) );
+    },
+
+    /*
+    * FORM WITH THE NEXT STEP HAS TO BE OPENED
+    * STOP THE LOADER
+    * INCREASE THE CURRENT STEP
+    * FOCUS ON THE NEXT INPUT
+    */
+    _openNextPreviousForm(){
+      this.$store.state.processing = false;
+      this.delay( 200 ).then( () => this.focusInput( this.formSteps[this.currentStep] ) );
+    },
+    openNextForm(){
+      this.currentStep += 1;
+      this._openNextPreviousForm();
+    },
+    openPreviousForm(){
+      this.currentStep -= 1;
+      this._openNextPreviousForm();
     },
 
     sendEmailOTP() {
@@ -209,10 +233,7 @@ export default {
           },
           method: "post",
         }).then(
-          () => {
-            component.$store.state.processing = false;
-            component.currentStep += 1;
-          },
+          () => component.openNextForm(),
           (error) => {
             console.log(error);
             component.form.email_address.error_msg =
@@ -304,6 +325,14 @@ export default {
         }
       }
     },
+
+    focusInput( element_id ){
+      const input = document.getElementById( element_id );
+      input.focus();
+    }
   },
+  mounted(){
+    this.focusInput( 'account_url' );
+  }
 };
 </script>
