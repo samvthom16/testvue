@@ -1,15 +1,39 @@
 <template>
-  <div class="members">
-    <UsersList
-      v-on:applyFilterTags="filterTagData($event)"
-      :users="items"
-      :total="totalItems"
-    />
-  </div>
+
+  <PhoneUI title="Members">
+
+    <template v-slot:headerright>
+      <router-link :to="{ name: 'NewEvent' }">
+        <Icon type='Plus' class='inline text-white' />
+      </router-link>
+    </template>
+
+    <template v-slot:phonebody>
+      <UsersList
+        v-on:applyFilterTags="filterTagData($event)"
+        :users="items"
+        :total="totalItems"
+      />
+    </template>
+
+    <template v-slot:mainttitle_footer>
+      <SearchField @searching='searching' />
+    </template>
+
+  </PhoneUI>
+
+
+
+
 </template>
 
 <script>
-//import API from '../api.js'
+import PhoneUI from '@/components/PhoneUI'
+import Icon from '@/components/Icon'
+
+import SearchField from '@/components/SearchField'
+
+
 import UsersList from "@/components/UsersList.vue";
 
 import defaultMixin from "@/mixins/DefaultMixin.js";
@@ -20,12 +44,16 @@ export default {
   name: "Members",
   components: {
     UsersList,
+    PhoneUI,
+    Icon,
+    SearchField
   },
   mixins: [defaultMixin, paginationMixin, apiMixin],
   data() {
     return {
       search: "",
       filterData: {},
+      searchFocus: false,
     };
   },
   watch: {
@@ -38,6 +66,9 @@ export default {
     },
   },
   methods: {
+    searching( searchText ){
+      this.search = searchText;
+    },
     filterTagData(e) {
       this.filterData = e;
     },
@@ -49,5 +80,6 @@ export default {
       return "InPursuit - Members";
     },
   },
+
 };
 </script>

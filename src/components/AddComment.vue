@@ -1,4 +1,25 @@
 <template>
+
+  <Modal @close="close()">
+    <template v-slot:modalcontent>
+      <textarea
+        placeholder="Type your comment"
+        v-model='newComment'
+        class='inline-block w-full border-black outline-white focus:border-red'
+      ></textarea>
+      <div class='h-8 relative mt-4 mb-2'>
+        <button
+          class='absolute right-0 bg-purple text-white p-2 text-sm rounded'
+          @click='saveComment'
+          :disabled='processing'
+          :class="{ 'cursor-not-allowed': processing }"
+        >Post Comment</button>
+      </div>
+    </template>
+  </Modal>
+
+  <!--
+
   <div :class="{ 'hidden': !openComment }" class="z-20 flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray">
     <div class="bg-white rounded-lg w-full md:w-1/2 mx-2">
       <div class="flex flex-col items-start p-4">
@@ -31,7 +52,7 @@
     </div>
   </div>
 
-  <div class="flex justify-left items-baseline flex-wrap">
+  <div class="flex justify-left items-baseline flex-wrap hidden">
     <div class="flex mb-5">
       <button @click='openComment = true' class="text-base rounded-r-none  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-darkorange hover:text-white hover:border-black bg-orange border duration-200 ease-in-out transition">
         <div class="flex leading-5">
@@ -53,17 +74,23 @@
     </button>
   </div>
 
+  -->
 
 </template>
 
 <script>
 import apiMixin from '@/mixins/APIMixin.js'
 
+import Modal from '@/components/Modal'
+
 export default{
   name: 'AddComment',
   props:{
     id : Number,
     item : Object
+  },
+  components:{
+    Modal
   },
   mixins: [ apiMixin ],
   data(){
@@ -75,28 +102,6 @@ export default{
     }
   },
   methods: {
-
-
-
-    /*
-
-    isIOSDevice(){
-      return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-    },
-    
-    schedule( ev ){
-      if( this.isIOSDevice() ){
-        ev.preventDefault();
-        var icsMSG = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Our Company//NONSGML v1.0//EN\nBEGIN:VEVENT\nUID:me@google.com\nDTSTAMP:20120315T170000Z\nATTENDEE;CN=My Self ;RSVP=TRUE:MAILTO:me@gmail.com\nORGANIZER;CN=Me:MAILTO::me@gmail.com\nSUMMARY:Our Meeting Office\nEND:VEVENT\nEND:VCALENDAR";
-        let blob = new Blob( icsMSG, { type: 'text/calendar' } );
-        let link = document.createElement('a');
-        link.href = window.URL.createObjectURL( blob );
-        link.download = 'Reminders.ics';
-        link.click();
-        //window.open( "data:text/calendar;charset=utf8," + escape( icsMSG ) );
-      }
-    },
-    */
 
     getScheduleLink(){
       var link = 'http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=';
@@ -114,6 +119,11 @@ export default{
       this.processing = flag;
       this.$store.commit( 'setProcessing', this.processing );
     },
+
+    close(){
+      this.$emit( 'close' );
+    },
+
     saveComment( ev ){
       ev.preventDefault();
 
@@ -136,7 +146,7 @@ export default{
 
         //console.log( response );
         component.newComment = '';
-        component.openComment = false;
+        component.close();
         component.$parent.refreshItems();
 
       }, ( error ) => {

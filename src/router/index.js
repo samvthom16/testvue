@@ -8,6 +8,8 @@ import SingleMember from '@/views/SingleMember.vue'
 import Profile from '@/views/Profile.vue'
 import Events from '@/views/Events.vue'
 import SingleEvent from '@/views/SingleEvent.vue'
+import NewEvent from '@/views/NewEvent'
+
 
 const routes = [
   {
@@ -50,7 +52,11 @@ const routes = [
     name: 'SingleEvent',
     component: SingleEvent
   },
-
+  {
+    path: '/events/new',
+    name: 'NewEvent',
+    component: NewEvent
+  },
 ]
 
 const router = createRouter({

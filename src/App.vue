@@ -1,19 +1,34 @@
 <template>
   <div :class="{ 'overflow-hidden': $store.state.processing, 'hidden': !$store.state.processing }" class="w-full"><div class="w-full inline-block fluentProgressBar-waiting"></div></div>
-  <HeaderMenu />
+
   <router-view />
   <ErrorNotification />
 </template>
 
 <script>
-import HeaderMenu from '@/components/HeaderMenu.vue'
+//import HeaderMenu from '@/components/HeaderMenu.vue'
 import ErrorNotification from '@/components/ErrorNotification.vue'
 
 export default {
   name: 'App',
   components: {
-    HeaderMenu,
+    //HeaderMenu,
     ErrorNotification
+  },
+  methods: {
+    /*
+    isNewAppVersion() {
+      var allowedRoutes = [
+        "Members",
+        "SingleMember",
+        "Events",
+        "SingleEvent",
+        "Profile"
+      ];
+      if (allowedRoutes.includes(this.$route.name)) return true;
+      return false;
+    },
+    */
   }
 }
 </script>

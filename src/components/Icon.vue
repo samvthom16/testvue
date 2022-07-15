@@ -55,6 +55,7 @@
   <!-- HOME ICON -->
   <svg
     v-else-if="type == 'Home'"
+    v-bind="$attrs"
     xmlns="http://www.w3.org/2000/svg"
     class="h-6 w-6"
     fill="none"
@@ -69,97 +70,19 @@
     />
   </svg>
 
-  <!-- EVENT ICON -->
   <svg
     v-else-if="type == 'Event'"
-    xmlns="http://www.w3.org/2000/svg"
-    class="h-5 w-5"
-    viewBox="0 0 452.986 452.986"
-  >
-    <g>
-      <g>
-        <g>
-          <path
-            d="M404.344,0H48.642C21.894,0,0,21.873,0,48.664v355.681c0,26.726,21.894,48.642,48.642,48.642     h355.702c26.726,0,48.642-21.916,48.642-48.642V48.664C452.986,21.873,431.07,0,404.344,0z M148.429,33.629h156.043v40.337     H148.429V33.629z M410.902,406.372H42.041v-293.88h368.86V406.372z"
-          />
-          <rect
-            x="79.273"
-            y="246.23"
-            style="fill: #010002"
-            width="48.642"
-            height="48.664"
-          />
-          <rect
-            x="79.273"
-            y="323.26"
-            style="fill: #010002"
-            width="48.642"
-            height="48.642"
-          />
-          <rect
-            x="160.853"
-            y="169.223"
-            style="fill: #010002"
-            width="48.621"
-            height="48.642"
-          />
-          <rect
-            x="160.853"
-            y="246.23"
-            style="fill: #010002"
-            width="48.621"
-            height="48.664"
-          />
-          <rect
-            x="160.853"
-            y="323.26"
-            style="fill: #010002"
-            width="48.621"
-            height="48.642"
-          />
-          <rect
-            x="242.369"
-            y="169.223"
-            style="fill: #010002"
-            width="48.664"
-            height="48.642"
-          />
-          <rect
-            x="242.369"
-            y="246.23"
-            style="fill: #010002"
-            width="48.664"
-            height="48.664"
-          />
-          <rect
-            x="242.369"
-            y="323.26"
-            style="fill: #010002"
-            width="48.664"
-            height="48.642"
-          />
-          <rect
-            x="323.907"
-            y="169.223"
-            style="fill: #010002"
-            width="48.664"
-            height="48.642"
-          />
-          <rect
-            x="323.907"
-            y="246.23"
-            style="fill: #010002"
-            width="48.664"
-            height="48.664"
-          />
-        </g>
-      </g>
-    </g>
+    v-bind="$attrs"
+    xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
   </svg>
+
+  
 
   <!-- PROFILE ICON -->
   <svg
     v-else-if="type == 'Profile'"
+    v-bind="$attrs"
     xmlns="http://www.w3.org/2000/svg"
     class="h-6 w-6"
     fill="none"
@@ -356,6 +279,46 @@
       stroke-width="2"
       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
     />
+  </svg>
+  <svg
+    v-else-if="type == 'Back'"
+    v-bind="$attrs"
+    xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+  </svg>
+  <svg
+    v-else-if="type == 'Plus'"
+    v-bind="$attrs"
+    xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+  </svg>
+  <svg
+    v-else-if="type == 'CircularLoader'"
+    v-bind="$attrs"
+    class="animate-spin h-5 w-5 text-white mr-2"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle
+      class="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      stroke-width="4"
+    ></circle>
+    <path
+      class="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+    ></path>
+  </svg>
+  <svg
+    v-else-if="type == 'Clock'"
+    v-bind="$attrs"
+    xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 </template>
 <script>

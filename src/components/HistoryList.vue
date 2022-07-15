@@ -1,5 +1,4 @@
 <template>
-  <AddComment :id='id' v-if='id' :item='item' />
   <div class="border-l-2 border-gray mt-3">
     <HistoryItem :item='item' v-for='item in items' :key='item.id' />
   </div>
@@ -9,7 +8,7 @@
 <script>
 import HistoryItem from '@/components/HistoryItem.vue'
 
-import AddComment from '@/components/AddComment.vue'
+//import AddComment from '@/components/AddComment.vue'
 import ItemAnimation from '@/components/ItemAnimation.vue'
 
 import defaultMixin from '@/mixins/DefaultMixin.js'
@@ -21,7 +20,7 @@ export default {
   name: 'HistoryList',
   components: {
     HistoryItem,
-    AddComment,
+    //AddComment,
     ItemAnimation
   },
   props:{
