@@ -46,3 +46,33 @@
   transition: all 0.3s ease-out;
 }
 /* route transitions */
+
+/* we will explain what these classes do next! */
+.slideup-enter-to {
+  position: absolute;
+  bottom: 0;
+}
+
+.slideup-enter-from {
+  position: absolute;
+  bottom: -100%;
+}
+
+.slideup-leave-to {
+  position: absolute;
+  bottom: -100%;
+}
+.slideup-leave-from {
+  position: absolute;
+  bottom: 0;
+}
+
+.slideup-enter-active,
+.slideup-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slideup-enter-from,
+.slideup-leave-to {
+  opacity: 0;
+}

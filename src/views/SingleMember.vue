@@ -10,7 +10,14 @@
     </template>
     <template v-slot:phonebody>
 
-      <AddComment :id='id' :item='post' v-if='showCommentModal && id' @close='closeCommentModal()' />
+      <AddComment
+        :id='id'
+        :item='post'
+        :showModal='showCommentModal'
+        v-if='id'
+        @close='closeCommentModal()'
+        @postComment='forceHistoryRerender()'
+      />
 
       <div class="pb-6 justify-center items-center mx-auto">
 
@@ -104,7 +111,6 @@ export default {
 
     closeCommentModal(){
       this.showCommentModal = false;
-      this.forceHistoryRerender();
     },
 
     openScheduleLink(){

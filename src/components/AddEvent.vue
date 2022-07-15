@@ -1,10 +1,8 @@
 <template>
   <div class="add_event">
-    <form class="p-10 max-w-sm m-auto" @submit="submit">
-      <h1 class="font-semibold mb-5 text-lg">Add New Event</h1>
-
+    <form @submit="submit">
       <TextField
-        class="mt-10"
+        class="mt-4"
         :field="formfield"
         v-model="formfield.value"
         v-for="(formfield, key) in form"
@@ -33,7 +31,7 @@
           inline-block
           w-full
           text-white
-          mb-5
+          mb-2
           border-purple
           p-2
           border

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Modal v-show="isModalVisible" @close="closeModal()">
+    <Modal :showModal='isModalVisible' @close="closeModal()">
+      <template v-slot:modaltitle>
+        <h4 class='font-semibold text-black'>Create Event</h4>
+      </template>
       <template v-slot:modalcontent>
         <AddEvent
           v-on:close="closeAddEvent($event)"
