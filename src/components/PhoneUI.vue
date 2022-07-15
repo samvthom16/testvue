@@ -59,7 +59,7 @@
             </p>
           </router-link>
         </li>
-        <li>
+        <!--li>
           <router-link to="/members" class="hover:opacity-80">
             <Icon
               class='text-black'
@@ -73,7 +73,7 @@
               Members
             </p>
           </router-link>
-        </li>
+        </li-->
         <li class='text-black'>
           <router-link to="/events" class="hover:opacity-80">
             <Icon
@@ -117,6 +117,8 @@
 
 import Icon from '@/components/Icon'
 
+import Util from '@/lib/Util'
+
 import {ref} from 'vue'
 
 export default{
@@ -131,7 +133,7 @@ export default{
   },
   data(){
     return {
-      debounce  : null,
+
       scrolled  : false,
       move_sticky_up : false,
     }
@@ -162,12 +164,7 @@ export default{
     //console.log( props );
   },
   methods: {
-    debounceEvent( callback, timeout = 600 ){
-      clearTimeout( this.debounce );
-      this.debounce = setTimeout(() => {
-        callback();
-      }, timeout);
-    },
+
   },
   mounted(){
 
@@ -175,14 +172,14 @@ export default{
 
     window.addEventListener('scroll', function(){
 
-      component.debounceEvent( () => {
+      Util.debounceEvent( () => {
         if( window.scrollY > 34 ){
           component.scrolled = true;
         }
         else{
           component.scrolled = false;
         }
-      }, 30 );
+      }, 10 );
     } );
 
     var $input = this.$el.querySelector( 'input[type=text]' );

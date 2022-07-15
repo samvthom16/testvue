@@ -1,5 +1,7 @@
 export default{
 
+  debounce  : null,
+
   getPostLink: function( post ){
     var route = {
       name		: "",
@@ -15,6 +17,13 @@ export default{
       route.name = "SingleEvent";
     }
     return route;
-  }
+  },
+
+  debounceEvent: function( callback, timeout = 600 ){
+    clearTimeout( this.debounce );
+    this.debounce = setTimeout(() => {
+      callback();
+    }, timeout);
+  },
 
 }

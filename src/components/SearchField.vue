@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+import Util from '@/lib/Util'
 
 export default{
   data(){
@@ -42,7 +43,10 @@ export default{
   },
   methods:{
     returnSearchText( ev ){
-      this.$emit( 'searching', ev.target.value );
+      var component = this;
+      Util.debounceEvent( () => {
+        component.$emit( 'searching', ev.target.value );
+      }, 100 )
     }
   },
   mounted(){
