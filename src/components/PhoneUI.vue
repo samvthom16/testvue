@@ -3,18 +3,18 @@
   <div class='phone-ui'>
 
     <div
-      class='opacity-0 bg-purple h-0'
-      :class="{
+      class='opacity-0 h-0'
+      :class="[`${colors}`, {
         'border-b border-lightgray': scrolled,
         'opacity-100 p-4 sticky top-0 z-10 h-auto' : !move_sticky_up
-      }"
+      }]"
     >
       <ul class='header-list'>
-        <li class='text-white'>
+        <li class=''>
           <slot name="headericon"></slot>
         </li>
         <li
-          class='opacity-0 transition-all text-white'
+          class='truncate opacity-0 transition-all'
           :class="[`${stickytitle_classes}`, { 'opacity-100': scrolled }]"
           v-html='title'>
         </li>
@@ -28,7 +28,7 @@
     </div>
     <div
       class='maintitle mt-0 transition-all duration-200 delay-50'
-      :class="[ `${maintitle_classes}`, {'transform -mt-12': move_sticky_up} ]"
+      :class="[ `${colors}`, `${maintitle_classes}`, {'transform -mt-12': move_sticky_up} ]"
     >
       <div class='flex'>
         <div class='flex-auto' v-html='title' v-if='!hide_maintitle'></div>
@@ -45,25 +45,25 @@
     <div class='sticky z-10 bg-white bottom-0 w-full border-t border-gray' v-if='!hide_footer'>
       <ul class='footer-list'>
         <li>
-          <router-link to="/members" class="hover:opacity-80">
+          <router-link :to="{ name: 'Home' }" class="hover:opacity-80">
             <Icon
               class='text-black'
               type='Home'
-              :class="{'text-orange' : $route.name == 'Members' }"
+              :class="{'text-orange' : $route.name == 'Home' }"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-orange' : $route.name == 'Members' }"
+              :class="{'text-orange' : $route.name == 'Home' }"
             >
               Home
             </p>
           </router-link>
         </li>
-        <!--li>
+        <li>
           <router-link to="/members" class="hover:opacity-80">
             <Icon
               class='text-black'
-              type='Home'
+              type='Members'
               :class="{'text-orange' : $route.name == 'Members' }"
             />
             <p
@@ -73,7 +73,7 @@
               Members
             </p>
           </router-link>
-        </li-->
+        </li>
         <li class='text-black'>
           <router-link to="/events" class="hover:opacity-80">
             <Icon
@@ -146,6 +146,9 @@ export default{
     const stickytitle_classes = ref( null );
     stickytitle_classes.value = props.configUI && props.configUI.stickytitle_classes ? props.configUI.stickytitle_classes : ""
 
+    const colors = ref( null );
+    colors.value = props.configUI && props.configUI.colors ? props.configUI.colors : "bg-purple text-white"
+
     const hide_maintitle = ref( null )
     hide_maintitle.value = props.configUI && props.configUI.hide_maintitle ? props.configUI.hide_maintitle : false
 
@@ -158,7 +161,8 @@ export default{
       maintitle_classes,
       stickytitle_classes,
       hide_maintitle,
-      hide_footer
+      hide_footer,
+      colors
     }
 
     //console.log( props );

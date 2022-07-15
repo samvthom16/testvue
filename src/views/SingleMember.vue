@@ -1,14 +1,17 @@
 <template>
 
-  <AddComment :id='id' :item='post' v-if='showCommentModal && id' @close='closeCommentModal()' />
 
-  <PhoneUI :configUI='configUI' :title='getHeaderTitle()'>
+
+  <PhoneUI :configUI='{ maintitle_classes : "py-16", hide_maintitle : true, colors: "bg-lightgray text-black" }' :title='getHeaderTitle()'>
     <template v-slot:headericon>
       <router-link :to="{ name: 'Members' }">
         <Icon type='Back' />
       </router-link>
     </template>
     <template v-slot:phonebody>
+
+      <AddComment :id='id' :item='post' v-if='showCommentModal && id' @close='closeCommentModal()' />
+
       <div class="pb-6 justify-center items-center mx-auto">
 
         <div class='pt-20 pb-4 relative bg-white rounded-sm -my-12'>
@@ -87,10 +90,6 @@ export default {
     return {
       id      : 0,
       post    : {},
-      configUI: {
-        maintitle_classes : "py-16",
-        hide_maintitle    : true,
-      },
       showCommentModal: false,
       historyKey      : 0
     };

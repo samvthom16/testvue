@@ -1,6 +1,6 @@
 <template>
 
-  <PhoneUI title='Events'>
+  <PhoneUI title='Events' :configUI='{ colors: "bg-orange text-white" }'>
     <template v-slot:phonebody>
       <EventList :events="items" :total="totalItems" />
     </template>

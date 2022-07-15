@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import store from '@/store'
+
 const api = {
   /*
   request: function( url, headers = {} ){
@@ -38,6 +40,38 @@ const api = {
     }
 
     return api;
+  },
+
+  getAuthHeaders: function() {
+    var username = store.state.settings.username;
+    var password = store.state.settings.password;
+
+    var headers = {};
+    if (username && password) {
+      headers = {
+        'Authorization': 'Basic ' + btoa(username + ':' + password),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      };
+    }
+    return headers;
+  },
+
+  _getURL: ( endpoint ) => store.state.settings.account_url + endpoint,
+
+  requestPosts: function( post_type, params = {} ){
+    return this.makeRequest( {
+        url     : this._getURL( '/wp-json/wp/v2/' + post_type + '/' ),
+        method  : 'get',
+        data    : params,
+    } )
+  },
+
+  requestHistory: function( params = {} ){
+    return this.makeRequest( {
+        url     : this._getURL( '/wp-json/inpursuit/v1/history' ),
+        method  : 'get',
+        data    : params,
+    } )
   },
 
 }
