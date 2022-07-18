@@ -1,41 +1,31 @@
 <template>
-  <ul class="text-sm dark:text-gray-400">
-    <li class="inline-block truncate" v-if="getLocation(user)">
-      <div class="mr-2 p-1 px-2 rounded bg-orange text-white">
-        <Icon type="Location" />
-        {{ getLocation(user) }}
-      </div>
+  <ul class="user-tags">
+    <li class="bg-orange" v-if="getLocation(user)">
+      <Icon type="Location" />
+      {{ getLocation(user) }}
     </li>
-    <li class="inline-block truncate" v-if="getGender(user)">
-      <div class="p-1 px-2 rounded bg-lightpurple text-white mr-2">
-        <Icon type="Gender" />
-        {{ getGender(user) }}
-      </div>
+    <li class="bg-lightpurple" v-if="getGender(user)">
+      <Icon type="Gender" />
+      {{ getGender(user) }}
     </li>
-    <li class="inline-block truncate" v-if="getGroup(user)">
-      <div class="mr-2 p-1 px-2 rounded bg-lightred text-white">
-        <Icon type="Group" />
-        {{ getGroup(user) }}
-      </div>
+    <li class="bg-lightred" v-if="getGroup(user)">
+      <Icon type="Group" />
+      {{ getGroup(user) }}
     </li>
-    <li class="inline-block truncate" v-if="getProfession(user)">
-      <div class="mr-2 p-1 px-2 rounded bg-gray text-white">
-        <Icon type="Profession" />
-        {{ getProfession(user) }}
-      </div>
+    <li class="bg-gray" v-if="getProfession(user)">
+      <Icon type="Profession" />
+      {{ getProfession(user) }}
     </li>
-    <li class="inline-block truncate" v-if="getStatus(user)">
-      <div class="mr-2 p-1 px-2 rounded bg-gray text-white">
-        <Icon type="Status" />
-        {{ getStatus(user) }}
-      </div>
+    <li class="bg-gray" v-if="getStatus(user)">
+      <Icon type="Status" />
+      {{ getStatus(user) }}
     </li>
   </ul>
 </template>
 
 <script>
-import userMixin from "@/mixins/UserMixin.js";
-import Icon from "@/components/Icon.vue";
+import userMixin from "@/mixins/UserMixin";
+import Icon from "@/components/Icon";
 
 export default {
   name: "UserTags",
@@ -50,3 +40,15 @@ export default {
   methods: {},
 };
 </script>
+
+<style scoped>
+  .user-tags{
+    @apply text-xs text-white;
+  }
+  .user-tags li{
+    @apply inline-block truncate mr-2 p-1 rounded;
+  }
+  .user-tags li svg{
+    @apply w-3 h-3;
+  }
+</style>

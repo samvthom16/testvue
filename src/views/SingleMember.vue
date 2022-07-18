@@ -1,11 +1,14 @@
 <template>
-
-
-
-  <PhoneUI :configUI='{ maintitle_classes : "py-16", hide_maintitle : true, colors: "bg-lightgray text-black" }' :title='getHeaderTitle()'>
+  
+  <PhoneUI :configUI='{ maintitle_classes : "py-16 hide-svg", hide_maintitle : true, colors: "bg-lightgray text-black" }' :title='getHeaderTitle()'>
     <template v-slot:headericon>
       <router-link :to="{ name: 'Members' }">
         <Icon type='Back' />
+      </router-link>
+    </template>
+    <template v-slot:headerright>
+      <router-link :to="getEditLink()" v-if='post.id'>
+        <Icon type='Edit' class='inline' />
       </router-link>
     </template>
     <template v-slot:phonebody>
@@ -44,11 +47,20 @@
               <ul class='mt-4'>
                 <li class='inline-block p-2'>
                   <Icon @click='showCommentModal = true' type='Comment' class='cursor-pointer block bg-lightergray text-black p-3 h-12 w-12 rounded-full' />
-                  <p class='text-xs mt-2 text-black text-center block'>Add Comment</p>
+                  <p class='text-xs mt-2 text-black text-center block'>Comment</p>
                 </li>
                 <li class='inline-block p-2'>
-                  <Icon @click='openScheduleLink()' type='Clock' class='cursor-pointer block bg-lightergray text-black p-3 h-12 w-12 rounded-full' />
+                  <Icon @click='openScheduleLink' type='Clock' class='cursor-pointer block bg-lightergray text-black p-3 h-12 w-12 rounded-full' />
                   <p class='text-xs mt-2 text-black text-center block'>Reminder</p>
+                </li>
+                <li class='inline-block p-2'>
+                  <Icon
+                    @click='archivePost'
+                    type='Archive'
+                    class='cursor-pointer block p-3 h-12 w-12 rounded-full'
+                    :class='{"bg-lightergray text-black" : post.status == "publish", "bg-orange text-white" : post.status == "draft" }'
+                  />
+                  <p class='text-xs mt-2 text-black text-center block' v-html='post.status == "draft" ? "Unarchive": "Archive"'></p>
                 </li>
               </ul>
             </div>
@@ -72,10 +84,12 @@
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 
+import Util from '@/lib/Util'
+import API from '@/api'
 
 import AddComment from '@/components/AddComment'
-import UserTags from "../components/UserTags.vue";
-import HistoryList from "@/components/HistoryList.vue";
+import UserTags from "../components/UserTags";
+import HistoryList from "@/components/HistoryList";
 
 import defaultMixin from "@/mixins/DefaultMixin.js";
 import userMixin from "@/mixins/UserMixin.js";
@@ -172,7 +186,31 @@ export default {
       var title = "InPursuit - Single Member";
       return title;
     },
+    getEditLink(){
+      return Util.getPostEditLink( this.post )
+    },
+    archivePost(){
+      this.$store.commit( 'setProcessing', true )
+
+      // CHANGING POST STATUS TO TRASH & PUBLISH
+      if( this.post.status == 'publish' ) this.post.status = 'draft';
+      else this.post.status = 'publish'
+
+      // CHANGE METHOD TO POST FOR UPDATING
+      this.post.method = 'post'
+
+      API.requestPost( 'inpursuit-members', this.post.id, this.post ).then(
+        () => this.$store.commit( 'setProcessing', false )
+      )
+
+    }
+
   },
 
 };
 </script>
+<style>
+  .hide-svg svg{
+    @apply hidden;
+  }
+</style>

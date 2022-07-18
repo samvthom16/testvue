@@ -8,16 +8,15 @@
         inline-block
         w-full
         p-2
-        border-2 border-solid
+        border-2 border-solid border-black
         rounded
-        mb-1
-        mt-2
-        border-black
+        mb-1 mt-2
         outline-white
         focus:border-red
       "
       :type="field.type"
-      v-model="value"
+      :value="field.value"
+      :name='field.id'
       @input="$emit('update:modelValue', $event.target.value)"
     />
     <div class="text-red text-xs">{{ field.error_msg }}</div>

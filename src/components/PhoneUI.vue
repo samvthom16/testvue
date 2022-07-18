@@ -64,11 +64,11 @@
             <Icon
               class='text-black'
               type='Members'
-              :class="{'text-orange' : $route.name == 'Members' }"
+              :class="{'text-orange' : ['Members', 'SingleMember'].includes( $route.name ) }"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-orange' : $route.name == 'Members' }"
+              :class="{'text-orange' : ['Members', 'SingleMember'].includes( $route.name ) }"
             >
               Members
             </p>
@@ -78,12 +78,12 @@
           <router-link to="/events" class="hover:opacity-80">
             <Icon
               class='text-black'
-              :class="{'text-orange' : $route.name == 'Events' }"
+              :class="{'text-orange' : ['Events', 'SingleEvent'].includes( $route.name ) }"
               type="Event"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-orange' : $route.name == 'Events' }"
+              :class="{'text-orange' : ['Events', 'SingleEvent'].includes( $route.name ) }"
             >
               Events
             </p>
@@ -186,7 +186,7 @@ export default{
       }, 10 );
     } );
 
-    var $input = this.$el.querySelector( 'input[type=text]' );
+    var $input = this.$el.querySelector( '.maintitle input[type=text]' );
     //console.log( $input )
     if( $input ){
       $input.addEventListener('focus', () => {

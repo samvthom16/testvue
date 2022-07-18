@@ -9,6 +9,7 @@ import Profile from '@/views/Profile.vue'
 import Events from '@/views/Events.vue'
 import SingleEvent from '@/views/SingleEvent.vue'
 import NewEvent from '@/views/NewEvent'
+import NewMember from '@/views/NewMember'
 
 
 const routes = [
@@ -41,6 +42,11 @@ const routes = [
     path: '/members/:id',
     name: 'SingleMember',
     component: SingleMember
+  },
+  {
+    path: '/members/new',
+    name: 'NewMember',
+    component: NewMember
   },
   {
     path: '/events',

@@ -30,24 +30,32 @@ export default {
     },
 
     requestUsers(page, search = '', filterData = {}) {
-      var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-members/';
+      //var component = this;
+      //var endpoint = '/wp-json/wp/v2/inpursuit-members/';
+
+      if( filterData.status && 'all' == filterData.status ){
+        filterData.status = ["draft", "publish"]
+      }
 
       var data = {
         'orderby': 'title',
-        'order': 'asc',
-        'page': page,
+        'order' : 'asc',
+        'page'  : page,
         'search': search,
       };
 
       let finalData = Object.assign(data, filterData);
 
+      return API.requestPosts( 'inpursuit-members', finalData )
+
+      /*
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
         method: 'get',
         data: finalData,
         headers: component.getAuthHeaders()
       });
+      */
     },
 
     requestEvent(event_id) {

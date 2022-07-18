@@ -6,6 +6,11 @@
         <Icon type='Back' />
       </router-link>
     </template>
+    <template v-slot:headerright>
+      <router-link :to="getEditLink()" v-if='post.id'>
+        <Icon type='Edit' class='inline' />
+      </router-link>
+    </template>
     <template v-slot:phonebody>
       <div class="bg-white pb-6 justify-center items-center mx-auto relative borde -my-12 pt-20 rounded-sm">
         <div class='absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-full'>
@@ -35,7 +40,7 @@
       </div>
 
 
-        <div class="w-full md:w-7/12 lg:6/12 relative py-20 mx-auto">
+        <div class="w-full relative py-20">
 
           <input
             class="mt-2 p-2 bg-lightergray w-full rounded-sm outline-none focus:none align-middle border-black border-2"
@@ -45,7 +50,7 @@
           />
           <div class="flow-root mt-4">
             <ul role="list" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <li class="py-1 p-4 sm:py-2 border border-gray rounded-sm" v-for="user in items" :key="user.id">
+              <li class="py-1 p-4 sm:py-2 bg-white border border-gray rounded-sm" v-for="user in items" :key="user.id">
                 <div class="items-center justify-between">
                   <div class="col-span-3 my-2 items-center flex flex-row">
                     <div class="flex-shrink-1">
@@ -98,6 +103,8 @@
 </template>
 
 <script>
+import Util from '@/lib/Util'
+
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 
@@ -130,7 +137,7 @@ export default {
       post    : {},
       search  : '',
       configUI: {
-        maintitle_classes : "py-16",
+        maintitle_classes : "py-16 hide-svg",
         hide_maintitle    : true,
       }
     };
@@ -202,6 +209,10 @@ export default {
     getPageTitle() {
       var title = "InPursuit - Single Event";
       return title;
+    },
+
+    getEditLink(){
+      return Util.getPostEditLink( this.post )
     },
 
     // UPDATE IN ATTENDANCE DATABASE

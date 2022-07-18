@@ -2,7 +2,7 @@
   <PhoneUI title="Home" :configUI="{ colors: 'bg-lightgray text-black' }">
     <template v-slot:phonebody>
       <h4 class='font-semibold text-lg mb-2'>Members</h4>
-      <ul class='pb-4 mb-4' style='white-space:nowrap; max-width: 100%; overflow: auto; '>
+      <ul class='pb-4 mb-4 whitespace-nowrap overflow-auto'>
         <li class='inline-block mr-2' v-for='member in members' :key='member'>
           <router-link :to='getPostLink( member )'>
             <img class='h-12 w-12 rounded-full border border-gray' :src='member.featured_image' />

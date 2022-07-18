@@ -50,7 +50,7 @@ const api = {
     if (username && password) {
       headers = {
         'Authorization': 'Basic ' + btoa(username + ':' + password),
-        'Content-Type': 'application/x-www-form-urlencoded'
+        //'Content-Type': 'application/x-www-form-urlencoded'
       };
     }
     return headers;
@@ -63,6 +63,21 @@ const api = {
         url     : this._getURL( '/wp-json/wp/v2/' + post_type + '/' ),
         method  : 'get',
         data    : params,
+        headers : this.getAuthHeaders()
+    } )
+  },
+
+  requestPost: function( post_type, post_id, params = {} ){
+
+    //var data = params
+    //delete data['method']
+    //delete data['post_type']
+
+    return this.makeRequest( {
+        url     : this._getURL( '/wp-json/wp/v2/' + post_type + '/' + post_id ),
+        method  : params.method ? params.method : 'get',
+        data    : params,
+        headers : this.getAuthHeaders()
     } )
   },
 
@@ -72,6 +87,33 @@ const api = {
         method  : 'get',
         data    : params,
     } )
+  },
+
+  requestSettings: function(){
+    return this.makeRequest( {
+      url     : this._getURL( '/wp-json/inpursuit/v1/settings' ),
+      method  : 'get',
+      headers : this.getAuthHeaders()
+    } )
+  },
+
+  createPost: function( newPost ) {
+    var post_type = newPost.post_type ? newPost.post_type : 'posts';
+    return this.makeRequest( {
+      url     : this._getURL( "/wp-json/wp/v2/" + post_type + "/" ),
+      data    : newPost,
+      method  : "post",
+      headers : this.getAuthHeaders()
+    } );
+  },
+
+  createAttachment: function( attachment ) {
+    return this.makeRequest( {
+      url     : this._getURL("/wp-json/wp/v2/media/"),
+      data    : attachment,
+      method  : "post",
+      headers : this.getAuthHeaders()
+    } );
   },
 
 }
