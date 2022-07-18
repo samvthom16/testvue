@@ -10,7 +10,7 @@
       <h4 class='font-semibold' v-html='field.popupTitle'></h4>
     </template>
     <template v-slot:modalcontent>
-      <ul class='dropdown-list'>
+      <ul class='dropdown-list text-md'>
         <li v-for='dropdownItem,key in field.items' :key='dropdownItem' @click='selectedItem( key )'>
           {{ dropdownItem }}
           <Icon v-if='key == field.selected' type='Check' class='absolute right-0 top-2 text-orange' />
@@ -59,16 +59,15 @@ export default{
 
 <style scoped>
   .badge{
-    @apply bg-lightpurple rounded-full text-purple font-bold;
-    padding: 1px 7px;
+    @apply bg-lightpurple rounded-full text-purple font-bold text-xs py-1 px-2;
     --tw-bg-opacity: 0.5;
   }
 
   .button-popup-modal{
-    @apply text-xs text-black border border-gray py-1 px-2 rounded-full
+    @apply text-sm text-black border border-gray py-2 px-4 rounded-full
   }
   .dropdown-list{
-    @apply my-2 px-4 bg-lightergray rounded-lg divide-y divide-lightgray bg-white text-sm;
+    @apply my-2 px-4 bg-lightergray rounded-lg divide-y divide-lightgray bg-white;
   }
   .dropdown-list li{
     @apply py-3 cursor-pointer relative;
