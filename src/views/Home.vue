@@ -1,7 +1,7 @@
 <template>
   <PhoneUI title="Home" :configUI="{ colors: 'bg-lightgray text-black' }">
     <template v-slot:phonebody>
-      <h4 class='font-semibold text-lg mb-2' v-if='members.length'>Members</h4>
+      <h4 class='font-semibold text-lg mb-2' v-if='members && members.length'>Members</h4>
       <ul class='border-b border-gray pb-4 mb-8 whitespace-nowrap overflow-auto'>
         <li class='inline-block w-16 h-16 mr-3' v-for='member in members' :key='member'>
           <router-link :to='getPostLink( member )'>
@@ -9,7 +9,7 @@
           </router-link>
         </li>
       </ul>
-      <h4 class='font-semibold text-lg' v-if='updates.length'>Recent Updates</h4>
+      <h4 class='font-semibold text-lg' v-if='updates && updates.length'>Recent Updates</h4>
       <ul class='divide-y divide-lightgray -mt-2'>
         <li v-for='update in updates' :key='update' class='py-3'>
           <h4 class='text-md truncate' v-html='update.title.rendered'></h4>

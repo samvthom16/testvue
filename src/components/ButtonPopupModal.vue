@@ -59,12 +59,15 @@ export default{
 
 <style scoped>
   .badge{
-    @apply bg-lightpurple rounded-full text-purple font-bold text-xs py-1 px-2;
+    @apply bg-lightpurple rounded-full text-purple font-bold text-xs py-1 px-2.5;
     --tw-bg-opacity: 0.5;
+    padding: 4px 8px;
+    font-size: 10px;
+    margin-left: 2px;
   }
 
   .button-popup-modal{
-    @apply text-sm text-black border border-gray py-2 px-4 rounded-full
+    @apply text-xs text-black border border-gray py-1.5 px-4 rounded-full
   }
   .dropdown-list{
     @apply my-2 px-4 bg-lightergray rounded-lg divide-y divide-lightgray bg-white;

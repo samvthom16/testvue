@@ -6,7 +6,7 @@
       class='opacity-0 h-0'
       :class="[`${colors}`, {
         'border-b border-lightgray': scrolled,
-        'opacity-100 p-4 sticky top-0 z-10 h-auto' : !move_sticky_up
+        'opacity-100 py-4 px-2 sticky top-0 z-10 h-auto' : !move_sticky_up
       }]"
     >
       <ul class='header-list'>
@@ -218,25 +218,30 @@ export default{
   @apply inline-block;
 }
 
+.header-list li{
 
+}
+
+.header-list li:nth-child(1),
+.header-list li:nth-child(3){
+  @apply w-8;
+}
 
 .header-list li:nth-child(1){
-  @apply w-1;
+  @apply pl-1;
 }
 
 .header-list li:nth-child(2){
-  @apply text-center;
+  @apply text-center px-2;
 }
 
 .header-list li:nth-child(3){
-  @apply w-1;
+  @apply pr-1;
 }
 
 .maintitle{
   @apply text-2xl p-4 pt-4 bg-purple text-white border-b border-lightgray;
 }
-.maintitle svg{
-  @apply mt-2;
-}
+
 
 </style>

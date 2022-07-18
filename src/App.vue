@@ -14,7 +14,9 @@
 
 <script>
 //import HeaderMenu from '@/components/HeaderMenu.vue'
-import ErrorNotification from '@/components/ErrorNotification.vue'
+import ErrorNotification from '@/components/ErrorNotification'
+
+import store from '@/store'
 
 export default {
   name: 'App',
@@ -23,19 +25,15 @@ export default {
     ErrorNotification
   },
   methods: {
-    /*
-    isNewAppVersion() {
-      var allowedRoutes = [
-        "Members",
-        "SingleMember",
-        "Events",
-        "SingleEvent",
-        "Profile"
-      ];
-      if (allowedRoutes.includes(this.$route.name)) return true;
-      return false;
-    },
-    */
+
+  },
+  setup(){
+
+    store.commit( 'getLocalSettings' )
+
+    //store.commit( 'getAccountSettings' )
+
+    //console.log( store.state.account )
   }
 }
 </script>

@@ -13,13 +13,13 @@
       </template>
     </Modal>
 
-    <button
+    <!--button
       class="inline-block whitespace-nowrap button mb-4"
       @click="showModal"
       type="button"
     >
       ADD EVENT
-    </button>
+    </button-->
 
     <div class="flow-root">
       <ul role="list" class="divide-y divide-lightgray dark:divide-gray-700">

@@ -40,57 +40,43 @@
       </div>
 
 
-        <div class="w-full relative py-20">
+      <div class="w-full py-20">
 
-          <input
-            class="mt-2 p-2 bg-lightergray w-full rounded-sm outline-none focus:none align-middle border-black border-2"
-            type="text"
-            placeholder="Search"
-            v-model="search"
-          />
-          <div class="flow-root mt-4">
-            <ul role="list" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <li class="py-1 p-4 sm:py-2 bg-white border border-gray rounded-sm" v-for="user in items" :key="user.id">
-                <div class="items-center justify-between">
-                  <div class="col-span-3 my-2 items-center flex flex-row">
-                    <div class="flex-shrink-1">
-                      <div
-                        class="
-                          bg-lightgray
-                          w-16
-                          h-16
-                          rounded-full
-                          overflow-hidden
-                          inline-block
-                          border border-gray
-                        "
-                      >
-                        <img
-                          class="w-full h-full object-cover rounded-full"
-                          :src="user.featured_image"
-                          :alt="user.title.rendered"
-                        />
-                      </div>
-                    </div>
+        <SearchField @searching='searching' />
 
+        <div class='mb-6'></div>
 
-                    <div class="ml-4 flex-1">
-                      <h1 class="text-xl font-semibold truncate dark:text-white">
-                        {{ user.title.rendered }}
-                      </h1>
-                      <UserTags :user="user" class="my-2" />
-                      <Switch
-                        v-model:checked="user.attended"
-                        @click="onAttendanceChange(user)"
-                      />
-                    </div>
-                  </div>
+        <MembersDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
 
+        <ul role="list" class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <li class="py-1 p-4 sm:py-2 bg-white border border-gray rounded-sm" v-for="user in items" :key="user.id">
+            <div class="items-center justify-between my-2 flex flex-row">
+              <div class="flex-shrink-1">
+                <div class="
+                  bg-lightgray w-16 h-16
+                  rounded-full overflow-hidden inline-block border border-gray"
+                >
+                  <img
+                    class="w-full h-full object-cover rounded-full"
+                    :src="user.featured_image"
+                    :alt="user.title.rendered"
+                  />
                 </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+              </div>
+
+              <div class="ml-4 flex-1">
+                <h1 class="text-xl font-semibold truncate mb-2" v-html='user.title.rendered'></h1>
+                <UserTags :user="user" class="my-2 hidden" />
+                <Switch
+                  v-model:checked="user.attended"
+                  @click="onAttendanceChange(user)"
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+
+      </div>
 
 
 
@@ -107,6 +93,8 @@ import Util from '@/lib/Util'
 
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
+import SearchField from '@/components/SearchField'
+import MembersDropdown from '@/components/MembersDropdown'
 
 import userMixin from "@/mixins/UserMixin.js";
 import defaultMixin from "@/mixins/DefaultMixin.js";
@@ -124,10 +112,11 @@ export default {
   components: {
     PhoneUI,
     Icon,
+    SearchField,
     EventTags,
     UserTags,
     Switch,
-    // ProgressBarItem,
+    MembersDropdown,
     CircularProgressBar,
   },
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
@@ -139,7 +128,10 @@ export default {
       configUI: {
         maintitle_classes : "py-16 hide-svg",
         hide_maintitle    : true,
-      }
+      },
+      filterData: {
+        status: 'publish',
+      },
     };
   },
   watch: {
@@ -179,9 +171,11 @@ export default {
     getAPI() {
       var post_id = this.$route.params.id;
 
-      return this.requestUsers(this.page, this.search, {
+      var params = Object.assign( this.filterData, {
         event_id: post_id,
-      });
+      } )
+      
+      return this.requestUsers(this.page, this.search, params );
     },
 
     /*
@@ -215,6 +209,10 @@ export default {
       return Util.getPostEditLink( this.post )
     },
 
+    searching( searchText ){
+      this.search = searchText;
+    },
+
     // UPDATE IN ATTENDANCE DATABASE
     onAttendanceChange(user) {
       var post_id = this.$route.params.id;
@@ -236,6 +234,19 @@ export default {
         }
       );
     },
+
+    selectDropdownItem( data ){
+
+      this.filterData[ data.name ] = data.value
+
+      if( data.name == 'orderby' && data.value == 'title' ) this.filterData.order = 'asc'
+      if( data.name == 'orderby' && data.value == 'id' ) this.filterData.order = 'desc'
+
+      if( data.name == 'member_status' && data.value == 'all' ) this.filterData.member_status = ''
+
+      this.refreshItems()
+    }
+
   },
 };
 </script>

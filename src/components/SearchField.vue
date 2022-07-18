@@ -1,19 +1,13 @@
 <template>
-  <div
-    class="
-      flex
-      mt-4
-      w-full
-      text-sm
-    "
-  >
-    <div
-      class="w-full p-2 relative border border-black bg-white rounded"
-      :class="{ 'w-10/12': searchFocus }"
-    >
+
+    <div class="mt-4 w-full text-sm relative">
+      <Icon
+        type="Search"
+        class="cursor-pointer absolute left-2 top-2.5 text-gray w-4 h-4"
+      />
       <input
         id="search"
-        class="w-full outline-none focus:none align-middle text-black"
+        class="w-full bg-white outline-none focus:none align-middle text-black p-2 pl-7 rounded"
         type="text"
         placeholder="Search"
         @keyup='returnSearchText'
@@ -24,18 +18,17 @@
         @click="showModal"
       /-->
     </div>
-    <div
-      class="w-2/12 text-center py-2"
-      :class="{ 'hidden': !searchFocus }"
-    >
-      <button @click='searchFocus = false'>Cancel</button>
-    </div>
-  </div>
+
 </template>
 <script>
 import Util from '@/lib/Util'
 
+import Icon from '@/components/Icon'
+
 export default{
+  components:{
+    Icon
+  },
   data(){
     return {
       searchFocus: false,
