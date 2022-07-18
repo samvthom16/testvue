@@ -1,6 +1,6 @@
 <template>
-  
-  <PhoneUI :configUI='{ maintitle_classes : "py-16 hide-svg", hide_maintitle : true, colors: "bg-lightgray text-black" }' :title='getHeaderTitle()'>
+
+  <PhoneUI :configUI='{ maintitle_classes : "py-16 hide-svg", hide_maintitle : true }' :title='getHeaderTitle()'>
     <template v-slot:headericon>
       <router-link :to="{ name: 'Members' }">
         <Icon type='Back' />

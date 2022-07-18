@@ -55,7 +55,7 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
     for( var i=0; i<fields.value.length; i++ ){
       var slug = fields.value[i]['id'];
 
-      console.log( slug )
+      //console.log( slug )
 
       if( fields.value[i] && slug == 'title' ){
         fields.value[i]['value'] = post.value.title.rendered

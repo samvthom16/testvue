@@ -1,4 +1,5 @@
 import API from '@/api'
+import store from '@/store'
 
 const ImageUtil = () => {
 
@@ -29,14 +30,24 @@ const ImageUtil = () => {
     //console.log( API )
     //console.log( callback )
 
+    // ENABLE LOADING
+    store.commit( 'setProcessing', true )
+
     /* ADD NEW IMAGE */
     API.createAttachment( selectedImage ).then( ( response ) => {
-        callback( response.data.source_url, response.data.id );
-      },( error ) => {
-        console.log( error );
-      }
-    );
-    
+
+      // DISABLE LOADING
+      store.commit( 'setProcessing', false )
+
+      callback( response.data.source_url, response.data.id );
+    },( error ) => {
+
+      // DISABLE LOADING
+      store.commit( 'setProcessing', false )
+
+      console.log( error );
+    } );
+
   }
 
   return {

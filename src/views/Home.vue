@@ -1,18 +1,18 @@
 <template>
   <PhoneUI title="Home" :configUI="{ colors: 'bg-lightgray text-black' }">
     <template v-slot:phonebody>
-      <h4 class='font-semibold text-lg mb-2'>Members</h4>
-      <ul class='pb-4 mb-4 whitespace-nowrap overflow-auto'>
-        <li class='inline-block mr-2' v-for='member in members' :key='member'>
+      <h4 class='font-semibold text-lg mb-2' v-if='members.length'>Members</h4>
+      <ul class='border-b border-gray pb-4 mb-8 whitespace-nowrap overflow-auto'>
+        <li class='inline-block w-16 h-16 mr-3' v-for='member in members' :key='member'>
           <router-link :to='getPostLink( member )'>
-            <img class='h-12 w-12 rounded-full border border-gray' :src='member.featured_image' />
+            <img class='w-full h-full object-cover rounded-full border border-gray' :src='member.featured_image' />
           </router-link>
         </li>
       </ul>
-      <h4 class='font-semibold text-lg'>Recent Updates</h4>
+      <h4 class='font-semibold text-lg' v-if='updates.length'>Recent Updates</h4>
       <ul class='divide-y divide-lightgray -mt-2'>
         <li v-for='update in updates' :key='update' class='py-3'>
-          <h4 class='text-md' v-html='update.title.rendered'></h4>
+          <h4 class='text-md truncate' v-html='update.title.rendered'></h4>
           <p class='text-gray text-xs'>Last updated on {{ update.date }}</p>
         </li>
       </ul>

@@ -131,8 +131,9 @@ export default{
 
     const submit = ( ev ) => {
       ev.preventDefault();
+
       createOrUpdatePost( {
-        featured_media: post.featured_media
+        featured_media: post.value.featured_media
       } )
     }
 

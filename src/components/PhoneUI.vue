@@ -212,18 +212,24 @@ export default{
   @apply flex-auto;
 }
 .footer-list li{
-  @apply p-2 text-center;
+  @apply p-2 pb-4 text-center;
 }
 .footer-list li svg{
   @apply inline-block;
 }
 
-.header-list li{
-  @apply w-1/3;
+
+
+.header-list li:nth-child(1){
+  @apply w-1;
 }
 
 .header-list li:nth-child(2){
   @apply text-center;
+}
+
+.header-list li:nth-child(3){
+  @apply w-1;
 }
 
 .maintitle{
