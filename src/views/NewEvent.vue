@@ -1,5 +1,5 @@
 <template>
-  <PhoneUI :configUI='configUI' :title='$route.query && $route.query.id ? "Update Member" : "Create a Member"'>
+  <PhoneUI :configUI='configUI' :title='$route.query && $route.query.id ? "Update Event" : "Create an Event"'>
     <template v-slot:headericon>
       <button @click='goBack'><Icon type='Back' /></button>
     </template>
@@ -56,7 +56,8 @@ export default{
       configUI:{
         hide_footer         : true,
         maintitle_classes   : 'hidden',
-        stickytitle_classes : 'opacity-100'
+        stickytitle_classes : 'opacity-100',
+        colors              : "bg-orange text-white"
       },
 
     }

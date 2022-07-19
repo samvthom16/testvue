@@ -123,6 +123,7 @@ export default {
       configUI: {
         maintitle_classes : "py-16 hide-svg",
         hide_maintitle    : true,
+        colors            : "bg-orange text-white"
       },
       filterData: {
         status: 'publish',

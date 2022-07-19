@@ -2,10 +2,10 @@
   <circle-progress
     :percent="contentProgress"
     :size="size"
-    :border-width="6"
-    :border-bg-width="6"
+    :border-width="8"
+    :border-bg-width="9"
     :show-percent="true"
-    :fill-color="'#89558d'"
+    :fill-color="'#F9AB70'"
     :empty-colo="'#9E81A0'"
   />
 </template>
