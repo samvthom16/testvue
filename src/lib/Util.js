@@ -1,10 +1,14 @@
 import store from '@/store'
 import API from '@/api'
 
+import * as timeago from 'timeago.js';
+
+/*
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
+*/
 
 export default{
 
@@ -67,7 +71,7 @@ export default{
 
     } )
   },
-
+  /*
   _getFormattedDate: function( date, prefomattedDate = false, hideYear = false ) {
     const day = date.getDate();
     const month = MONTH_NAMES[date.getMonth()];
@@ -94,8 +98,15 @@ export default{
     // 10. January 2017. at 10:20
     return `${ day } ${ month } ${ year }, ${ hours }:${ minutes }`;
   },
+  */
 
   timeAgo: function( dateParam ){
+
+    //console.log( timeago.format( new Date() ) )
+
+    return timeago.format( dateParam );
+
+    /*
     if (!dateParam) {
       return null;
     }
@@ -128,6 +139,8 @@ export default{
     }
 
     return this._getFormattedDate(date); // 10. January 2017. at 10:20
+
+    */
   }
 
 }
