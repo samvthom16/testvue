@@ -3,20 +3,21 @@
     <div class="mt-4 w-full text-md relative">
       <Icon
         type="Search"
-        class="cursor-pointer absolute left-2 top-2.5 text-gray w-6 h-6"
+        class="cursor-pointer absolute left-2 top-3 text-gray w-6 h-6"
       />
       <input
         id="search"
-        class="w-full bg-white outline-none focus:none align-middle text-black p-2 pl-10 rounded"
+        class="w-full bg-white outline-none focus:none align-middle text-black p-2 px-9 rounded"
         type="text"
         placeholder="Search"
         @keyup='returnSearchText'
       />
-      <!--Icon
-        type="filter"
-        class="cursor-pointer absolute right-0 -top-1"
-        @click="showModal"
-      /-->
+      <Icon
+        @click='searchFocus == false'
+        type="Close"
+        class="cursor-pointer absolute right-2 top-3 text-white bg-black p-1 rounded-full"
+        v-if='searchFocus'
+      />
     </div>
 
 </template>
