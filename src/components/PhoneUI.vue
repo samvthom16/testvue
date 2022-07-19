@@ -193,7 +193,6 @@ export default{
       }, 10 );
     } );
 
-    /*
     var $input = this.$el.querySelector( '.maintitle input[type=text]' );
     if( $input ){
       $input.addEventListener('focus', () => {
@@ -203,7 +202,7 @@ export default{
         component.move_sticky_up = false
       } );
     }
-    */
+    
 
   }
 }

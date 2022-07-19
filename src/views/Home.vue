@@ -48,8 +48,8 @@ export default {
 
     API.requestPosts( 'inpursuit-members', {
       'per_page'  : 10,
-      'orderby' : 'title',
-      'order'   : 'asc'
+      'orderby' : 'id',
+      'order'   : 'desc'
     } ).then( ( response ) => members.value = response.data )
 
     API.requestHistory( {
