@@ -11,7 +11,7 @@
         border-2 border-solid border-black
         rounded
         mb-1 mt-2
-        outline-white
+        outline-none
         focus:border-red
       "
       :type="field.type"

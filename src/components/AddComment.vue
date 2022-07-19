@@ -8,7 +8,7 @@
       <textarea
         placeholder="Type your comment"
         v-model='newComment'
-        class='inline-block w-full border-black outline-white focus:border-red'
+        class='inline-block p-2 w-full border-black outline-none focus:border-red rounded'
       ></textarea>
       <div class='h-8 relative mt-4 mb-2'>
         <button

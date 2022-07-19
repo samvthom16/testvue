@@ -38,7 +38,10 @@
     </div>
 
 
-    <div class='p-4 bg-lightergray min-h-screen'>
+    <div
+      class='p-4 bg-lightergray min-h-screen'
+      :class='`${body_classes}`'
+    >
       <slot name="phonebody"></slot>
     </div>
 
@@ -146,6 +149,9 @@ export default{
     const stickytitle_classes = ref( null );
     stickytitle_classes.value = props.configUI && props.configUI.stickytitle_classes ? props.configUI.stickytitle_classes : ""
 
+    const body_classes = ref( null );
+    body_classes.value = props.configUI && props.configUI.body_classes ? props.configUI.body_classes : ""
+
     const colors = ref( null );
     colors.value = props.configUI && props.configUI.colors ? props.configUI.colors : "bg-purple text-white"
 
@@ -160,6 +166,7 @@ export default{
     return{
       maintitle_classes,
       stickytitle_classes,
+      body_classes,
       hide_maintitle,
       hide_footer,
       colors
@@ -186,8 +193,8 @@ export default{
       }, 10 );
     } );
 
+    /*
     var $input = this.$el.querySelector( '.maintitle input[type=text]' );
-    //console.log( $input )
     if( $input ){
       $input.addEventListener('focus', () => {
         component.move_sticky_up = true
@@ -196,6 +203,7 @@ export default{
         component.move_sticky_up = false
       } );
     }
+    */
 
   }
 }
