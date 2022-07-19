@@ -1,5 +1,5 @@
 <template>
-  <div class="border-l-2 border-gray mt-3">
+  <div class="border-l-2 border-lightgray mt-3">
     <HistoryItem :item='item' v-for='item in items' :key='item.id' />
   </div>
   <ItemAnimation v-if='$store.state.processing && !items.length' />

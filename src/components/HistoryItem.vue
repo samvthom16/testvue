@@ -1,99 +1,44 @@
 <template>
-  <!-- Card 1 -->
-  <div
+  <div class="card"
     :class="{
-      'bg-purple': item.type == 'event',
-      'bg-orange': item.type == 'comment',
+      'event'   : item.type == 'event',
+      'comment' : item.type == 'comment',
       hidden: deletedFlag,
       'opacity-80': processing,
     }"
-    class="
-      transform
-      transition
-      cursor-pointer
-      hover:-translate-y-2
-      ml-10
-      relative
-      flex
-      items-center
-      px-6
-      py-4
-      text-white
-      rounded
-      mb-10
-      flex-col
-      md:flex-row
-      space-y-4
-      md:space-y-0
-    "
   >
-    <!-- Dot Follwing the Left Vertical Line -->
-    <div
-      :class="{
-        'bg-purple': item.type == 'event',
-        'bg-orange': item.type == 'comment',
-      }"
-      class="
-        w-5
-        h-5
-        absolute
-        -left-10
-        transform
-        -translate-x-2/4
-        rounded-full
-        z-10
-        mt-2
-        md:mt-0
-      "
-    ></div>
+    <div class="card-dot"></div>
 
     <!-- Line that connecting the box with the vertical line -->
-    <div
-      :class="{
-        'bg-purple': item.type == 'event',
-        'bg-orange': item.type == 'comment',
-      }"
-      class="w-10 h-1 absolute opacity-70 -left-10 z-0"
-    ></div>
+    <div class='card-line'></div>
 
     <!-- Content that showing in the box -->
-    <div class="flex-auto w-full">
-      <div
-        class="uppercase text-xs text-lightgray mb-1 font-bold"
-        v-if="item.type"
+    <div class="card-content">
+      <div class="card-meta" v-if="item.type">
+        <Icon type="History" v-if="item.type == 'event'" />
+        <Icon type="Comment" v-if="item.type == 'comment'" />
+        <span v-if="item.type == 'comment'">{{ item.author_name }} on </span>
+        <span>{{ formatDate(item.date) }}</span>
+      </div>
+      <h2 class="card-title">{{ item.title.rendered }}</h2>
+      <p class="card-desc">{{ item.text }}</p>
+      <button
+        v-if="item.type == 'comment'"
+        @click="deleteItem"
+        type="button"
+        class="rounded-sm text-white outline-none absolute right-2 top-2"
       >
-        <div class="inline" v-if="item.type == 'event'">
-          <Icon type="History" />
-        </div>
-        <div class="inline" v-if="item.type == 'comment'">
-          <Icon type="Comment" />
-        </div>
-        {{ item.type }}
-        <div class="inline" v-if="item.type == 'comment'">
-          by {{ item.author_name }}
-        </div>
-      </div>
-      <h1 class="text-md font-thin text-sm mb-2">
-        {{ formatDate(item.date) }}
-      </h1>
-      <h1 class="text-xl font-bold">{{ item.title.rendered }}</h1>
-      <p contenteditable class="opacity-85 text-md">{{ item.text }}</p>
-      <div class="absolute right-2 top-2" v-if="item.type == 'comment'">
-        <button
-          @click="deleteItem"
-          type="button"
-          class="rounded-sm text-white outline-none"
-        >
-          <Icon type="Delete" />
-        </button>
-      </div>
+        <Icon type="Delete" />
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import apiMixin from "@/mixins/APIMixin.js";
-import Icon from "@/components/Icon.vue";
+import apiMixin from "@/mixins/APIMixin";
+import Icon from "@/components/Icon";
+
+import Util from '@/lib/Util'
 
 export default {
   name: "HistoryItem",
@@ -109,11 +54,7 @@ export default {
     };
   },
   methods: {
-    formatDate(dateString) {
-      //return dateString;
-      return new Date(dateString.replace(" ", "T")).toLocaleString();
-      //return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
-    },
+    formatDate: ( dateString ) => Util.timeAgo( dateString ),
     deleteItem() {
       var component = this;
 
@@ -146,3 +87,41 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .card{
+    @apply transform transition hover:-translate-y-2 ml-10 relative flex items-center;
+    @apply p-4 text-white rounded mb-10 flex-col md:flex-row space-y-4 md:space-y-0;
+  }
+  .card-dot{
+    @apply w-5 h-5 absolute -left-10 transform -translate-x-2/4 rounded-full;
+    @apply z-10 mt-2 md:mt-0;
+  }
+  .card-line{
+    @apply w-10 h-1 absolute opacity-70 -left-10 z-0;
+  }
+  .card-content{
+    @apply w-full;
+  }
+  .card-meta{
+    @apply uppercase text-xs mb-1 font-bold;
+  }
+  .card-meta svg{
+    @apply inline mr-1;
+  }
+  .card-title{
+    @apply text-xl font-bold;
+  }
+  .card-desc{
+    @apply text-sm opacity-80;
+  }
+
+  .card.event,.event .card-dot, .event .card-line, .event .card-meta{
+    @apply bg-lightgray text-black;
+  }
+
+  .card.comment,.comment .card-dot, .comment .card-line, .comment .card-meta{
+    @apply bg-orange text-white;
+  }
+
+</style>
