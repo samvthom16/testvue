@@ -1,3 +1,5 @@
+import Util from '@/lib/Util'
+
 export default {
     methods: {
         getLocation(post) {
@@ -19,7 +21,9 @@ export default {
             return '';
         },
 
-        getDate(post) {
+        getDate( post ) {
+          return Util.timeAgo( post.date )
+            /*
             var date = new Date(post.date);
             var year = date.getFullYear();
             var month = date.getMonth() + 1;
@@ -33,6 +37,7 @@ export default {
             }
 
             return dt + '/' + month + '/' + year;
+            */
         },
     }
 };

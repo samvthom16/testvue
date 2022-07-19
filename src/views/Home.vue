@@ -13,7 +13,7 @@
       <ul class='divide-y divide-lightgray -mt-2'>
         <li v-for='update in updates' :key='update' class='py-3'>
           <h4 class='text-md truncate' v-html='update.title.rendered'></h4>
-          <p class='text-gray text-xs'>Last updated on {{ update.date }}</p>
+          <p class='text-gray text-xs' v-html='getLastUpdatedText( update.date )'></p>
         </li>
       </ul>
 
@@ -65,8 +65,11 @@ export default {
 
   },
   methods:{
-    getPostLink: ( post ) => Util.getPostLink( post )
+    getPostLink: ( post ) => Util.getPostLink( post ),
 
+    getLastUpdatedText: ( datestring ) => {
+      return Util.timeAgo( datestring )
+    }
 
   },
 
