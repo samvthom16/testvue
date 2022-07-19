@@ -19,6 +19,16 @@ const routes = [
     component: Home
   },
   {
+    path: '/team',
+    name: 'Team',
+    component: () => import( '@/views/Team' )
+  },
+  {
+    path: '/team/new',
+    name: 'NewTeamMember',
+    component: () => import( '@/views/NewTeamMember' )
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login

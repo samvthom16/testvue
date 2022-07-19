@@ -50,24 +50,6 @@
       </template>
     </Modal>
 
-    <!--div class="hidden flex mb-3 border-black rounded w-full p-2 outline-none focus:border-red border-2">
-          <div class="w-11/12">
-            <input
-              class="w-full bg-lightergray outline-none focus:none align-middle"
-              type="text"
-              placeholder="Search"
-              v-model="$parent.search"
-            />
-          </div>
-          <div class="w-1/12 text-red">
-            <Icon
-              type="filter"
-              class="float-right cursor-pointer"
-              @click="showModal"
-            />
-          </div>
-        </div-->
-
     <div class="flow-root">
       <ul role="list" class="divide-y divide-lightgray">
         <li class="py-3 sm:py-4" v-for="user in users" :key="user.id">

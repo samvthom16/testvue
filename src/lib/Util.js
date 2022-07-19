@@ -49,6 +49,17 @@ export default{
     return route;
   },
 
+  /*
+  * LEADERSHIP TEAM ACCESS
+  */
+  getUserEditLink: function( user ){
+    return {
+      name    : "NewTeamMember",
+      params  : { user: JSON.stringify( user ) },
+      query   : { id: user.id }
+    }
+  },
+
   debounceEvent: function( callback, timeout = 600 ){
     clearTimeout( this.debounce );
     this.debounce = setTimeout(() => {
