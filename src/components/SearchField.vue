@@ -1,13 +1,13 @@
 <template>
 
-    <div class="mt-4 w-full text-md relative">
+    <div class="mt-4 w-full relative">
       <Icon
         type="Search"
         class="cursor-pointer absolute left-2 top-3 text-gray w-6 h-6"
       />
       <input
         id="search"
-        class="w-full bg-white outline-none focus:none align-middle text-black p-2 px-9 rounded"
+        class="w-full text-2xl bg-white outline-none focus:none align-middle text-black p-2 px-9 rounded"
         type="text"
         placeholder="Search"
         @keyup='returnSearchText'

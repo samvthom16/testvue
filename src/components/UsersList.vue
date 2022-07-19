@@ -69,7 +69,7 @@
         </div-->
 
     <div class="flow-root">
-      <ul role="list" class="divide-y divide-lightgray dark:divide-gray-700">
+      <ul role="list" class="divide-y divide-lightgray">
         <li class="py-3 sm:py-4" v-for="user in users" :key="user.id">
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-1">

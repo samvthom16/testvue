@@ -48,30 +48,25 @@
 
         <MembersDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
 
-        <ul role="list" class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <li class="py-1 p-4 sm:py-2 bg-white border border-gray rounded-sm" v-for="user in items" :key="user.id">
-            <div class="items-center justify-between my-2 flex flex-row">
-              <div class="flex-shrink-1">
-                <div class="
-                  bg-lightgray w-16 h-16
-                  rounded-full overflow-hidden inline-block border border-gray"
-                >
-                  <img
-                    class="w-full h-full object-cover rounded-full"
-                    :src="user.featured_image"
-                    :alt="user.title.rendered"
-                  />
-                </div>
-              </div>
-
-              <div class="ml-4 flex-1">
-                <h1 class="text-xl font-semibold truncate mb-2" v-html='user.title.rendered'></h1>
-                <UserTags :user="user" class="my-2 hidden" />
-                <Switch
-                  v-model:checked="user.attended"
-                  @click="onAttendanceChange(user)"
+        <ul role="list" class="divide-y divide-lightgray">
+          <li class="items-center justify-between py-4 flex flex-row" v-for="user in items" :key="user.id">
+            <div class="flex-shrink-1">
+              <div class="bg-lightgray w-16 h-16 rounded-full overflow-hidden inline-block border border-gray">
+                <img
+                  class="w-full h-full object-cover rounded-full"
+                  :src="user.featured_image"
+                  :alt="user.title.rendered"
                 />
               </div>
+            </div>
+
+            <div class="ml-4 flex-1">
+              <h1 class="text-xl font-semibold truncate mb-2" v-html='user.title.rendered'></h1>
+              <UserTags :user="user" class="my-2 hidden" />
+              <Switch
+                v-model:checked="user.attended"
+                @click="onAttendanceChange(user)"
+              />
             </div>
           </li>
         </ul>
@@ -174,7 +169,7 @@ export default {
       var params = Object.assign( this.filterData, {
         event_id: post_id,
       } )
-      
+
       return this.requestUsers(this.page, this.search, params );
     },
 
