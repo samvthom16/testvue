@@ -1,5 +1,8 @@
 <template>
-  <div :class="{ 'overflow-hidden': $store.state.processing, 'hidden': !$store.state.processing }" class="w-full"><div class="w-full inline-block fluentProgressBar-waiting"></div></div>
+
+  <div :class="{ 'overflow-hidden': $store.state.processing, 'hidden': !$store.state.processing }" class="w-full">
+    <div class="w-full inline-block fluentProgressBar-waiting"></div>
+  </div>
 
   <router-view v-slot="{ Component }">
     <transition name="route" mode="out-in">

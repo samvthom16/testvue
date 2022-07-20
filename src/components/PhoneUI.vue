@@ -37,6 +37,7 @@
       <slot name="mainttitle_footer"></slot>
     </div>
 
+    
 
     <div
       class='p-4 bg-lightergray min-h-screen'
