@@ -1,5 +1,5 @@
 <template>
-  <PhoneUI title="Home" :configUI="{ colors: 'bg-gray text-black', maintitle_classes : 'hidden', stickytitle_classes : 'opacity-100' }">
+  <PhoneUI title="Home" :configUI="{ maintitle_classes : 'hidden', stickytitle_classes : 'opacity-100' }">
     <template v-slot:phonebody>
       <h4 class='font-semibold text-lg mb-2' v-if='members && members.length'>Members</h4>
       <ul class='border-b border-gray pb-4 mb-8 whitespace-nowrap overflow-auto' v-if='members && members.length'>

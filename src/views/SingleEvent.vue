@@ -91,16 +91,16 @@ import Icon from '@/components/Icon'
 import SearchField from '@/components/SearchField'
 import MembersDropdown from '@/components/MembersDropdown'
 
-import userMixin from "@/mixins/UserMixin.js";
-import defaultMixin from "@/mixins/DefaultMixin.js";
-import paginationMixin from "@/mixins/PaginationMixin.js";
-import apiMixin from "@/mixins/APIMixin.js";
+import userMixin from "@/mixins/UserMixin";
+import defaultMixin from "@/mixins/DefaultMixin";
+import paginationMixin from "@/mixins/PaginationMixin";
+import apiMixin from "@/mixins/APIMixin";
 
-import EventTags from "@/components/EventTags.vue";
-import UserTags from "@/components/UserTags.vue";
-import Switch from "@/components/switch.vue";
+import EventTags from "@/components/EventTags";
+import UserTags from "@/components/UserTags";
+import Switch from "@/components/switch";
 // import ProgressBarItem from "@/components/ProgressBarItem.vue";
-import CircularProgressBar from "@/components/CircularProgressBar.vue";
+import CircularProgressBar from "@/components/CircularProgressBar";
 
 export default {
   name: "SingleEvent",
@@ -123,7 +123,7 @@ export default {
       configUI: {
         maintitle_classes : "py-16 hide-svg",
         hide_maintitle    : true,
-        colors            : "bg-orange text-white"
+
       },
       filterData: {
         status: 'publish',

@@ -52,11 +52,11 @@
             <Icon
               class='text-black'
               type='Home'
-              :class="{'text-blue-100' : $route.name == 'Home' }"
+              :class="{'text-purple' : $route.name == 'Home' }"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-blue-100' : $route.name == 'Home' }"
+              :class="{'text-purple' : $route.name == 'Home' }"
             >
               Home
             </p>
@@ -67,11 +67,11 @@
             <Icon
               class='text-black'
               type='Members'
-              :class="{'text-blue-100' : ['Members', 'SingleMember'].includes( $route.name ) }"
+              :class="{'text-purple' : ['Members', 'SingleMember'].includes( $route.name ) }"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-blue-100' : ['Members', 'SingleMember'].includes( $route.name ) }"
+              :class="{'text-purple' : ['Members', 'SingleMember'].includes( $route.name ) }"
             >
               Members
             </p>
@@ -81,12 +81,12 @@
           <router-link to="/events" class="hover:opacity-80">
             <Icon
               class='text-black'
-              :class="{'text-blue-100' : ['Events', 'SingleEvent'].includes( $route.name ) }"
+              :class="{'text-purple' : ['Events', 'SingleEvent'].includes( $route.name ) }"
               type="Event"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-blue-100' : ['Events', 'SingleEvent'].includes( $route.name ) }"
+              :class="{'text-purple' : ['Events', 'SingleEvent'].includes( $route.name ) }"
             >
               Events
             </p>
@@ -96,12 +96,12 @@
           <router-link to="/profile" class="hover:opacity-80">
             <Icon
               class='text-black'
-              :class="{'text-blue-100' : $route.name == 'Profile' }"
+              :class="{'text-purple' : $route.name == 'Profile' }"
               type="Profile"
             />
             <p
               class='text-xs pt-1'
-              :class="{'text-blue-100' : $route.name == 'Profile' }"
+              :class="{'text-purple' : $route.name == 'Profile' }"
             >
               Profile
             </p>

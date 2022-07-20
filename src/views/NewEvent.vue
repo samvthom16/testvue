@@ -57,7 +57,6 @@ export default{
         hide_footer         : true,
         maintitle_classes   : 'hidden',
         stickytitle_classes : 'opacity-100',
-        colors              : "bg-orange text-white"
       },
 
     }
