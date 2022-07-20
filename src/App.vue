@@ -10,8 +10,6 @@
     </transition>
   </router-view>
 
-
-
   <ErrorNotification />
 </template>
 

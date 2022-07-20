@@ -46,16 +46,39 @@ export default {
 
     if ( !store.state.settings || !store.state.settings.account_url ) router.push( "/login" )
 
-    API.requestPosts( 'inpursuit-members', {
-      'per_page'  : 10,
-      'orderby' : 'id',
-      'order'   : 'desc'
-    } ).then( ( response ) => members.value = response.data )
+    const fetchLatestMembers = () => {
+      API.requestPosts( 'inpursuit-members', {
+        'per_page'  : 10,
+        'orderby' : 'id',
+        'order'   : 'desc'
+      } ).then(
+      ( response ) => {
+        store.commit( 'setProcessing', false )
+        members.value = response.data
+      } )
+    }
 
-    API.requestHistory( {
-      'per_page'  : 10,
-    } ).then( ( response ) => updates.value = response.data )
+    const fetchLatestUpdates = () => {
+      API.requestHistory( {
+        'per_page'  : 10,
+      } ).then(
+      ( response ) => {
+        store.commit( 'setProcessing', false )
+        updates.value = response.data
+      } )
+    }
 
+    const init = () => {
+
+      // ENABLE THE LOADER
+      store.commit( 'setProcessing', true )
+
+      fetchLatestMembers()
+      fetchLatestUpdates()
+    }
+
+
+    init()
 
     return {
       members,
