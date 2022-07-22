@@ -1,18 +1,14 @@
 <template>
 
   <div class='phone-ui'>
-
     <div
       class='opacity-0 h-0'
       :class="[`${colors}`, {
         'border-b border-lightgray': scrolled,
         'opacity-100 py-4 px-2 sticky top-0 z-10 h-auto' : !move_sticky_up
-      }]"
-    >
+      }]">
       <ul class='header-list'>
-        <li class=''>
-          <slot name="headericon"></slot>
-        </li>
+        <li><slot name="headericon"></slot></li>
         <li
           class='truncate opacity-0 transition-all'
           :class="[`${stickytitle_classes}`, { 'opacity-100': scrolled }]"
@@ -27,7 +23,7 @@
       </ul>
     </div>
     <div
-      class='maintitle mt-0 transition-all duration-200 delay-50'
+      class='maintitle mt-0 transition-all duration-200 delay-50 relative'
       :class="[ `${colors}`, `${maintitle_classes}`, {'transform -mt-12': move_sticky_up} ]"
     >
       <div class='flex'>
@@ -37,7 +33,9 @@
       <slot name="mainttitle_footer"></slot>
     </div>
 
-    
+    <div class="w-full bg-lightergray relative h-1 overflow-hidden">
+      <div :class="{ 'hidden': !$store.state.processing }" class="w-full inline-block fluentProgressBar-waiting"></div>
+    </div>
 
     <div
       class='p-4 bg-lightergray min-h-screen'
@@ -110,10 +108,7 @@
         </li>
       </ul>
     </div>
-
   </div>
-
-
 
 </template>
 

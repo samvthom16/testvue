@@ -10,4 +10,18 @@ import VueAxios from 'vue-axios'
 import './assets/tailwind.css'
 import './assets/global.css'
 
-createApp(App).use( VueAxios, axios ).use( store ).use( router ).mount( '#app' )
+import { VueQueryPlugin } from "vue-query";
+
+const VueQueryPluginOptions = {
+  queryClientConfig: {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  },
+};
+
+const app = createApp(App);
+
+app.use( VueQueryPlugin, VueQueryPluginOptions ).use( VueAxios, axios ).use( store ).use( router ).mount( '#app' )

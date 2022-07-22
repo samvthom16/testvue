@@ -124,6 +124,14 @@ const api = {
     } );
   },
 
+  requestUser: function( user_id, params = {} ){
+    return this.makeRequest(  {
+      url     : this._getURL( '/wp-json/wp/v2/users/' + user_id + '?context=edit' ),
+      data    : params,
+      headers : this.getAuthHeaders()
+    } );
+  },
+
 }
 
 export default api

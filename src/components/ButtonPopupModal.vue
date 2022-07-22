@@ -67,7 +67,7 @@ export default{
   }
 
   .button-popup-modal{
-    @apply text-xs text-black border border-gray py-1.5 px-4 rounded-full
+    @apply text-xs text-black border border-gray py-1.5 px-4 rounded-full bg-white;
   }
   .dropdown-list{
     @apply my-2 px-4 bg-lightergray rounded-lg divide-y divide-lightgray bg-white;

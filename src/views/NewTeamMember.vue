@@ -12,14 +12,20 @@
     </template>
     <template v-slot:phonebody>
       <form class="" @submit="submit">
-        <component
+        {{ team_member.first_name }}
+        <TextField
+          v-model='team_member.first_name'
+          :field='field'
+          v-if='field'
+        />
+        <!--component
           v-for='field in fields'
           :is='field.component'
           :key='field'
           :field='field'
           v-model="field.value"
         >
-        </component>
+      </component-->
       </form>
       <button
         v-if='$route.query && $route.query.id'
@@ -35,13 +41,15 @@
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 import TextField from "@/components/TextField";
-import DropDownField from "@/components/DropDownField";
+//import DropDownField from "@/components/DropDownField";
 
 import router from '@/router'
 
+import API from '@/api'
 
+import {ref} from 'vue'
 
-
+import { useRoute } from 'vue-router';
 
 
 export default{
@@ -49,7 +57,7 @@ export default{
     PhoneUI,
     Icon,
     TextField,
-    DropDownField
+    //DropDownField
   },
   data(){
     return {
@@ -61,6 +69,26 @@ export default{
     }
   },
   setup(){
+
+    const team_member = ref( {} )
+
+    const field = ref( null )
+
+    const route = useRoute()
+
+    if( route.query && route.query.id ){
+      API.requestUser( route.query.id ).then(
+        ( response ) => {
+          team_member.value = response.data
+          field.value = {
+            label: 'First Name',
+            value: team_member.value.first_name,
+            slug: 'first_name'
+          }
+        }
+      )
+    }
+
 
 
 
@@ -88,8 +116,8 @@ export default{
     }
 
     return {
-      //post,
-      //fields,
+      team_member,
+      field,
       submit,
       deleteItem,
       goBack,

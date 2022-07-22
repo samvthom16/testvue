@@ -15,6 +15,7 @@
     "timeago.js": "^4.0.2",
     "vue": "^3.0.0",
     "vue-axios": "^3.4.0",
+    "vue-query": "^1.25.2",
     "vue-router": "^4.0.0-0",
     "vue3-circle-progress": "^1.0.7",
     "vuex": "^4.0.0-0"

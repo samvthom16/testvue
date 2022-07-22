@@ -15,10 +15,11 @@
   height: 4px;
   background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(223,118,68,1) 35%, rgba(219,105,51,1) 100%);
 
-  bottom: 0;
-  position: fixed;
+  left: 0;
+  top: -1px;
+  position: absolute;
 
-  z-index: 1000;
+  /*z-index: 1000;*/
   -webkit-animation: progressBarAnimation 2s linear infinite;
 	animation: progressBarAnimation 2s linear infinite;
 }
