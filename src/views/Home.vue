@@ -6,6 +6,9 @@
         <template v-slot:title>
           <h4 class='font-semibold text-lg mb-2'>Latest Members</h4>
         </template>
+        <template v-slot:loadingAnimation>
+          <MemberAvatarsAnimation />
+        </template>
       </OrbitPosts>
 
       <div class='mb-8'></div>
@@ -14,17 +17,14 @@
         <template v-slot:title>
           <h4 class='font-semibold text-lg mb-2'>Latest Events</h4>
         </template>
+        <template v-slot:loadingAnimation>
+          <SimpleListAnimation />
+        </template>
       </OrbitPosts>
 
       <div class='mb-8'></div>
 
-      <!--h4 class='font-semibold text-lg' v-if='updates && updates.length'>Recent Updates</h4>
-      <ul class='divide-y divide-lightgray -mt-2'>
-        <li v-for='update in updates' :key='update' class='py-3'>
-          <h4 class='text-md truncate' v-html='update.title.rendered'></h4>
-          <p class='text-gray text-xs' v-html='getLastUpdatedText( update.date )'></p>
-        </li>
-      </ul-->
+
 
     </template>
   </PhoneUI>
@@ -39,7 +39,8 @@ import OrbitPosts from '@/lib/OrbitPosts'
 import store from '@/store'
 import router from '@/router'
 
-
+import MemberAvatarsAnimation from '@/templates/Animation/MemberAvatars'
+import SimpleListAnimation from '@/templates/Animation/SimpleList'
 
 import {ref} from 'vue'
 
@@ -47,7 +48,9 @@ export default {
   name: "Home",
   components: {
     PhoneUI,
-    OrbitPosts
+    OrbitPosts,
+    MemberAvatarsAnimation,
+    SimpleListAnimation
   },
   setup(){
 

@@ -1,41 +1,33 @@
 <template>
 
   <div class='phone-ui'>
-    <div
-      class='opacity-0 h-0'
-      :class="[`${colors}`, {
-        'border-b border-lightgray': scrolled,
-        'opacity-100 py-4 px-2 sticky top-0 z-10 h-auto' : !move_sticky_up
-      }]">
-      <ul class='header-list'>
-        <li><slot name="headericon"></slot></li>
-        <li
-          class='truncate opacity-0 transition-all'
-          :class="[`${stickytitle_classes}`, { 'opacity-100': scrolled }]"
-          v-html='title'>
-        </li>
-        <li
-          class='opacity-0 transition-all text-right'
-          :class="[`${stickytitle_classes}`, { 'opacity-100': scrolled }]"
-        >
-          <slot name="headerright"></slot>
-        </li>
-      </ul>
-    </div>
-    <div
-      class='maintitle mt-0 transition-all duration-200 delay-50 relative'
-      :class="[ `${colors}`, `${maintitle_classes}`, {'transform -mt-12': move_sticky_up} ]"
+    <PhoneHeader
+      :title='title'
+      :colors='colors'
+      :scrolled='scrolled'
+      :move_sticky_up='move_sticky_up'
+      :stickytitle_classes='stickytitle_classes'
     >
-      <div class='flex'>
-        <div class='flex-auto' v-html='title' v-if='!hide_maintitle'></div>
-        <slot name="headerright"></slot>
-      </div>
-      <slot name="mainttitle_footer"></slot>
-    </div>
+      <template v-for="(index, name) in $slots" v-slot:[name]>
+        <slot :name="name" />
+      </template>
+    </PhoneHeader>
 
-    <div class="w-full bg-lightergray relative h-1 overflow-hidden">
-      <div :class="{ 'hidden': !$store.state.processing }" class="w-full inline-block fluentProgressBar-waiting"></div>
-    </div>
+    <PhoneTitle
+      :hide_maintitle='hide_maintitle'
+      :maintitle_classes='maintitle_classes'
+      :title='title'
+      :colors='colors'
+      :scrolled='scrolled'
+      :move_sticky_up='move_sticky_up'
+      :stickytitle_classes='stickytitle_classes'
+    >
+      <template v-for="(index, name) in $slots" v-slot:[name]>
+        <slot :name="name" />
+      </template>
+    </PhoneTitle>
+
+    <PhoneProgressBar />
 
     <div
       class='p-4 bg-lightergray min-h-screen'
@@ -44,77 +36,17 @@
       <slot name="phonebody"></slot>
     </div>
 
-    <div class='sticky z-10 bg-white bottom-0 w-full border-t border-gray' v-if='!hide_footer'>
-      <ul class='footer-list'>
-        <li>
-          <router-link :to="{ name: 'Home' }" class="hover:opacity-80">
-            <Icon
-              class='text-black'
-              type='Home'
-              :class="{'text-purple' : $route.name == 'Home' }"
-            />
-            <p
-              class='text-xs pt-1'
-              :class="{'text-purple' : $route.name == 'Home' }"
-            >
-              Home
-            </p>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/members" class="hover:opacity-80">
-            <Icon
-              class='text-black'
-              type='Members'
-              :class="{'text-purple' : ['Members', 'SingleMember'].includes( $route.name ) }"
-            />
-            <p
-              class='text-xs pt-1'
-              :class="{'text-purple' : ['Members', 'SingleMember'].includes( $route.name ) }"
-            >
-              Members
-            </p>
-          </router-link>
-        </li>
-        <li class='text-black'>
-          <router-link to="/events" class="hover:opacity-80">
-            <Icon
-              class='text-black'
-              :class="{'text-purple' : ['Events', 'SingleEvent'].includes( $route.name ) }"
-              type="Event"
-            />
-            <p
-              class='text-xs pt-1'
-              :class="{'text-purple' : ['Events', 'SingleEvent'].includes( $route.name ) }"
-            >
-              Events
-            </p>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/profile" class="hover:opacity-80">
-            <Icon
-              class='text-black'
-              :class="{'text-purple' : $route.name == 'Profile' }"
-              type="Profile"
-            />
-            <p
-              class='text-xs pt-1'
-              :class="{'text-purple' : $route.name == 'Profile' }"
-            >
-              Profile
-            </p>
-          </router-link>
-        </li>
-      </ul>
-    </div>
+    <PhoneFooter :hide_footer='hide_footer' />
+
   </div>
 
 </template>
 
 <script>
-
-import Icon from '@/components/Icon'
+import PhoneHeader from '@/templates/PhoneUI/Header'
+import PhoneTitle from '@/templates/PhoneUI/Title'
+import PhoneFooter from '@/templates/PhoneUI/Footer'
+import PhoneProgressBar from '@/templates/PhoneUI/ProgressBar'
 
 import Util from '@/lib/Util'
 
@@ -124,15 +56,15 @@ export default{
   props: {
     configUI: Object,
     title: String,
-
-
   },
   components: {
-    Icon
+    PhoneHeader,
+    PhoneTitle,
+    PhoneProgressBar,
+    PhoneFooter
   },
   data(){
     return {
-
       scrolled  : false,
       move_sticky_up : false,
     }
@@ -157,8 +89,6 @@ export default{
     const hide_footer = ref( null )
     hide_footer.value = props.configUI && props.configUI.hide_footer ? props.configUI.hide_footer : false
 
-
-
     return{
       maintitle_classes,
       stickytitle_classes,
@@ -167,11 +97,6 @@ export default{
       hide_footer,
       colors
     }
-
-    //console.log( props );
-  },
-  methods: {
-
   },
   mounted(){
 

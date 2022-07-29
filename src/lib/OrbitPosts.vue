@@ -7,7 +7,7 @@
       :posts="items"
       v-if="status == 'success'"
     ></component>
-    <PostsAnimation v-else />
+    <slot name="loadingAnimation" v-else></slot>
     <slot name="whenempty" v-if="!items.length && status == 'success'"></slot>
   </div>
 </template>

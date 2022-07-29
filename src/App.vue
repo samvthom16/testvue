@@ -1,6 +1,5 @@
 <template>
 
-  
   <router-view v-slot="{ Component }">
     <transition name="route" mode="out-in">
       <component :is="Component" />
@@ -19,24 +18,16 @@ import store from '@/store'
 export default {
   name: 'App',
   components: {
-    //HeaderMenu,
     ErrorNotification
   },
-  methods: {
-
-  },
   setup(){
-
     store.commit( 'getLocalSettings' )
-
-    //store.commit( 'getAccountSettings' )
-
-    //console.log( store.state.account )
   }
 }
 </script>
 
 <style>
+/*
 #nav{
   display: none;
 }
@@ -58,4 +49,5 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+*/
 </style>

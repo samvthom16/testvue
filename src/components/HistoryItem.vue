@@ -17,10 +17,10 @@
       <div class="card-meta" v-if="item.type">
         <Icon type="History" v-if="item.type == 'event'" />
         <Icon type="Comment" v-if="item.type == 'comment'" />
-        <span v-if="item.type == 'comment'">{{ item.author_name }} on </span>
+        <span v-if="item.type == 'comment'">{{ item.author_name }}, </span>
         <span>{{ formatDate(item.date) }}</span>
       </div>
-      <h2 class="card-title">{{ item.title.rendered }}</h2>
+      <h2 class="card-title" v-if="item.type == 'event'">{{ item.title.rendered }}</h2>
       <p class="card-desc">{{ item.text }}</p>
       <button
         v-if="item.type == 'comment'"
@@ -113,7 +113,7 @@ export default {
     @apply text-xl font-bold;
   }
   .card-desc{
-    @apply text-sm opacity-80;
+    @apply text-lg opacity-80;
   }
 
   .card.event,.event .card-dot, .event .card-line, .event .card-meta{

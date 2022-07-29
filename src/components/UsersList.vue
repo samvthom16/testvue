@@ -1,54 +1,4 @@
 <template>
-  <div>
-    <Modal v-show="isModalVisible" @close="closeModal()">
-      <template v-slot:modalcontent>
-        <form @submit="filterFormSubmit" id="filterForm">
-          <div class="text-xs dark:text-gray-400">
-            <FilterTags
-              v-on:filterTags="getFilterTagData($event)"
-              tagkey="location"
-              tag="Location"
-              :tagData="locationData"
-              :selectedFilterData="this.selectedFiltersData.location"
-            />
-            <FilterTags
-              v-on:filterTags="getFilterTagData($event)"
-              tagkey="gender"
-              tag="Gender"
-              :tagData="genderData"
-              :selectedFilterData="this.selectedFiltersData.gender"
-            />
-            <FilterTags
-              v-on:filterTags="getFilterTagData($event)"
-              tagkey="group"
-              tag="Group Leader"
-              :tagData="groupData"
-              :selectedFilterData="this.selectedFiltersData.group"
-            />
-            <FilterTags
-              v-on:filterTags="getFilterTagData($event)"
-              tagkey="profession"
-              tag="Profession"
-              :tagData="professionData"
-              :selectedFilterData="this.selectedFiltersData.profession"
-            />
-          </div>
-          <div class="my-4">
-            <button class="button" @click="filterFormSubmit" type="submit">
-              Apply
-            </button>
-            <span class="mx-4 text-sm">or</span>
-            <button
-              type="button"
-              @click="clearFilters"
-              class="text-sm underline"
-            >
-              Clear
-            </button>
-          </div>
-        </form>
-      </template>
-    </Modal>
 
     <div class="flow-root">
       <ul role="list" class="divide-y divide-lightgray">
@@ -67,43 +17,35 @@
               </router-link>
             </div>
             <div class="flex-1 min-w-0">
-              <h1 class="text-xl font-semibold truncate dark:text-white">
+              <h1 class="text-2xl font-semibold truncate dark:text-white">
                 <router-link :to="getPostLink( user )">
                   {{ user.title.rendered }}
                 </router-link>
               </h1>
-              <UserTags :user="user" class="mt-1" />
+              <p class='text-sm text-gray'>Last seen {{ formatDate(user.last_seen) }}</p>
             </div>
           </div>
         </li>
       </ul>
     </div>
-  </div>
+
 </template>
 
 <script>
-import UserTags from "./UserTags.vue";
-import FilterTags from "./FilterTags.vue";
-//import Icon from "@/components/Icon";
-import Modal from "@/components/Modal";
-
 import userMixin from "@/mixins/UserMixin.js";
 
-import store from "@/store";
+//import store from "@/store";
 
-import API from "../api.js";
+//import API from "../api.js";
 
-import { ref } from "vue";
+//import { ref } from "vue";
 
 import Util from '@/lib/Util'
 
 export default {
   name: "UsersList",
   components: {
-    UserTags,
-    FilterTags,
-    //Icon,
-    Modal
+
   },
   mixins: [userMixin],
   props: {
@@ -112,21 +54,22 @@ export default {
   },
   data() {
     return {
+      /*
       isModalVisible: false,
       filterdata: {},
-      //locationdata: {},
-      //genderData: {},
-      //groupData: {},
-      //professionData: {},
       selectedFiltersData: {
         location: "",
         gender: "",
         group: "",
         profession: "",
       },
+      */
     };
   },
   setup() {
+
+    /*
+
     const locationData = ref({});
     const genderData = ref({});
     const groupData = ref({});
@@ -151,9 +94,11 @@ export default {
       groupData,
       professionData,
     };
+    */
   },
 
   methods: {
+    /*
     showModal() {
       this.isModalVisible = true;
     },
@@ -189,7 +134,9 @@ export default {
 
       this.isModalVisible = false;
     },
-    getPostLink: ( post ) => Util.getPostLink( post )
+    */
+    getPostLink: ( post ) => Util.getPostLink( post ),
+    formatDate: ( dateParam ) => Util.timeAgo( dateParam )
   },
 };
 </script>
