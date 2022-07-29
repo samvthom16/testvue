@@ -25,7 +25,8 @@
           <li class="py-3 sm:py-4" v-for='comment in comments' :key='comment'>
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-1">
-                <div
+                <router-link
+                  :to='getPostLink( comment.member )'
                   class="bg-lightgray w-16 h-16 rounded-full overflow-hidden inline-block"
                 >
                   <img
@@ -33,11 +34,14 @@
                     :src="comment.member.featured_image"
                     :alt="comment.member.title"
                   />
-                </div>
+                </router-link>
               </div>
               <div class="flex-1 min-w-0">
                 <h1 class="text-xl font-semibold truncate dark:text-white">
-                  {{ comment.member.title }}
+                  <router-link
+                    :to='getPostLink( comment.member )'
+                    v-html='comment.member.title.rendered'
+                  />
                 </h1>
                 <p class='text-sm text-gray'>{{ formatDate(comment.post_date) }} by {{ comment.user.name }}</p>
               </div>
