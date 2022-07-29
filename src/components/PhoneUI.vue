@@ -48,7 +48,7 @@ import PhoneTitle from '@/templates/PhoneUI/Title'
 import PhoneFooter from '@/templates/PhoneUI/Footer'
 import PhoneProgressBar from '@/templates/PhoneUI/ProgressBar'
 
-import Util from '@/lib/Util'
+import Helper from '@/lib/Helper'
 
 import {ref} from 'vue'
 
@@ -102,9 +102,10 @@ export default{
 
     var component = this;
 
-    window.addEventListener('scroll', function(){
+    const {debounceEvent} = Helper()
 
-      Util.debounceEvent( () => {
+    window.addEventListener('scroll', function(){
+      debounceEvent( () => {
         if( window.scrollY > 34 ){
           component.scrolled = true;
         }
@@ -140,7 +141,7 @@ export default{
   @apply flex-auto;
 }
 .footer-list li{
-  @apply p-2 pb-4 text-center;
+  @apply p-2 pb-6 text-center;
 }
 .footer-list li svg{
   @apply inline-block;

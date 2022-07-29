@@ -11,7 +11,7 @@ const query = ( params, API, queryConfig = {} ) => {
     return API( clonedParams )
   }
 
-  const { data, fetchNextPage, status } = useInfiniteQuery( ['OrbitQuery', params ], fetchItems, queryConfig )
+  const { data, fetchNextPage, status, isFetchingNextPage } = useInfiniteQuery( ['OrbitQuery', params ], fetchItems, queryConfig )
 
   // COMPUTATION OF ITEMS FROM DATA PAGES
   const items = computed( () => {
@@ -36,6 +36,8 @@ const query = ( params, API, queryConfig = {} ) => {
   } )
 
   const loadMore = () => {
+    //console.log( 'load more' )
+    //console.log( hasMorePages.value )
     if( hasMorePages.value ){
       page.value += 1;
       fetchNextPage.value( { pageParam: page.value } )
@@ -59,7 +61,8 @@ const query = ( params, API, queryConfig = {} ) => {
     watchScroll,
     scrollComponent,
     status,
-    fetchNextPage
+    fetchNextPage,
+    isFetchingNextPage
   }
 }
 

@@ -29,6 +29,11 @@ const routes = [
     component: () => import( '@/views/NewTeamMember' )
   },
   {
+    path: '/comments',
+    name: 'Comments',
+    component: () => import( '@/views/Comments' )
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login

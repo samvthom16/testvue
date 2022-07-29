@@ -1,63 +1,18 @@
 <template>
   <div class='sticky z-10 bg-white bottom-0 w-full border-t border-gray' v-if='!hide_footer'>
     <ul class='footer-list'>
-      <li>
-        <router-link :to="{ name: 'Home' }" class="hover:opacity-80">
+      <li v-for='item in items' :key='item'>
+        <router-link :to="item.route" class="hover:opacity-80">
           <Icon
-            class='text-black'
-            type='Home'
-            :class="{'text-purple' : $route.name == 'Home' }"
+            class='text-black h-5 w-5'
+            :type=item.icon
+            :class="{'text-purple' : item.allowedRoutes.includes( $route.name ) }"
           />
           <p
             class='text-xs pt-1'
-            :class="{'text-purple' : $route.name == 'Home' }"
+            :class="{'text-purple' : item.allowedRoutes.includes( $route.name ) }"
           >
-            Home
-          </p>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/members" class="hover:opacity-80">
-          <Icon
-            class='text-black'
-            type='Members'
-            :class="{'text-purple' : ['Members', 'SingleMember'].includes( $route.name ) }"
-          />
-          <p
-            class='text-xs pt-1'
-            :class="{'text-purple' : ['Members', 'SingleMember'].includes( $route.name ) }"
-          >
-            Members
-          </p>
-        </router-link>
-      </li>
-      <li class='text-black'>
-        <router-link to="/events" class="hover:opacity-80">
-          <Icon
-            class='text-black'
-            :class="{'text-purple' : ['Events', 'SingleEvent'].includes( $route.name ) }"
-            type="Event"
-          />
-          <p
-            class='text-xs pt-1'
-            :class="{'text-purple' : ['Events', 'SingleEvent'].includes( $route.name ) }"
-          >
-            Events
-          </p>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/profile" class="hover:opacity-80">
-          <Icon
-            class='text-black'
-            :class="{'text-purple' : $route.name == 'Profile' }"
-            type="Profile"
-          />
-          <p
-            class='text-xs pt-1'
-            :class="{'text-purple' : $route.name == 'Profile' }"
-          >
-            Profile
+            {{ item.name }}
           </p>
         </router-link>
       </li>
@@ -68,6 +23,8 @@
 
 import Icon from '@/components/Icon'
 
+import {ref} from 'vue'
+
 export default{
   props: {
     hide_footer: Boolean
@@ -75,6 +32,47 @@ export default{
   components: {
     Icon
   },
+  setup(){
+
+    const items = ref( [
+      {
+        route : { name: 'Home' },
+        icon  : 'Home',
+        name  : 'Home',
+        allowedRoutes: ['Home']
+      },
+
+      {
+        route : { name: 'Members' },
+        icon  : 'Members',
+        name  : 'Members',
+        allowedRoutes: ['Members', 'SingleMember']
+      },
+      {
+        route : { name: 'Events' },
+        icon  : 'Event',
+        name  : 'Events',
+        allowedRoutes: ['Events', 'SingleEvent']
+      },
+      {
+        route : { name: 'Comments' },
+        icon  : 'Comment',
+        name  : 'Comments',
+        allowedRoutes: ['Comments']
+      },
+      {
+        route : { name: 'Profile' },
+        icon  : 'Profile',
+        name  : 'Profile',
+        allowedRoutes: ['Profile']
+      },
+    ] )
+
+    return {
+      items
+    }
+
+  }
 
 }
 </script>

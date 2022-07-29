@@ -8,16 +8,19 @@
       v-if="status == 'success'"
     ></component>
     <slot name="loadingAnimation" v-else></slot>
+    <slot name="nextPageAnimation" v-if="isFetchingNextPage"></slot>
     <slot name="whenempty" v-if="!items.length && status == 'success'"></slot>
   </div>
 </template>
 <script>
 import OrbitQuery from "@/lib/OrbitQuery.js";
 import Util from "@/lib/Util";
+import Helper from '@/lib/Helper'
 
 import { onMounted, onUnmounted, computed } from "vue";
 
 import UsersList from '@/templates/Comments/UsersList'
+import UsersListWithComment from '@/templates/Comments/UsersListWithComment'
 
 import API from "@/api";
 
@@ -26,7 +29,8 @@ export default {
     params: Object,
   },
   components: {
-    UsersList
+    UsersList,
+    UsersListWithComment
   },
   setup( props ) {
 
@@ -40,13 +44,15 @@ export default {
     } );
 
     const requestAPI = ( params ) => API.requestComments( params );
-    const { items, watchScroll, scrollComponent, status } = OrbitQuery(
+    const { items, watchScroll, scrollComponent, status, isFetchingNextPage } = OrbitQuery(
       params.value,
       requestAPI
     );
 
+    const {debounceEvent} = Helper()
+
     const handleScroll = () => {
-      Util.debounceEvent(function () {
+      debounceEvent( function() {
         watchScroll();
       }, 50);
     };
@@ -65,6 +71,7 @@ export default {
       items,
       status,
       scrollComponent,
+      isFetchingNextPage
     };
   },
 };

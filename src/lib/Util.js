@@ -5,7 +5,7 @@ import * as timeago from 'timeago.js';
 
 export default{
 
-  debounce  : null,
+  //debounce  : null,
 
   // REMOVE EMPTY PARAMS THAT COME FROM DEFAULT ATTRIBUTES
   removeEmptyParams: (params) => {
@@ -66,12 +66,15 @@ export default{
     }
   },
 
+  /*
   debounceEvent: function( callback, timeout = 600 ){
+    //console.log( timeout )
     clearTimeout( this.debounce );
     this.debounce = setTimeout(() => {
       callback();
     }, timeout);
   },
+  */
 
   fetchSettings: function( callback ){
 

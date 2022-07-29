@@ -57,7 +57,7 @@
     v-else-if="type == 'Home'"
     v-bind="$attrs"
     xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
+
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -73,7 +73,7 @@
   <svg
     v-else-if="type == 'Event'"
     v-bind="$attrs"
-    xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
   </svg>
 
@@ -84,7 +84,7 @@
     v-else-if="type == 'Profile'"
     v-bind="$attrs"
     xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
+    
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -249,20 +249,13 @@
 
   <!-- COMMENT (MESSAGE) ICON -->
   <svg
-    v-else-if="type == 'Comment'"
     xmlns="http://www.w3.org/2000/svg"
-    class="inline w-4"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-    />
+    v-else-if="type == 'Comment'"
+    v-bind="$attrs"
+    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
   </svg>
+
 
   <!-- DELETE ICON -->
   <svg
@@ -323,7 +316,7 @@
   <svg
     v-else-if="type == 'Members'"
     v-bind="$attrs"
-    xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
   </svg>
   <svg
