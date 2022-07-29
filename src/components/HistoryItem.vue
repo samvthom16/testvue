@@ -15,8 +15,8 @@
     <!-- Content that showing in the box -->
     <div class="card-content">
       <div class="card-meta" v-if="item.type">
-        <Icon type="History" v-if="item.type == 'event'" />
-        <Icon type="Comment" v-if="item.type == 'comment'" />
+        <Icon type="History" class='w-4 h-4' v-if="item.type == 'event'" />
+        <Icon type="Comment" class='w-4 h-4' v-if="item.type == 'comment'" />
         <span v-if="item.type == 'comment'">{{ item.author_name }}, </span>
         <span>{{ formatDate(item.date) }}</span>
       </div>

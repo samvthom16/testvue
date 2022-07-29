@@ -84,7 +84,7 @@
     v-else-if="type == 'Profile'"
     v-bind="$attrs"
     xmlns="http://www.w3.org/2000/svg"
-    
+
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -228,7 +228,6 @@
   <svg
     v-else-if="type == 'History'"
     xmlns="http://www.w3.org/2000/svg"
-    class="inline w-4"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
