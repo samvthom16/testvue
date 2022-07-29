@@ -17,6 +17,9 @@
         <template v-slot:title>
           <MainTitle title='Latest Comments' icon='Comment' />
         </template>
+        <template v-slot:loadingAnimation>
+          <ListWithImageAnimation />
+        </template>
       </OrbitComments>
 
       <div class='mb-10'></div>
@@ -50,7 +53,7 @@ import store from '@/store'
 import router from '@/router'
 
 
-
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
 import MemberAvatarsAnimation from '@/templates/Animation/MemberAvatars'
 import SimpleListAnimation from '@/templates/Animation/SimpleList'
 
@@ -64,7 +67,7 @@ export default {
     OrbitComments,
     MemberAvatarsAnimation,
     SimpleListAnimation,
-
+    ListWithImageAnimation,
     MainTitle
   },
   setup(){
