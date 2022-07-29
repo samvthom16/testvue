@@ -132,6 +132,14 @@ const api = {
     } );
   },
 
+  requestComments: function( params = {} ){
+    return this.makeRequest(  {
+      url   : this._getURL( '/wp-json/inpursuit/v1/comments' ),
+      data  : params,
+      headers : this.getAuthHeaders()
+    } );
+  },
+
 }
 
 export default api
