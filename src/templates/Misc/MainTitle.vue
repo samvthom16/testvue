@@ -1,6 +1,6 @@
 <template>
-  <h4 class='font-semibold text-xl mb-4'>
-    <Icon :type='icon' class='inline h-6 w-6' />
+  <h4 class='font-semibold text-2xl mb-3'>
+    <Icon :type='icon' class='inline h-6 w-6 mb-2' />
     {{ title }}
   </h4>
 </template>

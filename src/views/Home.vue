@@ -11,7 +11,7 @@
         </template>
       </OrbitPosts>
 
-      <div class='mb-8'></div>
+      <div class='mb-9'></div>
 
       <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
         <template v-slot:title>
@@ -19,7 +19,7 @@
         </template>
       </OrbitComments>
 
-      <div class='mb-8'></div>
+      <div class='mb-9'></div>
 
       <OrbitPosts :params="{ per_page: 8, post_type: 'inpursuit-events', style: 'PostList' }">
         <template v-slot:title>
@@ -64,7 +64,7 @@ export default {
     OrbitComments,
     MemberAvatarsAnimation,
     SimpleListAnimation,
-    
+
     MainTitle
   },
   setup(){
