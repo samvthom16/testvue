@@ -1,7 +1,7 @@
 <template>
   <PhoneUI :configUI='configUI' :title='$route.query && $route.query.id ? "Update Admin" : "Create an Admin"'>
     <template v-slot:headericon>
-      <button @click='goBack'><Icon type='Back' /></button>
+      <BackButton :defaultRoute='{ name: "Team" }' />
     </template>
     <template v-slot:headerright>
       <button
@@ -41,7 +41,10 @@
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 import TextField from "@/components/TextField";
-//import DropDownField from "@/components/DropDownField";
+
+import BackButton from '@/templates/PhoneUI/BackButton'
+
+
 
 import router from '@/router'
 
@@ -57,7 +60,7 @@ export default{
     PhoneUI,
     Icon,
     TextField,
-    //DropDownField
+    BackButton
   },
   data(){
     return {

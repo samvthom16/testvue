@@ -11,7 +11,7 @@
         </template>
       </OrbitPosts>
 
-      <div class='mb-9'></div>
+      <div class='mb-10'></div>
 
       <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
         <template v-slot:title>
@@ -19,7 +19,7 @@
         </template>
       </OrbitComments>
 
-      <div class='mb-9'></div>
+      <div class='mb-10'></div>
 
       <OrbitPosts :params="{ per_page: 8, post_type: 'inpursuit-events', style: 'PostList' }">
         <template v-slot:title>

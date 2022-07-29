@@ -1,7 +1,7 @@
 <template>
   <PhoneUI :configUI='configUI' :title='$route.query && $route.query.id ? "Update Member" : "Create a Member"'>
     <template v-slot:headericon>
-      <button @click='goBack'><Icon type='Back' /></button>
+      <BackButton :defaultRoute='{ name: "Members" }' />
     </template>
     <template v-slot:headerright>
       <button
@@ -13,21 +13,31 @@
     <template v-slot:phonebody>
       <form class="" @submit="submit">
         <div
-          class='relative border border-black w-48 h-48 mx-auto my-10 rounded-full bg-white'>
+          class='relative border border-black bg-gray w-36 h-36 mx-auto my-10 rounded-full'>
           <input ref='featured' type='file' @change='chooseUserProfile' class='hidden' />
           <img
             v-if='post.featured_image'
             :src='post.featured_image'
             width='100'
             height='100'
-            class='w-full h-full rounded-full'
+            class='w-full h-full rounded-full object-cover'
           />
           <button
             type='button'
             @click='$refs.featured.click'
-            class='text-sm bg-orange p-2 px-8 rounded-full absolute border left-1/2 transform -translate-x-1/2 -bottom-2'>
+            class='text-xs bg-orange p-2 px-4 rounded-full absolute border left-1/2 transform -translate-x-1/2 -bottom-2'>
             Upload
           </button>
+
+          <div
+            class='p-4 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'
+            :class="{ 'hidden': !imageUploadFlag }"
+          >
+            <Icon
+              type='CircularLoader'
+              class='mx-auto h-8 w-8'
+            />
+          </div>
         </div>
 
         <component
@@ -51,6 +61,7 @@
 </template>
 <script>
 import PhoneUI from '@/components/PhoneUI'
+import BackButton from '@/templates/PhoneUI/BackButton'
 import Icon from '@/components/Icon'
 import TextField from "@/components/TextField";
 import DropDownField from "@/components/DropDownField";
@@ -60,11 +71,12 @@ import router from '@/router'
 import PostEdit from '@/lib/PostEdit'
 import ImageUtil from '@/lib/ImageUtil'
 
-
+import {ref} from 'vue'
 
 export default{
   components:{
     PhoneUI,
+    BackButton,
     Icon,
     TextField,
     DropDownField
@@ -86,6 +98,7 @@ export default{
     */
     const { handleImageSelection } = ImageUtil()
 
+    const imageUploadFlag = ref( false )
 
 
     /*
@@ -121,10 +134,12 @@ export default{
           //console.log( src )
           //console.log( po)
           post.value.featured_image = src
+          imageUploadFlag.value = true
         },
         ( serverImageUrl, image_id ) => {
           post.value.featured_image = serverImageUrl
           post.value.featured_media = image_id
+          imageUploadFlag.value = false
         }
       )
     }
@@ -154,7 +169,8 @@ export default{
       submit,
       deleteItem,
       goBack,
-      chooseUserProfile
+      chooseUserProfile,
+      imageUploadFlag
     }
 
   },

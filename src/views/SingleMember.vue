@@ -2,9 +2,7 @@
 
   <PhoneUI :configUI='{ maintitle_classes : "py-16 hide-svg", hide_maintitle : true }' :title='getHeaderTitle()'>
     <template v-slot:headericon>
-      <router-link :to="{ name: 'Members' }">
-        <Icon type='Back' />
-      </router-link>
+      <BackButton :defaultRoute='{ name: "Members" }' />
     </template>
     <template v-slot:headerright>
       <router-link :to="getEditLink()" v-if='post.id'>
@@ -81,6 +79,7 @@
 </template>
 
 <script>
+import BackButton from '@/templates/PhoneUI/BackButton'
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 
@@ -101,6 +100,7 @@ export default {
   name: "SingleMember",
   components: {
     PhoneUI,
+    BackButton,
     Icon,
     AddComment,
     UserTags,
