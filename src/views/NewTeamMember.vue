@@ -11,28 +11,21 @@
       ></button>
     </template>
     <template v-slot:phonebody>
+
       <form class="" @submit="submit">
-        {{ team_member.first_name }}
-        <TextField
-          v-model='team_member.first_name'
-          :field='field'
-          v-if='field'
-        />
-        <!--component
-          v-for='field in fields'
-          :is='field.component'
-          :key='field'
-          :field='field'
-          v-model="field.value"
-        >
-      </component-->
+
+        <div class='mb-5' v-for='field,slug in fields' :key='field'>
+          <label class='block font-semibold text-black'>{{ field.label }}</label>
+          <input class='inline-block w-full p-2 border-2 border-solid border-black rounded mb-1 mt-2 outline-none focus:border-red' type='text' v-model='data[slug]' />
+        </div>
+
       </form>
       <button
         v-if='$route.query && $route.query.id'
-        @click='deleteItem( $route.query.id )'
+        @click='deleteData'
         class='border border-red p-2 rounded text-red text-sm'>
         <Icon type='Delete' class='inline' />
-        Delete this member
+        Delete Team Member
       </button>
     </template>
   </PhoneUI>
@@ -40,26 +33,22 @@
 <script>
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
-import TextField from "@/components/TextField";
 
 import BackButton from '@/templates/PhoneUI/BackButton'
 
-
+import FormEdit from '@/lib/FormEdit'
 
 import router from '@/router'
-
 import API from '@/api'
 
 import {ref} from 'vue'
-
 import { useRoute } from 'vue-router';
-
 
 export default{
   components:{
     PhoneUI,
     Icon,
-    TextField,
+
     BackButton
   },
   data(){
@@ -73,60 +62,66 @@ export default{
   },
   setup(){
 
-    const team_member = ref( {} )
+    const fields = ref( {
+      first_name: {
+        label : 'First Name',
+        type  : 'text',
+      },
+      last_name: {
+        label : 'Last Name',
+        type  : 'text',
+      },
+      email: {
+        label : 'Email Address',
+        type  : 'text',
+      }
+    } )
 
-    const field = ref( null )
+    const requestAPI = ( params ) => API.requestUsers( params );
+
+    const afterUpdate = () => router.push( { name: 'Team' } )
+
+    const {deleteData, createOrUpdateData, data} = FormEdit(
+      requestAPI,
+      afterUpdate,
+      afterUpdate,
+      {
+        first_name: '',
+        last_name : '',
+        email     : ''
+      }
+    )
 
     const route = useRoute()
 
-    if( route.query && route.query.id ){
-      API.requestUser( route.query.id ).then(
-        ( response ) => {
-          team_member.value = response.data
-          field.value = {
-            label: 'First Name',
-            value: team_member.value.first_name,
-            slug: 'first_name'
-          }
-        }
-      )
-    }
-
-
-
+    //console.log( route.query )
 
     const submit = ( ev ) => {
-      ev.preventDefault();
-      /*
-      createOrUpdatePost( {
-        featured_media: post.featured_media
-      } )
-      */
-    }
+      data.value.name = data.value.first_name.trim() + ' ' + data.value.last_name.trim();
 
-    const deleteItem = ( post_id ) => {
-      if( confirm( 'Are you sure you want to delete this information?' ) ){
-
-        console.log( post_id )
-
-        //deletePost( post_id )
+      if( !( route.query && route.query.id ) ){
+        data.value.username = data.value.email;
+        data.value.password = Math.random().toString( 36 ).slice( 2, 10 )
+        data.value.roles = ['editor'];
       }
+
+      //console.log( data.value )
+
+      createOrUpdateData( ev );
     }
 
-    const goBack = () => {
-      if( window.history.length > 2 ) router.go( -1 )
-      else router.push( { name: 'Team' } )
-    }
+
 
     return {
-      team_member,
-      field,
+      fields,
       submit,
-      deleteItem,
-      goBack,
+      deleteData,
+      data
     }
 
   },
+
+
 
 }
 </script>

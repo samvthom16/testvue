@@ -42,6 +42,18 @@ const api = {
     return api;
   },
 
+  cleanParams: function( params ){
+    params = JSON.parse( JSON.stringify( params ) );
+    var removeAttr = ['pagination', 'style', 'post_type', 'method'];
+    for( var index in removeAttr ){
+      var key = removeAttr[ index ];
+      if( params[ key ] ){
+        delete params[ key ];
+      }
+    }
+    return params;
+  },
+
   getAuthHeaders: function() {
     var username = store.state.settings.username;
     var password = store.state.settings.password;
@@ -117,9 +129,27 @@ const api = {
   },
 
   requestUsers: function( params = {} ){
+
+    var url = this._getURL( '/wp-json/wp/v2/users' );
+
+    if( params.id )
+      url = this._getURL( '/wp-json/wp/v2/users/' + params.id )
+
+    if( !params.method || params.method == 'get' )
+      url += "?context=edit"
+
+    var data = this.cleanParams( params )
+
+    if( params.method == 'delete' ){
+      data.id = params.id
+      data.force = true
+      data.reassign = 1
+    }
+
     return this.makeRequest(  {
-      url   : this._getURL( '/wp-json/wp/v2/users?context=edit' ),
-      data  : params,
+      url     : url,
+      method  : params.method ? params.method : 'get',
+      data    : data,
       headers : this.getAuthHeaders()
     } );
   },
@@ -127,6 +157,7 @@ const api = {
   requestUser: function( user_id, params = {} ){
     return this.makeRequest(  {
       url     : this._getURL( '/wp-json/wp/v2/users/' + user_id + '?context=edit' ),
+      method  : params.method ? params.method : 'get',
       data    : params,
       headers : this.getAuthHeaders()
     } );
