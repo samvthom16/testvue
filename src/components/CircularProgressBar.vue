@@ -2,8 +2,8 @@
   <circle-progress
     :percent="contentProgress"
     :size="size"
-    :border-width="8"
-    :border-bg-width="9"
+    :border-width="borderWidth"
+    :border-bg-width="borderBgWidth"
     :show-percent="true"
     :fill-color="'#F9AB70'"
     :empty-colo="'#9E81A0'"
@@ -21,6 +21,8 @@ export default {
   props: {
     contentProgress: Number,
     size: Number,
+    borderWidth: Number,
+    borderBgWidth: Number
   },
 };
 </script>

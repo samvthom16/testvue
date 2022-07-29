@@ -22,24 +22,22 @@
     </button-->
 
     <div class="flow-root">
-      <ul role="list" class="divide-y divide-lightgray dark:divide-gray-700">
+      <ul role="list" class="divide-y divide-lightgray">
         <li class="py-3 sm:py-4" v-for="event in events" :key="event.id">
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-1">
               <router-link :to="getPostLink(event)">
                 <CircularProgressBar
                   :contentProgress="event.attendants_percentage"
-                  :size="70"
+                  :size="50"
+                  :border-width="6"
+                  :border-bg-width="7"
                 ></CircularProgressBar>
               </router-link>
             </div>
             <div class="flex-1 min-w-0">
-              <h1 class="text-xl font-semibold truncate dark:text-white">
-                <router-link :to="getPostLink(event)">
-                  {{ event.title.rendered }}
-                </router-link>
-              </h1>
-              <EventTags :event="event" class="mt-1" />
+              <PostTitle :post='event' />
+              <SubTitle :title='formatDate( event.date )' />
             </div>
           </div>
         </li>
@@ -52,9 +50,12 @@
 
 <script>
 import AddEvent from "./AddEvent.vue";
-import EventTags from "./EventTags.vue";
+
 import Modal from "@/components/Modal";
 import CircularProgressBar from "@/components/CircularProgressBar.vue";
+
+import PostTitle from '@/templates/Post/Title'
+import SubTitle from '@/templates/Misc/SubTitle'
 
 import store from "@/store";
 import API from "../api.js";
@@ -65,7 +66,14 @@ import apiMixin from "@/mixins/APIMixin.js";
 
 export default {
   name: "EventList",
-  components: { AddEvent, EventTags, CircularProgressBar, Modal },
+  components: {
+    AddEvent,
+
+    CircularProgressBar,
+    Modal,
+    PostTitle,
+    SubTitle
+  },
   mixins: [apiMixin],
   setup() {
     const eventTypeData = ref({});
@@ -97,6 +105,7 @@ export default {
     total: Number,
   },
   methods: {
+
     showModal() {
       this.isModalVisible = true;
     },
@@ -108,6 +117,7 @@ export default {
       this.$parent.refreshItems();
       this.$router.push("/events/" + e.id);
     },
+    formatDate: ( dateParam ) => Util.timeAgo( dateParam ),
     getPostLink: ( post ) => Util.getPostLink( post )
   },
 };

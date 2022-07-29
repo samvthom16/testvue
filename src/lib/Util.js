@@ -18,6 +18,9 @@ export default{
   },
 
   getPostLink: function( post ){
+
+    if( !post ) return {}
+
     var route = {
       name		: "",
       params 	: { id : post.id, post: JSON.stringify( post ) }

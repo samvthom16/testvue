@@ -4,7 +4,7 @@
     <component
       v-bind="$attrs"
       :is="params.style"
-      :posts="items"
+      :items="items"
       v-if="status == 'success'"
     ></component>
     <slot name="loadingAnimation" v-else></slot>
@@ -12,29 +12,21 @@
   </div>
 </template>
 <script>
-
-
 import OrbitQuery from "@/lib/OrbitQuery.js";
-
 import Util from "@/lib/Util";
 
 import { onMounted, onUnmounted, computed } from "vue";
 
-
-import PostImagesSlider from '@/templates/Posts/PostImagesSlider'
-import PostList from '@/templates/Posts/PostList'
-
-
+import UsersList from '@/templates/Comments/UsersList'
 
 import API from "@/api";
+
 export default {
   props: {
     params: Object,
   },
   components: {
-    PostList,
-    PostImagesSlider,
-
+    UsersList
   },
   setup( props ) {
 
@@ -42,16 +34,12 @@ export default {
       var params = Util.removeEmptyParams(
         JSON.parse(JSON.stringify(props.params))
       );
-      if (params.style == "TrendingPosts") {
-        params.trending = 1;
-      }
+
       delete params["style"];
-      params.post_type = params.post_type ? params.post_type : "posts";
       return params;
-    });
+    } );
 
-
-    const requestAPI = (params) => API.requestPosts(params.post_type, params);
+    const requestAPI = ( params ) => API.requestComments( params );
     const { items, watchScroll, scrollComponent, status } = OrbitQuery(
       params.value,
       requestAPI
@@ -65,12 +53,12 @@ export default {
 
     onMounted( () => {
       if ( props.params.pagination ) {
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener( "scroll", handleScroll );
       }
     });
     onUnmounted(() => {
       if (props.params.pagination) {
-        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener( "scroll", handleScroll );
       }
     });
     return {

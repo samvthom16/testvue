@@ -4,10 +4,7 @@
 
       <OrbitPosts :params="{ per_page: 10, post_type: 'inpursuit-members', style: 'PostImagesSlider' }">
         <template v-slot:title>
-          <h4 class='font-semibold text-xl mb-4'>
-            <Icon type='Members' class='inline h-6 w-6' />
-            Latest Members
-          </h4>
+          <MainTitle title='Latest Members' icon='Members' />
         </template>
         <template v-slot:loadingAnimation>
           <MemberAvatarsAnimation />
@@ -16,48 +13,17 @@
 
       <div class='mb-8'></div>
 
-      <div class='flow-root'>
-        <h4 class='font-semibold text-xl mb-2'>
-          <Icon type='Comment' class='inline h-6 w-6' />
-          Latest Comments
-        </h4>
-        <ul role="list" class="divide-y divide-lightgray">
-          <li class="py-3 sm:py-4" v-for='comment in comments' :key='comment'>
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-1">
-                <router-link
-                  :to='getPostLink( comment.member )'
-                  class="bg-lightgray w-16 h-16 rounded-full overflow-hidden inline-block"
-                >
-                  <img
-                    class="w-full h-full object-cover rounded-full"
-                    :src="comment.member.featured_image"
-                    :alt="comment.member.title"
-                  />
-                </router-link>
-              </div>
-              <div class="flex-1 min-w-0">
-                <h1 class="text-xl font-semibold truncate dark:text-white">
-                  <router-link
-                    :to='getPostLink( comment.member )'
-                    v-html='comment.member.title.rendered'
-                  />
-                </h1>
-                <p class='text-sm text-gray'>{{ formatDate(comment.post_date) }} by {{ comment.user.name }}</p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
+      <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
+        <template v-slot:title>
+          <MainTitle title='Latest Comments' icon='Comment' />
+        </template>
+      </OrbitComments>
 
       <div class='mb-8'></div>
 
       <OrbitPosts :params="{ per_page: 8, post_type: 'inpursuit-events', style: 'PostList' }">
         <template v-slot:title>
-          <h4 class='font-semibold text-xl mb-2'>
-            <Icon type='Event' class='inline h-6 w-6' />
-            Latest Events
-          </h4>
+          <MainTitle title='Latest Events' icon='Event' />
         </template>
         <template v-slot:loadingAnimation>
           <SimpleListAnimation />
@@ -66,10 +32,6 @@
 
       <div class='mb-8'></div>
 
-
-
-
-
     </template>
   </PhoneUI>
 </template>
@@ -77,13 +39,17 @@
 <script>
 import PhoneUI from '@/components/PhoneUI'
 
-import API from '@/api'
+import MainTitle from '@/templates/Misc/MainTitle'
+
 import Util from '@/lib/Util'
 import OrbitPosts from '@/lib/OrbitPosts'
+import OrbitComments from '@/lib/OrbitComments'
+
+import API from '@/api'
 import store from '@/store'
 import router from '@/router'
 
-import Icon from '@/components/Icon'
+
 
 import MemberAvatarsAnimation from '@/templates/Animation/MemberAvatars'
 import SimpleListAnimation from '@/templates/Animation/SimpleList'
@@ -95,9 +61,11 @@ export default {
   components: {
     PhoneUI,
     OrbitPosts,
+    OrbitComments,
     MemberAvatarsAnimation,
     SimpleListAnimation,
-    Icon
+    
+    MainTitle
   },
   setup(){
 

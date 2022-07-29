@@ -17,6 +17,8 @@
           <CircularProgressBar
             :contentProgress="post.attendants_percentage"
             :size="120"
+            :border-width="8"
+            :border-bg-width="9"
             class="
               shadow
               h-28
