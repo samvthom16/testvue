@@ -22,7 +22,10 @@
 
 </template>
 <script>
-import Util from '@/lib/Util'
+
+import Helper from '@/lib/Helper'
+
+const {debounceEvent} = Helper()
 
 import Icon from '@/components/Icon'
 
@@ -35,13 +38,16 @@ export default{
       searchFocus: false,
     }
   },
+
   methods:{
+
     returnSearchText( ev ){
       var component = this;
-      Util.debounceEvent( () => {
+      debounceEvent( () => {
         component.$emit( 'searching', ev.target.value );
       }, 100 )
     }
+
   },
   mounted(){
     var $search = document.getElementById( 'search' );
