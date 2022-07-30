@@ -57,7 +57,7 @@ export default{
     } );
     $search.addEventListener( 'blur', () => {
       component.searchFocus = false
-    } );
+    } );  
   }
 }
 </script>

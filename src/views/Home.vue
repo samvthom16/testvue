@@ -4,7 +4,7 @@
 
       <OrbitPosts :params="{ per_page: 10, post_type: 'inpursuit-members', style: 'PostImagesSlider' }">
         <template v-slot:title>
-          <MainTitle title='Latest Members' icon='Members' />
+          <MainTitle title='Members' icon='Members' :route='{ name: "Members" }' />
         </template>
         <template v-slot:loadingAnimation>
           <MemberAvatarsAnimation />
@@ -15,7 +15,7 @@
 
       <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
         <template v-slot:title>
-          <MainTitle title='Latest Comments' icon='Comment' />
+          <MainTitle title='Comments' icon='Comment' :route='{ name: "Comments" }' />
         </template>
         <template v-slot:loadingAnimation>
           <ListWithImageAnimation />
@@ -26,7 +26,7 @@
 
       <OrbitPosts :params="{ per_page: 8, post_type: 'inpursuit-events', style: 'PostList' }">
         <template v-slot:title>
-          <MainTitle title='Latest Events' icon='Event' />
+          <MainTitle title='Events' icon='Event' :route='{ name: "Events" }' />
         </template>
         <template v-slot:loadingAnimation>
           <SimpleListAnimation />
