@@ -1,6 +1,6 @@
 <template>
-
-    <div class="animate-pulse flex space-x-4">
+  <div class='space-y-6'>
+    <div class="animate-pulse flex space-x-4" v-for='i in total' :key='i'>
       <div class="flex-1 space-y-6 py-1">
         <div class="space-y-3">
           <div class="h-2 bg-lightgray rounded"></div>
@@ -11,5 +11,17 @@
         </div>
       </div>
     </div>
-    
+  </div>
 </template>
+
+<script>
+
+export default{
+  props:{
+    total:{
+      type    : Number,
+      default : 5
+    }
+  }
+}
+</script>

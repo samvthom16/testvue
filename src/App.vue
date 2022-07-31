@@ -22,6 +22,7 @@ export default {
   },
   setup(){
     store.commit( 'getLocalSettings' )
+    //store.commit( 'notifyError', 'Testing' )
   }
 }
 </script>

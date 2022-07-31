@@ -4,13 +4,15 @@
       class="
         text-xs
         fixed
-        bottom-0
-        left-0
-        mx-auto
+        bottom-24
+        left-1/2
+        transform
+        -translate-x-1/2
         max-w-xs
         px-2
         w-full
         text-white
+        z-50
       "
     >
       <div
@@ -25,7 +27,7 @@
           max-w-xs
           bg-lightred
           text-white
-          p-4
+          p-2
           rounded-lg
           shadow
         "
@@ -42,7 +44,7 @@
         >
           <Icon type="Error" />
         </div>
-        <div class="ml-3 text-xs font-normal">{{ error }}</div>
+        <div class="ml-2 text-xs font-normal">{{ error }}</div>
         <button
           type="button"
           class="

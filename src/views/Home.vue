@@ -24,7 +24,7 @@
 
       <div class='mb-10'></div>
 
-      <OrbitPosts :params="{ per_page: 8, post_type: 'inpursuit-events', style: 'PostList' }">
+      <OrbitPosts :params="{ per_page: 5, post_type: 'inpursuit-events', style: 'PostList' }">
         <template v-slot:title>
           <MainTitle title='Events' icon='Event' :route='{ name: "Events" }' />
         </template>
