@@ -53,18 +53,13 @@
         <ul role="list" class="divide-y divide-lightgray">
           <li class="items-center justify-between py-4 flex flex-row" v-for="user in items" :key="user.id">
             <div class="flex-shrink-1">
-              <div class="bg-lightgray w-16 h-16 rounded-full overflow-hidden inline-block border border-gray">
-                <img
-                  class="w-full h-full object-cover rounded-full"
-                  :src="user.featured_image"
-                  :alt="user.title.rendered"
-                />
-              </div>
+              <PostFeaturedImage :post='user' />
             </div>
 
             <div class="ml-4 flex-1">
-              <h1 class="text-xl font-semibold truncate mb-2" v-html='user.title.rendered'></h1>
+              <PostTitle :post='user' />
               <UserTags :user="user" class="my-2 hidden" />
+              <div class='my-2'></div>
               <Switch
                 v-model:checked="user.attended"
                 @click="onAttendanceChange(user)"
@@ -104,6 +99,9 @@ import Switch from "@/components/switch";
 // import ProgressBarItem from "@/components/ProgressBarItem.vue";
 import CircularProgressBar from "@/components/CircularProgressBar";
 
+import PostFeaturedImage from '@/templates/Post/FeaturedImage'
+import PostTitle from '@/templates/Post/Title'
+
 export default {
   name: "SingleEvent",
   components: {
@@ -115,6 +113,8 @@ export default {
     Switch,
     MembersDropdown,
     CircularProgressBar,
+    PostFeaturedImage,
+    PostTitle
   },
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
   data() {

@@ -5,6 +5,7 @@
       v-bind="$attrs"
       :is="params.style"
       :posts="items"
+      :total="total"
       v-if="status == 'success'"
     ></component>
     <slot name="loadingAnimation" v-else></slot>
@@ -22,8 +23,8 @@ import { onMounted, onUnmounted, computed } from "vue";
 
 
 import PostImagesSlider from '@/templates/Posts/PostImagesSlider'
-import PostList from '@/templates/Posts/PostList'
-
+import EventList from '@/templates/Posts/EventList'
+import AvatarsStacked from '@/templates/Posts/AvatarsStacked'
 
 
 import API from "@/api";
@@ -32,9 +33,9 @@ export default {
     params: Object,
   },
   components: {
-    PostList,
+    EventList,
     PostImagesSlider,
-
+    AvatarsStacked
   },
   setup( props ) {
 
@@ -52,7 +53,7 @@ export default {
 
 
     const requestAPI = (params) => API.requestPosts(params.post_type, params);
-    const { items, watchScroll, scrollComponent, status } = OrbitQuery(
+    const { items, total, watchScroll, scrollComponent, status } = OrbitQuery(
       params.value,
       requestAPI
     );
@@ -75,6 +76,7 @@ export default {
     });
     return {
       items,
+      total,
       status,
       scrollComponent,
     };

@@ -22,6 +22,10 @@ const VueQueryPluginOptions = {
   },
 };
 
+import OrbitPosts from '@/lib/OrbitPosts'
+
 const app = createApp(App);
+
+app.component( 'OrbitPosts', OrbitPosts );
 
 app.use( VueQueryPlugin, VueQueryPluginOptions ).use( VueAxios, axios ).use( store ).use( router ).mount( '#app' )

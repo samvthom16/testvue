@@ -1,5 +1,5 @@
 <template>
-  <ul class='pb-4 mb-8 space-x-3 whitespace-nowrap overflow-auto' v-if='posts && posts.length'>
+  <ul class='pb-4 mb-8 space-x-2 whitespace-nowrap overflow-auto' v-if='posts && posts.length'>
     <li class='inline-block' v-for='post in posts' :key='post'>
       <PostFeaturedImage :post='post' />
     </li>

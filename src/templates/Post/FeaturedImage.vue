@@ -1,10 +1,10 @@
 <template>
   <router-link
     :to="getPostLink( post )"
-    class="bg-lightgray w-12 h-12 rounded-full overflow-hidden inline-block"
+    class="p-0.5 inline-block"
   >
     <img
-      class="w-full h-full object-cover rounded-full"
+      class="bg-lightgray w-12 h-12 object-cover rounded-full ring-2 inline-block ring-white"
       :src="post.featured_image"
       :alt="post.title.rendered"
       v-if='post.title && post.title.rendered'

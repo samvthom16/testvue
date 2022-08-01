@@ -28,6 +28,13 @@ const query = ( params, API, queryConfig = {} ) => {
     return arr;
   } )
 
+  const total = computed( () => {
+    if( data.value && data.value.pages && data.value.pages[0] &&
+      data.value.pages[0].headers && data.value.pages[0].headers['x-wp-totalpages'] )
+      return parseInt( data.value.pages[0].headers['x-wp-total'] )
+    return 0
+  } )
+
   const hasMorePages = computed( () => {
     if( data.value && data.value.pages && data.value.pages[0] &&
       data.value.pages[0].headers && data.value.pages[0].headers['x-wp-totalpages'] && page.value < data.value.pages[0].headers['x-wp-totalpages'] )
@@ -55,6 +62,7 @@ const query = ( params, API, queryConfig = {} ) => {
 
   return {
     items,
+    total,
     loadMore,
     hasMorePages,
     page,
