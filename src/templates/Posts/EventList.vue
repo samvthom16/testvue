@@ -4,6 +4,15 @@
       <PostTitle :post='post' />
       <SubTitle :title='getLastUpdatedText( post.date )' />
 
+      <!--div>
+        <span class="my-2 bg-lightpurple text-xs font-light inline-block py-1 px-4 uppercase rounded-full text-white font-normal">
+          ATTENDANCE
+        </span>
+        <div class="w-full bg-lightgray rounded-full dark:bg-gray-300">
+          <div class="bg-lightpurple text-xs font-medium text-white text-center p-0.5 leading-none rounded-full py-1" style="width: 45%">45%</div>
+        </div>
+      </div-->
+
       <OrbitPosts :params="getParamsForMembers( post )">
         <template v-slot:loadingAnimation>
           <AvatarsStackedAnimation />

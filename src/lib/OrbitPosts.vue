@@ -17,14 +17,16 @@
 
 import OrbitQuery from "@/lib/OrbitQuery.js";
 
-import Util from "@/lib/Util";
+import Util from "@/lib/Util"
+import Helper from '@/lib/Helper'
 
-import { onMounted, onUnmounted, computed } from "vue";
+import { onMounted, onUnmounted, computed, watch } from "vue";
 
 
 import PostImagesSlider from '@/templates/Posts/PostImagesSlider'
 import EventList from '@/templates/Posts/EventList'
 import AvatarsStacked from '@/templates/Posts/AvatarsStacked'
+import ListWithImage from '@/templates/Posts/ListWithImage'
 
 
 import API from "@/api";
@@ -35,9 +37,10 @@ export default {
   components: {
     EventList,
     PostImagesSlider,
-    AvatarsStacked
+    AvatarsStacked,
+    ListWithImage
   },
-  setup( props ) {
+  setup( props, context ) {
 
     const params = computed(() => {
       var params = Util.removeEmptyParams(
@@ -58,8 +61,10 @@ export default {
       requestAPI
     );
 
+    const {debounceEvent} = Helper()
+
     const handleScroll = () => {
-      Util.debounceEvent(function () {
+      debounceEvent(function () {
         watchScroll();
       }, 50);
     };
@@ -73,7 +78,13 @@ export default {
       if (props.params.pagination) {
         window.removeEventListener("scroll", handleScroll);
       }
-    });
+    } );
+
+    watch( total, () => context.emit( 'totalChanged', total.value ) )
+
+    // FOR THE FIRST API CALL
+    context.emit( 'totalChanged', total.value )
+
     return {
       items,
       total,

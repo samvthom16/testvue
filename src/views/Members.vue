@@ -9,21 +9,24 @@
     </template>
 
     <template v-slot:phonebody>
-      <!--ul class='whitespace-nowrap border-b border-lightgray pb-4 mb-2 overflow-auto'>
-        <li class='inline-block mr-2' v-for='dropdownButton,field_name in dropdownButtons' :key='dropdownButton'>
-          <ButtonPopupModal :field_name='field_name' :field='dropdownButton' @selectItem='selectDropdownItem' />
-        </li>
-      </ul-->
+
       <MembersDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
-      <UsersList
-        v-on:applyFilterTags="filterTagData($event)"
-        :users="items"
-        :total="totalItems"
-      />
+
+      <OrbitPosts :params="params" :key='params.unique_id' @totalChanged='totalChanged'>
+        <template v-slot:loadingAnimation>
+          <ListWithImageAnimation :total='10' />
+        </template>
+        <template v-slot:nextPageAnimation>
+          <PaginationLoaderAnimation />
+        </template>
+      </OrbitPosts>
+
+
+
     </template>
 
     <template v-slot:mainttitle_footer>
-      <SearchField @searching='searching' />
+      <SearchField @searching='onSearch' />
     </template>
 
   </PhoneUI>
@@ -36,77 +39,69 @@
 <script>
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
-
 import SearchField from '@/components/SearchField'
-//import ButtonPopupModal from '@/components/ButtonPopupModal'
-import UsersList from "@/components/UsersList";
 import MembersDropdown from '@/components/MembersDropdown'
 
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
 
-
-import defaultMixin from "@/mixins/DefaultMixin";
-import paginationMixin from "@/mixins/PaginationMixin";
-import apiMixin from "@/mixins/APIMixin";
-
-
+import {ref} from 'vue'
 
 export default {
   name: "Members",
   components: {
-    UsersList,
     PhoneUI,
     Icon,
     SearchField,
-    //ButtonPopupModal,
-    MembersDropdown
+    MembersDropdown,
+    ListWithImageAnimation,
+    PaginationLoaderAnimation
   },
-  mixins: [defaultMixin, paginationMixin, apiMixin],
-  data() {
-    return {
-      search: "",
-      filterData: {
-        status: 'publish',
-      },
-    };
-  },
+
   setup(){
 
-  },
-  watch: {
-    search() {
-      var component = this;
-      component.debounceEvent(function () {
-        component.refreshItems();
-      } );
-    },
+    const totalItems = ref( 0 )
 
-  },
-  methods: {
-    searching( searchText ){
-      this.search = searchText;
-    },
-    filterTagData(e) {
-      this.filterData = e;
-    },
-    /* INHERITED FROM PAGINATION MIXIN */
-    getAPI() {
-      return this.requestUsers(this.page, this.search, this.filterData);
-    },
-    getPageTitle() {
-      return "InPursuit - Members";
-    },
-    selectDropdownItem( data ){
+    const params = ref( {
+      unique_id   : 1,
+      per_page    : 10,
+      post_type   : 'inpursuit-members',
+      style       : 'ListWithImage',
+      orderby     : 'title',
+      order       : 'asc',
+      pagination  : 1,
+      search      : ''
+    } )
 
-      this.filterData[ data.name ] = data.value
-
-      if( data.name == 'orderby' && data.value == 'title' ) this.filterData.order = 'asc'
-      if( data.name == 'orderby' && data.value == 'id' ) this.filterData.order = 'desc'
-
-      if( data.name == 'member_status' && data.value == 'all' ) this.filterData.member_status = ''
-
-      this.refreshItems()
+    const onSearch = ( searchText ) => {
+      params.value.search = searchText
+      params.value.unique_id++;
     }
-  },
 
+    const selectDropdownItem = ( data ) => {
+
+      params.value[ data.name ] = data.value
+
+      if( data.name == 'orderby' && data.value == 'title' ) params.value.order = 'asc'
+      if( data.name == 'orderby' && data.value == 'id' ) params.value.order = 'desc'
+
+      if( data.name == 'member_status' && data.value == 'all' ) params.value.member_status = ''
+
+      if( data.name == 'status' && data.value == 'all' ) params.value.status = 'publish,draft'
+
+      params.value.unique_id++;
+    }
+
+    const totalChanged = ( total ) => totalItems.value = total
+
+    return {
+      params,
+      onSearch,
+      selectDropdownItem,
+      totalChanged,
+      totalItems
+    }
+
+  },
 };
 </script>

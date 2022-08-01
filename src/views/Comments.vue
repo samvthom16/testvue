@@ -14,13 +14,7 @@
           <ListWithImageAnimation :total='10' />
         </template>
         <template v-slot:nextPageAnimation>
-          <button class='bg-orange p-2 px-8 my-4 rounded text-white text-center mx-auto block'>
-            Loading
-            <Icon
-              type='CircularLoader'
-              class='inline h-4 w-4'
-            />
-          </button>
+          <PaginationLoaderAnimation />
         </template>
       </OrbitComments>
     </template>
@@ -36,24 +30,19 @@
 
 <script>
 import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
 
 import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
 
 import OrbitComments from '@/lib/OrbitComments'
 
 export default {
   components: {
     PhoneUI,
-    Icon,
+
     ListWithImageAnimation,
-    OrbitComments
-  },
-  setup(){
-
-  },
-  methods: {
-
+    OrbitComments,
+    PaginationLoaderAnimation
   },
 };
 </script>
