@@ -64,8 +64,8 @@ export default {
       per_page    : 10,
       post_type   : 'inpursuit-events',
       style       : 'EventList',
-      orderby     : 'title',
-      order       : 'asc',
+      //orderby     : 'title',
+      //order       : 'asc',
       pagination  : 1,
       search      : ''
     } )
