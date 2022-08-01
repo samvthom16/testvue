@@ -13,6 +13,7 @@
 //import HeaderMenu from '@/components/HeaderMenu.vue'
 import ErrorNotification from '@/components/ErrorNotification'
 
+import router from '@/router'
 import store from '@/store'
 
 export default {
@@ -21,8 +22,16 @@ export default {
     ErrorNotification
   },
   setup(){
+
     store.commit( 'getLocalSettings' )
-    //store.commit( 'notifyError', 'Testing' )
+
+    /*
+    * IF THE STORE DOES NOT HAVE LOCAL SETTINGS THEN IT SHOULD SUCCESSFULLY
+    * REDIRECT TO THE LOGIN PAGE
+    */
+    if( !( store.state.settings && store.state.settings.account_url ) ){
+      router.push( '/login' );
+    }
   }
 }
 </script>
