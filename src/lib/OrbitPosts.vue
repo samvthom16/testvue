@@ -9,6 +9,7 @@
       v-if="status == 'success'"
     ></component>
     <slot name="loadingAnimation" v-else></slot>
+    <slot name="nextPageAnimation" v-if="isFetchingNextPage"></slot>
     <slot name="whenempty" v-if="!items.length && status == 'success'"></slot>
   </div>
 </template>
@@ -56,7 +57,7 @@ export default {
 
 
     const requestAPI = (params) => API.requestPosts(params.post_type, params);
-    const { items, total, watchScroll, scrollComponent, status } = OrbitQuery(
+    const { items, total, watchScroll, scrollComponent, status, isFetchingNextPage } = OrbitQuery(
       params.value,
       requestAPI
     );
@@ -90,6 +91,7 @@ export default {
       total,
       status,
       scrollComponent,
+      isFetchingNextPage
     };
   },
 };

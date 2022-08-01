@@ -7,6 +7,9 @@
         <template v-slot:loadingAnimation>
           <SimpleListAnimation />
         </template>
+        <template v-slot:nextPageAnimation>
+          <PaginationLoaderAnimation />
+        </template>
       </OrbitPosts>
 
 
@@ -33,6 +36,7 @@ import Icon from '@/components/Icon'
 import SearchField from '@/components/SearchField'
 
 import SimpleListAnimation from '@/templates/Animation/SimpleList'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
 
 import {ref} from 'vue'
 
@@ -49,7 +53,8 @@ export default {
     PhoneUI,
     Icon,
     SearchField,
-    SimpleListAnimation
+    SimpleListAnimation,
+    PaginationLoaderAnimation
   },
   setup(){
     const totalItems = ref( 0 )

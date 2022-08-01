@@ -30,7 +30,7 @@
     <PhoneProgressBar />
 
     <div
-      class='p-4 bg-lightergray min-h-screen'
+      class='p-4 bg-white pb-8'
       :class='`${body_classes}`'
     >
       <slot name="phonebody"></slot>
@@ -132,7 +132,7 @@ export default{
 
 <style>
 .phone-ui{
-  @apply max-w-4xl mx-auto;
+  /*@apply max-w-5xl mx-auto;*/
 }
 .header-list, .footer-list{
   @apply items-center flex;
