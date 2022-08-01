@@ -30,7 +30,7 @@
     <PhoneProgressBar />
 
     <div
-      class='p-4 bg-white pb-8'
+      class='p-4 bg-white min-h-screen'
       :class='`${body_classes}`'
     >
       <slot name="phonebody"></slot>
