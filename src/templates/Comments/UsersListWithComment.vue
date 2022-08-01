@@ -10,7 +10,7 @@
           <SubTitle :title='getTitle( comment )' />
         </div>
       </div>
-      <div class='pt-2 text-black'>{{ comment.comment }}</div>
+      <div class='pt-2 text-black whitespace-pre-line'>{{ comment.comment }}</div>
     </li>
   </ul>
 </template>
