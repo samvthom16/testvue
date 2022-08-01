@@ -21,7 +21,7 @@
         <span>{{ formatDate(item.date) }}</span>
       </div>
       <h2 class="card-title" v-if="item.type == 'event'">{{ item.title.rendered }}</h2>
-      <p class="card-desc">{{ item.text }}</p>
+      <p class="card-desc whitespace-pre-line">{{ item.text }}</p>
       <button
         v-if="item.type == 'comment'"
         @click="deleteItem"
