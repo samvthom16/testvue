@@ -40,7 +40,7 @@ const query = ( params, API, queryConfig = {} ) => {
 
   const hasMorePages = computed( () => {
     if( data.value && data.value.pages && data.value.pages[0] &&
-      data.value.pages[0].headers && data.value.pages[0].headers['x-wp-totalpages'] && page.value < data.value.pages[0].headers['x-wp-totalpages'] )
+      data.value.pages[0].headers && data.value.pages[0].headers['x-wp-totalpages'] && data.value.pages.length < data.value.pages[0].headers['x-wp-totalpages'] )
       return true;
     return false;
   } )

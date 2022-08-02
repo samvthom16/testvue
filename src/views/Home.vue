@@ -11,18 +11,16 @@
         </template>
       </OrbitPosts>
 
-      <div class='mb-10'></div>
-
-      <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
-        <template v-slot:title>
-          <MainTitle title='Comments' icon='Comment' :route='{ name: "Comments" }' />
-        </template>
-        <template v-slot:loadingAnimation>
-          <ListWithImageAnimation />
-        </template>
-      </OrbitComments>
-
-      <div class='mb-10'></div>
+      <div class='-ml-4 -mr-4 p-4 pt-6 bg-lightergray mb-6'>
+        <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
+          <template v-slot:title>
+            <MainTitle title='Comments' icon='Comment' :route='{ name: "Comments" }' />
+          </template>
+          <template v-slot:loadingAnimation>
+            <ListWithImageAnimation />
+          </template>
+        </OrbitComments>
+      </div>
 
       <OrbitPosts :params="{ per_page: 5, post_type: 'inpursuit-events', style: 'EventList' }">
         <template v-slot:title>
