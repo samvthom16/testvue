@@ -12,7 +12,7 @@
       </router-link>
     </template>
     <template v-slot:phonebody>
-      <div class="bg-white pb-6 justify-center items-center mx-auto relative borde -my-12 pt-20 rounded-sm">
+      <div class="bg-lightergray pb-6 justify-center items-center mx-auto relative borde -my-12 pt-20 rounded-sm">
         <div class='absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-full'>
           <CircularProgressBar
             :contentProgress="post.attendants_percentage"
@@ -42,7 +42,7 @@
       </div>
 
 
-      <div class="w-full py-20">
+      <div class="event-details w-full py-20">
 
         <SearchField @searching='searching' />
 
@@ -125,7 +125,6 @@ export default {
       configUI: {
         maintitle_classes : "py-16 hide-svg",
         hide_maintitle    : true,
-
       },
       filterData: {
         status: 'publish',
@@ -248,3 +247,8 @@ export default {
   },
 };
 </script>
+<style>
+  .event-details #search{
+    @apply border border-gray;
+  }
+</style>
