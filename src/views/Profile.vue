@@ -15,7 +15,6 @@
         </div>
         <div v-if="!$store.state.processing">
           <h1 class="text-2xl" v-if="profile.name">{{ profile.name }}</h1>
-
         </div>
       </div>
 
@@ -34,8 +33,8 @@
           </span>
         </div-->
       </div>
-      <div class="text-sm text-black font-semibold">SETTINGS</div>
-      <ul class="text-base focus:outline-none sm:text-sm w-full  bg-lightergray rounded-lg py-2 px-4 drop-shadow-sm my-2 divide-y divide-lightgray">
+      <div class="text-sm text-black font-semibold" v-if='settings.length'>SETTINGS</div>
+      <ul class="text-base focus:outline-none sm:text-sm w-full  bg-lightergray rounded-lg py-2 px-4 drop-shadow-sm my-2 divide-y divide-lightgray" v-if='settings.length'>
         <li class="text-gray-900 cursor-default py-4" v-for='setting in settings' :key='setting'>
           <div class="flex items-center justify-between  ">
             <div class="flex items-center">
@@ -44,15 +43,18 @@
                 class='h-7 w-7 p-1 rounded-md text-white'
                 :class='setting.icon_classes'
               />
-              <span class="ml-3 block font-normal truncate text-lg">
-                {{ setting.name }}
-              </span>
+              <router-link
+                :to='setting.route'
+                class="ml-3 block font-normal truncate text-lg"
+                v-html='setting.name'
+              />
             </div>
-            <div>
-              <span class="inset-y-0 right-0 flex items-center pr-4">
-                <Icon type='Right-Arrow' class='h-6 w-6' />
-              </span>
-            </div>
+            <router-link
+              :to='setting.route'
+              class="inset-y-0 right-0 flex items-center pr-2"
+            >
+              <Icon type='Right-Arrow' class='h-6 w-6' />
+            </router-link>
           </div>
         </li>
       </ul>
@@ -92,36 +94,44 @@ export default {
   setup(){
 
     const settings = ref( [
+      /*
       {
         name          : 'Group',
         icon          : 'Members',
-        icon_classes  : 'bg-red'
+        icon_classes  : 'bg-red',
+        route         : { name: 'Team' }
       },
       {
         name: 'Locations',
         icon: 'Location',
-        icon_classes  : 'bg-lightred'
+        icon_classes  : 'bg-lightred',
+        route         : { name: 'Team' }
       },
       {
         name: 'Profile Types',
         icon: 'Single-User',
-        icon_classes  : 'bg-blue-100'
+        icon_classes  : 'bg-blue-100',
+        route         : { name: 'Team' }
       },
       {
         name          : 'Profession',
         icon          : 'Profession',
-        icon_classes  : 'bg-lightblue'
+        icon_classes  : 'bg-lightblue',
+        route         : { name: 'Team' }
       },
       {
         name          : 'Event Types',
         icon          : 'Event',
-        icon_classes  : 'bg-darkorange'
+        icon_classes  : 'bg-darkorange',
+        route         : { name: 'Team' }
       },
       {
         name          : 'Team',
         icon          : 'Team',
-        icon_classes  : 'bg-orange'
+        icon_classes  : 'bg-orange',
+        route         : { name: 'Team' }
       },
+      */
     ] )
 
     return {
