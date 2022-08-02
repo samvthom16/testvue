@@ -71,6 +71,7 @@ const api = {
   _getURL: ( endpoint ) => store.state.settings.account_url + endpoint,
 
   requestPosts: function( post_type, params = {} ){
+    delete params["post_type"];
     return this.makeRequest( {
         url     : this._getURL( '/wp-json/wp/v2/' + post_type + '/' ),
         method  : 'get',
