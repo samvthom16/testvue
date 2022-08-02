@@ -20,6 +20,7 @@ module.exports = {
       'lightred'    : '#E16075',
 
       'blue-100'    : '#003E5A',
+      'lightblue'   : '#006491',
       'orange'      : '#F9AB70',
     },
     extend: {

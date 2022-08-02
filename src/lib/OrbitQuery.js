@@ -17,6 +17,9 @@ const query = ( params, API, queryConfig = {} ) => {
   const items = computed( () => {
     var arr = [];
     if( data.value && data.value.pages ){
+
+      //console.log( data.value.pages )
+
       for( var index in data.value.pages ){
         if( data.value.pages[index].data ){
           for( var key in data.value.pages[index].data ){
@@ -30,7 +33,7 @@ const query = ( params, API, queryConfig = {} ) => {
 
   const total = computed( () => {
     if( data.value && data.value.pages && data.value.pages[0] &&
-      data.value.pages[0].headers && data.value.pages[0].headers['x-wp-totalpages'] )
+      data.value.pages[0].headers && data.value.pages[0].headers['x-wp-total'] )
       return parseInt( data.value.pages[0].headers['x-wp-total'] )
     return 0
   } )
@@ -47,6 +50,11 @@ const query = ( params, API, queryConfig = {} ) => {
     //console.log( hasMorePages.value )
     if( hasMorePages.value ){
       page.value += 1;
+
+      //console.log( page.value )
+
+      //console.log( isFetchingNextPage.value )
+
       fetchNextPage.value( { pageParam: page.value } )
     }
   }
@@ -55,7 +63,7 @@ const query = ( params, API, queryConfig = {} ) => {
 
   const watchScroll = () => {
     let element = scrollComponent.value;
-    if( element && element.getBoundingClientRect().bottom < window.innerHeight ){
+    if( !isFetchingNextPage.value && element && element.getBoundingClientRect().bottom < window.innerHeight ){
       loadMore();
     }
   }
