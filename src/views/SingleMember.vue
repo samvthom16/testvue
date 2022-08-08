@@ -22,7 +22,7 @@
 
       <div class="pb-6 justify-center items-center mx-auto">
 
-        <div class='pt-20 pb-4 relative bg-white rounded-sm -my-12'>
+        <div class='pt-20 pb-4 relative bg-lightergray rounded-sm -my-12'>
           <div
             class="bg-gray
               absolute -top-10 left-1/2
@@ -67,7 +67,7 @@
         </div>
 
         <div class="relative py-20" v-if="id">
-          <HistoryList :id="id" :item="post" :key='historyKey' />
+          <HistoryList @deleteComment="deleteComment" :id="id" :item="post" :key='historyKey' />
         </div>
       </div>
     </template>
@@ -118,6 +118,21 @@ export default {
 
 
   methods: {
+
+    deleteComment( comment ){
+
+      if ( confirm( "Are you sure you want to delete this?" ) ) {
+
+        API.requestComments( {
+          id      : comment.id,
+          method  : 'delete'
+        } ).then( () => this.forceHistoryRerender() )
+
+        //console.log( comment.id )
+      }
+
+
+    },
 
     forceHistoryRerender(){
       this.historyKey += 1

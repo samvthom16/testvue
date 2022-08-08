@@ -165,9 +165,16 @@ const api = {
   },
 
   requestComments: function( params = {} ){
+
+    var url = this._getURL( '/wp-json/inpursuit/v1/comments' )
+
+    if( params.id )
+      url = this._getURL( '/wp-json/inpursuit/v1/comments/' + params.id )
+
     return this.makeRequest(  {
-      url   : this._getURL( '/wp-json/inpursuit/v1/comments' ),
-      data  : params,
+      url     : url,
+      data    : params,
+      method  : params.method ? params.method : 'get',
       headers : this.getAuthHeaders()
     } );
   },

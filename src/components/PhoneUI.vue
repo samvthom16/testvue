@@ -140,6 +140,11 @@ export default{
 .header-list li, .footer-list li{
   @apply flex-auto;
 }
+
+#phone-footer{
+  @apply sticky z-10 bg-lightergray bottom-0 w-full border-t border-gray;
+}
+
 .footer-list li{
   @apply p-2 pb-6 text-center;
 }

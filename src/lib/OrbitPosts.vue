@@ -16,7 +16,7 @@
 <script>
 
 
-import OrbitQuery from "@/lib/OrbitQuery.js";
+import OrbitQuery from "@/lib/OrbitQuery";
 
 import Util from "@/lib/Util"
 import Helper from '@/lib/Helper'
@@ -56,7 +56,7 @@ export default {
     });
 
 
-    const requestAPI = (params) => API.requestPosts(params.post_type, params);
+    const requestAPI = ( params ) => API.requestPosts(params.post_type, params);
     const { items, total, watchScroll, scrollComponent, status, isFetchingNextPage } = OrbitQuery(
       params.value,
       requestAPI
