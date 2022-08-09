@@ -28,6 +28,7 @@ import PostImagesSlider from '@/templates/Posts/PostImagesSlider'
 import EventList from '@/templates/Posts/EventList'
 import AvatarsStacked from '@/templates/Posts/AvatarsStacked'
 import ListWithImage from '@/templates/Posts/ListWithImage'
+import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch'
 
 
 import API from "@/api";
@@ -39,7 +40,8 @@ export default {
     EventList,
     PostImagesSlider,
     AvatarsStacked,
-    ListWithImage
+    ListWithImage,
+    MemberListWithSwitch
   },
   setup( props, context ) {
 

@@ -45,29 +45,30 @@
 
       <div class="event-details w-full py-20">
 
-        <SearchField @searching='searching' />
+        <SearchField @searching='onSearch' />
 
         <div class='mb-6'></div>
 
         <MembersDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
 
-        <ul role="list" class="divide-y divide-lightgray">
-          <li class="items-center justify-between py-4 flex flex-row" v-for="user in items" :key="user.id">
-            <div class="flex-shrink-1">
-              <PostFeaturedImage :post='user' />
-            </div>
+        <OrbitPosts
+          :params="params"
+          :key='params.unique_id'
+          @totalChanged='totalChanged'
+          @onAttendanceChange='onAttendanceChange'
+        >
+          <template v-slot:loadingAnimation>
+            <ListWithImageAnimation :total='10' />
+          </template>
+          <template v-slot:nextPageAnimation>
+            <PaginationLoaderAnimation />
+          </template>
+          <template v-slot:whenempty>
+            <div class='text-xs text-red border border-red p-2 mt-4'>No members found for this query</div>
+          </template>
+        </OrbitPosts>
 
-            <div class="ml-4 flex-1">
-              <PostTitle :post='user' />
-              <UserTags :user="user" class="my-2 hidden" />
-              <div class='my-2'></div>
-              <Switch
-                v-model:checked="user.attended"
-                @click="onAttendanceChange(user)"
-              />
-            </div>
-          </li>
-        </ul>
+
 
       </div>
 
@@ -95,13 +96,20 @@ import paginationMixin from "@/mixins/PaginationMixin";
 import apiMixin from "@/mixins/APIMixin";
 
 import EventTags from "@/components/EventTags";
-import UserTags from "@/components/UserTags";
-import Switch from "@/components/switch";
+//import UserTags from "@/components/UserTags";
+//import Switch from "@/components/switch";
 // import ProgressBarItem from "@/components/ProgressBarItem.vue";
 import CircularProgressBar from "@/components/CircularProgressBar";
 
-import PostFeaturedImage from '@/templates/Post/FeaturedImage'
-import PostTitle from '@/templates/Post/Title'
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+
+//import PostFeaturedImage from '@/templates/Post/FeaturedImage'
+//import PostTitle from '@/templates/Post/Title'
+
+import MembersHelper from '@/lib/MembersHelper'
+
+import { useRoute } from 'vue-router'
 
 export default {
   name: "SingleEvent",
@@ -110,12 +118,14 @@ export default {
     Icon,
     SearchField,
     EventTags,
-    UserTags,
-    Switch,
+    //UserTags,
+    //Switch,
     MembersDropdown,
     CircularProgressBar,
-    PostFeaturedImage,
-    PostTitle
+    //PostFeaturedImage,
+    //PostTitle,
+    ListWithImageAnimation,
+    PaginationLoaderAnimation
   },
   mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
   data() {
@@ -211,28 +221,8 @@ export default {
     searching( searchText ){
       this.search = searchText;
     },
+    
 
-    // UPDATE IN ATTENDANCE DATABASE
-    onAttendanceChange(user) {
-      var post_id = this.$route.params.id;
-
-      var isAttended;
-
-      if (!user.attended) {
-        isAttended = 1;
-      } else {
-        isAttended = 0;
-      }
-
-      this.updateAttendance(user.id, post_id, isAttended).then(
-        () => {
-          setTimeout(() => this.getPost(), 500);
-        },
-        (error) => {
-          console.log("" + error);
-        }
-      );
-    },
 
     selectDropdownItem( data ){
 
@@ -244,9 +234,33 @@ export default {
       if( data.name == 'member_status' && data.value == 'all' ) this.filterData.member_status = ''
 
       this.refreshItems()
-    }
+    },
+
+    // UPDATE IN ATTENDANCE DATABASE
+    onAttendanceChange( data ) {
+
+      var post_id = this.$route.params.id;
+
+      var isAttended = data.flag;
+
+      var user = data.user;
+
+      this.updateAttendance(user.id, post_id, isAttended).then(
+        () => this.getPost(),
+        (error) => {
+          console.log("" + error);
+        }
+      );
+
+
+    },
 
   },
+  setup(){
+    const route = useRoute()
+    var post_id = route.params.id;
+    return MembersHelper( 'MemberListWithSwitch', post_id )
+  }
 };
 </script>
 <style>

@@ -8,7 +8,7 @@
             <Icon type="Comment" class='bg-orange text-white rounded p-3 w-12 h-12 inline mr-1' v-if="item.type == 'comment'" />
           </div>
           <div class="flex-1 min-w-0">
-            <h2 class="text-lg" v-if="item.type == 'event'">{{ item.title.rendered }}</h2>
+            <h2 class="text-lg truncate" v-if="item.type == 'event'">{{ item.title.rendered }}</h2>
             <h2 class='text-lg' v-else>{{ item.author_name }} commented</h2>
             <div class="text-gray text-sm">
               {{ formatDate( item.date ) }}

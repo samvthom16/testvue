@@ -5,8 +5,8 @@
       v-bind="$attrs"
       type="checkbox"
       :checked="checked"
-      @change="$emit('update:checked', $event.target.checked)"
     />
+    <!-- @change="$emit('update:checked', $event.target.checked)" -->
     <span class="switch"></span>
   </label>
 </template>
