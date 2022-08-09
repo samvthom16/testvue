@@ -36,7 +36,7 @@ export default{
     getLastUpdatedText: ( datestring ) => Util.timeAgo( datestring ),
     getParamsForMembers: ( post ) => {
       return {
-        per_page              : 4,
+        per_page              : 5,
         post_type             : 'inpursuit-members',
         style                 : 'AvatarsStacked',
         event_id              : post.id,

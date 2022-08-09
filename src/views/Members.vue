@@ -3,9 +3,11 @@
   <PhoneUI title="Members">
 
     <template v-slot:headerright>
+
       <router-link :to="{ name: 'NewMember' }">
         <Icon type='Plus' class='inline text-white' />
       </router-link>
+      
     </template>
 
     <template v-slot:phonebody>
@@ -13,15 +15,19 @@
       <MembersDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
 
       <OrbitPosts :params="params" :key='params.unique_id' @totalChanged='totalChanged'>
+
         <template v-slot:loadingAnimation>
           <ListWithImageAnimation :total='10' />
         </template>
+
         <template v-slot:nextPageAnimation>
           <PaginationLoaderAnimation />
         </template>
+
         <template v-slot:whenempty>
           <div class='text-xs text-red border border-red p-2 mt-4'>No members found for this query</div>
         </template>
+
       </OrbitPosts>
 
 
@@ -33,9 +39,6 @@
     </template>
 
   </PhoneUI>
-
-
-
 
 </template>
 
