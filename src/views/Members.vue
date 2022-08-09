@@ -19,6 +19,9 @@
         <template v-slot:nextPageAnimation>
           <PaginationLoaderAnimation />
         </template>
+        <template v-slot:whenempty>
+          <div class='text-xs text-red border border-red p-2 mt-4'>No members found for this query</div>
+        </template>
       </OrbitPosts>
 
 

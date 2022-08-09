@@ -1,6 +1,6 @@
 <template>
 
-  <PhoneUI :configUI='{ maintitle_classes : "py-16 hide-svg", hide_maintitle : true }' :title='getHeaderTitle()'>
+  <PhoneUI :configUI='{ maintitle_classes : "py-16 hide-svg", hide_maintitle : true, hide_footer: true }' :title='getHeaderTitle()'>
     <template v-slot:headericon>
       <BackButton :defaultRoute='{ name: "Members" }' />
     </template>
@@ -44,11 +44,11 @@
               <UserTags :user="post" />
               <ul class='mt-4'>
                 <li class='inline-block p-2'>
-                  <Icon @click='showCommentModal = true' type='Comment' class='cursor-pointer block bg-lightergray text-black p-3 h-12 w-12 rounded-full' />
+                  <Icon @click='showCommentModal = true' type='Comment' class='cursor-pointer block bg-white text-black p-3 h-12 w-12 rounded-full' />
                   <p class='text-xs mt-2 text-black text-center block'>Comment</p>
                 </li>
                 <li class='inline-block p-2'>
-                  <Icon @click='openScheduleLink' type='Clock' class='cursor-pointer block bg-lightergray text-black p-3 h-12 w-12 rounded-full' />
+                  <Icon @click='openScheduleLink' type='Clock' class='cursor-pointer block bg-white text-black p-3 h-12 w-12 rounded-full' />
                   <p class='text-xs mt-2 text-black text-center block'>Reminder</p>
                 </li>
                 <li class='inline-block p-2'>
@@ -56,7 +56,7 @@
                     @click='archivePost'
                     type='Archive'
                     class='cursor-pointer block p-3 h-12 w-12 rounded-full'
-                    :class='{"bg-lightergray text-black" : post.status == "publish", "bg-orange text-white" : post.status == "draft" }'
+                    :class='{"bg-white text-black" : post.status == "publish", "bg-orange text-white" : post.status == "draft" }'
                   />
                   <p class='text-xs mt-2 text-black text-center block' v-html='post.status == "draft" ? "Unarchive": "Archive"'></p>
                 </li>
