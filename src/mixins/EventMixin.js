@@ -22,7 +22,7 @@ export default {
         },
 
         getDate( post ) {
-          return Util.timeAgo( post.date )
+          return Util.timeAgo( post.date_gmt )
             /*
             var date = new Date(post.date);
             var year = date.getFullYear();

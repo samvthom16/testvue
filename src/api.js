@@ -82,6 +82,8 @@ const api = {
 
   requestPost: function( post_type, post_id, params = {} ){
 
+    //console.log( params )
+
     //var data = params
     //delete data['method']
     //delete data['post_type']

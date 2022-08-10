@@ -5,24 +5,25 @@
       <BackButton :defaultRoute='{ name: "Members" }' />
     </template>
     <template v-slot:headerright>
-      <router-link :to="getEditLink()" v-if='post.id'>
+      <router-link :to="getEditLink()" v-if='$store.state.post.id'>
         <Icon type='Edit' class='inline' />
       </router-link>
     </template>
     <template v-slot:phonebody>
 
       <AddComment
-        :id='id'
-        :item='post'
+        :id='$store.state.post.id'
+        :item='$store.state.post'
         :showModal='showCommentModal'
-        v-if='id'
+        v-if='$store.state.post.id'
         @close='closeCommentModal()'
         @postComment='forceHistoryRerender()'
       />
 
       <div class="pb-6 justify-center items-center mx-auto">
 
-        <div class='pt-20 pb-4 relative bg-lightergray rounded-sm -my-12'>
+        <div class='pt-20 pb-4 relative bg-lightergray rounded-sm -my-12' v-if='$store.state.post.id' :key='$store.state.post.id'>
+
           <div
             class="bg-gray
               absolute -top-10 left-1/2
@@ -33,15 +34,15 @@
               rounded-full
             "
           >
-            <img class="object-cover w-full h-full" :src="post.featured_image" />
+            <img class="object-cover w-full h-full" :src="$store.state.post.featured_image" />
           </div>
 
           <div class=" px-2">
-            <h1 class="text-xl text-center font-semibold" v-if="post.title">
-              {{ post.title.rendered }}
+            <h1 class="text-xl text-center font-semibold" v-if="$store.state.post.title">
+              {{ $store.state.post.title.rendered }}
             </h1>
             <div class="text-center mt-3">
-              <UserTags :user="post" />
+              <UserTags :user="$store.state.post" />
               <ul class='mt-4'>
                 <li class='inline-block p-2'>
                   <Icon @click='showCommentModal = true' type='Comment' class='cursor-pointer block bg-white text-black p-3 h-12 w-12 rounded-full' />
@@ -56,9 +57,9 @@
                     @click='archivePost'
                     type='Archive'
                     class='cursor-pointer block p-3 h-12 w-12 rounded-full'
-                    :class='{"bg-white text-black" : post.status == "publish", "bg-orange text-white" : post.status == "draft" }'
+                    :class='{"bg-white text-black" : $store.state.post.status == "publish", "bg-orange text-white" : $store.state.post.status == "draft" }'
                   />
-                  <p class='text-xs mt-2 text-black text-center block' v-html='post.status == "draft" ? "Unarchive": "Archive"'></p>
+                  <p class='text-xs mt-2 text-black text-center block' v-html='$store.state.post.status == "draft" ? "Unarchive": "Archive"'></p>
                 </li>
               </ul>
             </div>
@@ -66,8 +67,8 @@
 
         </div>
 
-        <div class="relative py-20" v-if="id">
-          <HistoryList @deleteComment="deleteComment" :id="id" :item="post" :key='historyKey' />
+        <div class="relative py-20" v-if="$store.state.post.id">
+          <HistoryList @deleteComment="deleteComment" :id="$store.state.post.id" :item="$store.state.post" :key='historyKey' />
         </div>
       </div>
     </template>
@@ -83,6 +84,7 @@ import BackButton from '@/templates/PhoneUI/BackButton'
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 
+
 import Util from '@/lib/Util'
 import API from '@/api'
 
@@ -90,11 +92,15 @@ import AddComment from '@/components/AddComment'
 import UserTags from "../components/UserTags";
 import HistoryList from "@/components/HistoryList";
 
-import defaultMixin from "@/mixins/DefaultMixin.js";
-import userMixin from "@/mixins/UserMixin.js";
-import apiMixin from "@/mixins/APIMixin.js";
+//import defaultMixin from "@/mixins/DefaultMixin.js";
+//import userMixin from "@/mixins/UserMixin.js";
+//import apiMixin from "@/mixins/APIMixin.js";
 
+import store from '@/store'
 
+import { ref, watch } from 'vue'
+import { useQuery } from "vue-query"
+import { useRoute } from 'vue-router'
 
 export default {
   name: "SingleMember",
@@ -106,14 +112,77 @@ export default {
     UserTags,
     HistoryList,
   },
-  mixins: [defaultMixin, userMixin, apiMixin],
+
   data() {
     return {
-      id      : 0,
-      post    : {},
+      //id      : 0,
+      //post    : {},
       showCommentModal: false,
       historyKey      : 0
     };
+  },
+
+  setup(){
+
+    const route = useRoute()
+    var post_id = route.params.id;
+
+    // SAVE THE POST IN CLIENT STATE
+    const setPost = ( post ) => {
+      const newPost = ref( post )
+      store.commit( 'setPost', newPost );
+    }
+
+    // GET POST FROM SERVER AND SET TO CLIENT STATE
+    const setPostFromServer = () => {
+      const getPost = () => API.requestPost( 'inpursuit-members', post_id )
+      const { data } = useQuery( "postQuery" + post_id, getPost )
+      watch(data, ( data ) => setPost( data.data ) )
+    }
+
+    
+    if( route.params && route.params.post ){
+      /* PRELOADED CONTENT FROM ROUTER */
+      setPost( JSON.parse( route.params.post ) )
+    }
+    else{
+      setPostFromServer()
+    }
+
+    /*
+    * ARCHIVE OR UNARCHIVE POST
+    */
+    const archivePost = () => {
+
+      var post = JSON.parse( JSON.stringify( store.state.post ) )
+
+      // CHANGING POST STATUS TO TRASH & PUBLISH
+      if( post.status == 'publish' ) post.status = 'draft';
+      else post.status = 'publish'
+
+      post.method = 'post'
+
+      setPost( post )
+
+      API.requestPost( 'inpursuit-members', post.id, post ).then(
+        ( res ) => setPost( res.data )
+      )
+    }
+
+    const getHeaderTitle = () => {
+      var post = store.state.post;
+      if( post && post.title && post.title.rendered ) {
+        return post.title.rendered;
+      }
+      return 'Member';
+    }
+
+    return{
+      getHeaderTitle,
+      archivePost
+    }
+
+
   },
 
 
@@ -128,7 +197,7 @@ export default {
           method  : 'delete'
         } ).then( () => this.forceHistoryRerender() )
 
-        //console.log( comment.id )
+
       }
 
 
@@ -144,7 +213,7 @@ export default {
 
     openScheduleLink(){
       var link = 'http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=';
-      var post = this.post;
+      var post = this.$store.state.post;
       if( post.title && post.title.rendered ){
         link += 'Follow up with ' + post.title.rendered;
       }
@@ -153,72 +222,10 @@ export default {
 
     },
 
-    getHeaderTitle(){
-      var component = this;
-      if( component.post && component.post.title && component.post.title.rendered ) {
-        return component.post.title.rendered;
-      }
-      return 'Member';
-    },
-
-    /*
-     * FUNCTION THAT IS FIRED FIRST AS SOON AS ALL THE DEFAULT INITILIZATION IS OVER
-     * TRIGGERED FROM THE DEFAULT MIXIN
-     */
-    ready() {
-      var post_id = this.$route.params.id;
-      if (post_id) {
-        this.id = parseInt(post_id);
-      }
-      //console.log( this.id );
-
-      // CHECK IF POST INFORMATION HAS BEEN PASSED IN THE ROUTE
-      if (this.$route.params.post != undefined) {
-        this.post = JSON.parse(this.$route.params.post);
-      } else {
-        this.getPost();
-      }
-    },
-    getPost() {
-      var component = this;
-
-      // SET PROCESSING
-      component.$store.commit("setProcessing", true);
-
-      component.requestUser(component.id).then(
-        (response) => {
-          component.post = response.data;
-
-          // RESET PROCESSING
-          component.$store.commit("setProcessing", false);
-        },
-        (error) => {
-          component.$store.commit("notifyError", error);
-        }
-      );
-    },
-    getPageTitle() {
-      var title = "InPursuit - Single Member";
-      return title;
-    },
     getEditLink(){
-      return Util.getPostEditLink( this.post )
+      return Util.getPostEditLink( this.$store.state.post )
     },
-    archivePost(){
-      this.$store.commit( 'setProcessing', true )
 
-      // CHANGING POST STATUS TO TRASH & PUBLISH
-      if( this.post.status == 'publish' ) this.post.status = 'draft';
-      else this.post.status = 'publish'
-
-      // CHANGE METHOD TO POST FOR UPDATING
-      this.post.method = 'post'
-
-      API.requestPost( 'inpursuit-members', this.post.id, this.post ).then(
-        () => this.$store.commit( 'setProcessing', false )
-      )
-
-    }
 
   },
 

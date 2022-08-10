@@ -23,6 +23,7 @@ export default createStore({
     account: {},
     processing: false,
     errors: [],
+    post: {}
   },
   mutations: {
     getLocalSettings(state) {
@@ -36,6 +37,10 @@ export default createStore({
     },
     flushLocalSettings() {
       localStorage.inpursuit_settings = null;
+    },
+    setPost(state, payload) {
+      state.post = payload;
+      return state.post;
     },
 
     /*
