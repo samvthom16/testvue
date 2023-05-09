@@ -7,7 +7,7 @@
       <router-link :to="{ name: 'NewMember' }">
         <Icon type='Plus' class='inline text-white' />
       </router-link>
-      
+
     </template>
 
     <template v-slot:phonebody>

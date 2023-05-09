@@ -3,6 +3,8 @@
   <PhoneUI title='Events'>
     <template v-slot:phonebody>
 
+      <EventsDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
+
       <OrbitPosts :params="params" :key='params.unique_id' @totalChanged='totalChanged'>
         <template v-slot:loadingAnimation>
           <SimpleListAnimation />
@@ -35,6 +37,8 @@ import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 import SearchField from '@/components/SearchField'
 
+import EventsDropdown from '@/components/EventsDropdown'
+
 import SimpleListAnimation from '@/templates/Animation/SimpleList'
 import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
 
@@ -49,7 +53,7 @@ import {ref} from 'vue'
 export default {
   name: "Events",
   components: {
-    //EventList,
+    EventsDropdown,
     PhoneUI,
     Icon,
     SearchField,
