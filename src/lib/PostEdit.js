@@ -18,19 +18,23 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
 
   for( var slug in textfields ){
 
-    var type = 'text'
+    var type = 'text';
+    var component = 'TextField';
 
     switch( slug ){
       case 'date':
         type = 'date';
         break;
+      case 'content':
+        component = 'TextAreaField';
+        type      = '';
     }
 
     fields.value.push( {
       type      : type,
       id        : slug,
       label     : textfields[ slug ],
-      component : 'TextField',
+      component : component,
       value     : ''
     } )
   }
@@ -61,9 +65,10 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
 
       //console.log( slug )
 
-      if( fields.value[i] && slug == 'title' ){
+      if( fields.value[i] && ( slug == 'title' || slug == 'content' ) ){
+
         // CHECK FOR POST TITLE
-        fields.value[i]['value'] = post.value.title.rendered
+        fields.value[i]['value'] = post.value[slug]['raw']
       }
       else if ( fields.value[i] && slug == 'date' ) {
         // CHECK FOR DATE INFORMATION
@@ -92,7 +97,7 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
   * REQUEST POST FROM SERVER BY POST ID
   */
   const fetchPostFromServer = ( post_id ) => {
-    API.requestPost( post_type, post_id ).then(
+    API.requestPost( post_type, post_id, { context: 'edit' } ).then(
       ( response ) => feedFormFromPost( response.data )
     )
   }
@@ -105,7 +110,7 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
     // ENABLE LOADING
     store.commit( 'setProcessing', true )
 
-    console.log( newPost )
+    //console.log( newPost )
 
     API.createPost( newPost ).then(
       ( response ) => {

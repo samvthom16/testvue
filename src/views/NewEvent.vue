@@ -35,20 +35,19 @@
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 import TextField from "@/components/TextField";
+import TextAreaField from "@/components/TextAreaField";
 import DropDownField from "@/components/DropDownField";
 
 import router from '@/router'
 
 import PostEdit from '@/lib/PostEdit'
 
-
-
-
 export default{
   components:{
     PhoneUI,
     Icon,
     TextField,
+    TextAreaField,
     DropDownField
   },
   data(){
@@ -72,8 +71,9 @@ export default{
       'inpursuit-events',
       // TEXTFIELDS
       {
-        'title' : 'Event Title',
-        'date' : 'Event Date',
+        'title'   : 'Event Title',
+        'date'    : 'Event Date',
+        'content' : 'Event Description'
       },
       // DROPDOWNFIELDS
       {

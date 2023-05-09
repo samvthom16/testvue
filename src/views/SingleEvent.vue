@@ -40,6 +40,7 @@
           <div class="text-center mt-3">
             <EventTags :event="post" />
           </div>
+          <div class='max-w-sm text-sm text-black p-2 mx-auto mt-4' v-if='post.content' v-html='post.content.rendered'></div>
         </div>
       </div>
 

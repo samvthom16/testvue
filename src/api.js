@@ -82,14 +82,13 @@ const api = {
 
   requestPost: function( post_type, post_id, params = {} ){
 
-    //console.log( params )
-
-    //var data = params
-    //delete data['method']
-    //delete data['post_type']
+    var partUrl = '/wp-json/wp/v2/' + post_type + '/' + post_id;
+    if( params.context ){
+      partUrl += '?context=edit';
+    }
 
     return this.makeRequest( {
-        url     : this._getURL( '/wp-json/wp/v2/' + post_type + '/' + post_id ),
+        url     : this._getURL( partUrl ),
         method  : params.method ? params.method : 'get',
         data    : params,
         headers : this.getAuthHeaders()
