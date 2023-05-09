@@ -44,11 +44,6 @@ import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
 
 import {ref} from 'vue'
 
-//import EventList from "@/components/EventList.vue";
-
-//import defaultMixin from "@/mixins/DefaultMixin.js";
-//import paginationMixin from "@/mixins/PaginationMixin.js";
-//import apiMixin from "@/mixins/APIMixin.js";
 
 export default {
   name: "Events",

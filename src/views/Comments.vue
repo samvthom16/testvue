@@ -1,15 +1,9 @@
 <template>
 
   <PhoneUI title="Comments">
-
-    <!--template v-slot:headerright>
-      <router-link :to="{ name: 'NewMember' }">
-        <Icon type='Plus' class='inline text-white' />
-      </router-link>
-    </template-->
-
+    
     <template v-slot:phonebody>
-      <OrbitComments :params="{ per_page: 10, style: 'UsersListWithComment', pagination: 1 }">
+      <OrbitComments :params="params" :key='params.unique_id'>
         <template v-slot:loadingAnimation>
           <ListWithImageAnimation :total='10' />
         </template>
@@ -19,30 +13,56 @@
       </OrbitComments>
     </template>
 
+    <template v-slot:mainttitle_footer>
+      <SearchField @searching='onSearch' />
+    </template>
 
 
   </PhoneUI>
-
-
 
 
 </template>
 
 <script>
 import PhoneUI from '@/components/PhoneUI'
+import SearchField from '@/components/SearchField'
 
 import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
 import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
 
 import OrbitComments from '@/lib/OrbitComments'
 
+import {ref} from 'vue'
+
 export default {
   components: {
     PhoneUI,
-
+    SearchField,
     ListWithImageAnimation,
     OrbitComments,
     PaginationLoaderAnimation
   },
+  setup(){
+
+    const params = ref( {
+      unique_id   : 1,
+      per_page    : 10,
+      style       : 'UsersListWithComment',
+      pagination  : 1,
+      search      : ''
+    } )
+
+    const onSearch = ( searchText ) => {
+      params.value.search = searchText
+      params.value.unique_id++;
+    }
+
+    return {
+      params,
+      onSearch
+    }
+
+
+  }
 };
 </script>
