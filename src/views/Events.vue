@@ -86,7 +86,7 @@ export default {
       if( data.name == 'orderby' && data.value == 'title' ) params.value.order = 'asc'
       if( data.name == 'orderby' && data.value == 'id' ) params.value.order = 'desc'
 
-      if( data.name == 'member_status' && data.value == 'all' ) params.value.member_status = ''
+      if( data.name == 'event_type' && data.value == 'all' ) params.value.event_type = ''
 
       if( data.name == 'status' && data.value == 'all' ) params.value.status = 'publish,draft'
 
@@ -103,40 +103,6 @@ export default {
       totalItems
     }
   },
-  /*
-  //mixins: [defaultMixin, paginationMixin, apiMixin],
-  data() {
-    return {
-      search: "",
-      filterData: {},
-    };
-  },
-  /*
-  watch: {
-    search() {
-      var component = this;
-      component.debounceEvent(function () {
-        component.refreshItems();
-        //console.log( component.search );
-      });
-    },
-  },
-  methods: {
-    searching( searchText ){
-      this.search = searchText;
-    },
-    filterTagData(e) {
-      this.filterData = e;
-    },
-    /* INHERITED FROM PAGINATION MIXIN
-    getAPI() {
-      return this.requestEvents(this.page, this.search, this.filterData);
-    },
-    getPageTitle() {
-      return "InPursuit - Events";
-    },
 
-  },
-  */
 };
 </script>
