@@ -2,9 +2,10 @@
 
   <PhoneUI :configUI='configUI' :title='getHeaderTitle()'>
     <template v-slot:headericon>
-      <router-link :to="{ name: 'Events' }">
+      <BackButton :defaultRoute='{ name: "Events" }' />
+      <!--router-link :to="{ name: 'Events' }">
         <Icon type='Back' />
-      </router-link>
+      </router-link-->
     </template>
     <template v-slot:headerright>
       <router-link :to="getEditLink()" v-if='post.id'>
@@ -85,6 +86,7 @@
 <script>
 import Util from '@/lib/Util'
 
+import BackButton from '@/templates/PhoneUI/BackButton'
 import PhoneUI from '@/components/PhoneUI'
 import Icon from '@/components/Icon'
 import SearchField from '@/components/SearchField'
@@ -115,6 +117,7 @@ export default {
   name: "SingleEvent",
   components: {
     PhoneUI,
+    BackButton,
     Icon,
     SearchField,
     EventTags,

@@ -39,6 +39,9 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
   * PARSES SETTINGS TEXT FROM TAXONOMY SLUG & TERM ID
   */
   const _getSettingsTextFromID = ( slug, id ) => {
+
+    //console.log( 'settings => ' + slug + ' : ' + id )
+
     if( settings.value[ slug ] && settings.value[ slug ][ id ] ) return settings.value[ slug ][ id ]
     return ''
   }
@@ -52,25 +55,35 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
 
     post.value = postData
 
+
     for( var i=0; i<fields.value.length; i++ ){
       var slug = fields.value[i]['id'];
 
       //console.log( slug )
 
       if( fields.value[i] && slug == 'title' ){
+        // CHECK FOR POST TITLE
         fields.value[i]['value'] = post.value.title.rendered
       }
       else if ( fields.value[i] && slug == 'date' ) {
+        // CHECK FOR DATE INFORMATION
         var dateArr = post.value.date.split( 'T' );
         if( dateArr.length ) fields.value[i]['value'] = dateArr[0]
       }
       else if( post.value[ slug ] && Array.isArray( post.value[ slug ] ) ){
+        // CHECK FOR CHECKBOX INFORMATION
         fields.value[i]['value'] = _getSettingsTextFromID( slug, post.value[ slug ][0] )
       }
+      else if ( post.value[ slug ] && fields.value[i].type && fields.value[i].type == 'text' ) {
+        // CHECK FOR TEXTBOXBOX INFORMATION
+        fields.value[i]['value'] = post.value[ slug ];
+      }
       else if( post.value[ slug ] ){
+        // CHECK FOR DROPDOWN INFORMATION
         fields.value[i]['value'] = _getSettingsTextFromID( slug, post.value[ slug ] )
       }
     }
+
 
 
   }
@@ -241,6 +254,8 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
   * FIRST FUNCTION TO BE CALLED
   */
   fetchSettingsFromServer()
+
+  //console.log( fields.value )
 
   return {
     post,

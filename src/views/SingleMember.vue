@@ -48,9 +48,9 @@
                   <Icon @click='showCommentModal = true' type='Comment' class='cursor-pointer block bg-white text-black p-3 h-12 w-12 rounded-full' />
                   <p class='text-xs mt-2 text-black text-center block'>Comment</p>
                 </li>
-                <li class='inline-block p-2'>
-                  <Icon @click='openScheduleLink' type='Clock' class='cursor-pointer block bg-white text-black p-3 h-12 w-12 rounded-full' />
-                  <p class='text-xs mt-2 text-black text-center block'>Reminder</p>
+                <li class='inline-block p-2' v-if="$store.state.post.phone">
+                  <Icon @click='openWhatsapp' type='Phone' class='cursor-pointer block bg-white text-black p-3 h-12 w-12 rounded-full' />
+                  <p class='text-xs mt-2 text-black text-center block'>Whatsapp</p>
                 </li>
                 <li class='inline-block p-2'>
                   <Icon
@@ -140,7 +140,7 @@ export default {
       watch(data, ( data ) => setPost( data.data ) )
     }
 
-    
+
     if( route.params && route.params.post ){
       /* PRELOADED CONTENT FROM ROUTER */
       setPost( JSON.parse( route.params.post ) )
@@ -211,14 +211,27 @@ export default {
       this.showCommentModal = false;
     },
 
-    openScheduleLink(){
-      var link = 'http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=';
-      var post = this.$store.state.post;
+    openWhatsapp(){
+
+      var phone_number = this.$store.state.post.phone;
+
+      if( phone_number ){
+
+        var link = "https://wa.me/" + phone_number;
+        window.open( link, '_blank' );
+
+      }
+
+      /*var link = 'http://www.google.com/calendar/render?action=TEMPLATE&trp=false&text=';
+
       if( post.title && post.title.rendered ){
         link += 'Follow up with ' + post.title.rendered;
       }
       window.open( link, '_blank' )
       //return link;
+      */
+
+
 
     },
 
