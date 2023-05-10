@@ -180,6 +180,14 @@ const api = {
     } );
   },
 
+  requestProfile: function() {
+    return this.makeRequest({
+      url     : this._getURL( '/wp-json/wp/v2/users/me?context=edit' ),
+      method  : 'get',
+      headers : this.getAuthHeaders()
+    } );
+  },
+
 }
 
 export default api

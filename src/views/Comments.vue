@@ -1,7 +1,7 @@
 <template>
 
   <PhoneUI title="Comments">
-    
+
     <template v-slot:phonebody>
       <OrbitComments :params="params" :key='params.unique_id'>
         <template v-slot:loadingAnimation>

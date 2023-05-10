@@ -65,6 +65,12 @@ export default{
       query   : { id: user.id }
     }
   },
+  getUserLink: function( teamMember ){
+    return {
+      name    : "SingleTeamMember",
+      params  : { teamMember: JSON.stringify( teamMember ), id: teamMember.id },
+    }
+  },
 
   /*
   debounceEvent: function( callback, timeout = 600 ){

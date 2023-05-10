@@ -1,8 +1,11 @@
 <template>
   <PhoneUI
     title='Team'
-    :configUI="{}"
+    :configUI="{ 'hide_footer' : true, 'maintitle_classes' : 'hidden', 'stickytitle_classes' : 'opacity-100'}"
   >
+    <template v-slot:headericon>
+      <BackButton :defaultRoute='{ name: "Profile" }' />
+    </template>
     <template v-slot:headerright>
 
     </template>
@@ -29,6 +32,7 @@
 
 <script>
 import PhoneUI from '@/components/PhoneUI'
+import BackButton from '@/templates/PhoneUI/BackButton'
 
 import API from '@/api'
 
@@ -39,13 +43,9 @@ import {ref} from 'vue'
 export default {
   components: {
     PhoneUI,
-
+    BackButton
   },
-  data() {
-    return {
 
-    };
-  },
   setup(){
 
     const users = ref( [] )
@@ -54,16 +54,13 @@ export default {
 
     const joinedText = ( datestring ) => 'Joined ' + Util.timeAgo( datestring )
 
-    const getUserEditLink = ( user ) => Util.getUserEditLink( user )
+    const getUserEditLink = ( user ) => Util.getUserLink( user )
 
     return {
       users,
       joinedText,
       getUserEditLink
     }
-
-  },
-  methods: {
 
   },
 };

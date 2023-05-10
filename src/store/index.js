@@ -23,7 +23,8 @@ export default createStore({
     account: {},
     processing: false,
     errors: [],
-    post: {}
+    post: {},
+    teamMember: {}
   },
   mutations: {
     getLocalSettings(state) {
@@ -41,6 +42,10 @@ export default createStore({
     setPost(state, payload) {
       state.post = payload;
       return state.post;
+    },
+    setTeamMember( state, payload ){
+      state.teamMember = payload;
+      return state.teamMember;
     },
 
     /*
