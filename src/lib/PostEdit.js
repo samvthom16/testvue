@@ -202,7 +202,10 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
   /*
   * REDIRECT TO SINGLE POST AFTER UPDATING OR CREATING NEW POST
   */
-  const redirectToSinglePost = ( post ) => router.push( Util.getPostLink( post ) )
+  const redirectToSinglePost = ( post ) => {
+    if( window.history.length > 2 ) router.go( -1 )
+    else router.push( Util.getPostLink( post ) )
+  }
 
   /*
   * REDIRECT TO MEMBERS LIST

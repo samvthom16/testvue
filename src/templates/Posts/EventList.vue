@@ -2,7 +2,7 @@
   <ul class='divide-y divide-lightgray -mt-2' v-if='posts && posts.length'>
     <li v-for='post in posts' :key='post' class='py-3'>
       <PostTitle :post='post' />
-      <SubTitle :title='getLastUpdatedText( post.date )' />
+      <SubTitle :title='getLastUpdatedText( post )' />
       <OrbitPosts :params="getParamsForMembers( post )">
         <template v-slot:loadingAnimation>
           <AvatarsStackedAnimation />
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import Util from '@/lib/Util'
 
 import PostTitle from '@/templates/Post/Title'
@@ -30,10 +31,33 @@ export default{
     SubTitle,
     AvatarsStackedAnimation
   },
+  setup(){
+
+    store.commit( 'getAccountSettings' );
+  
+  },
 
   methods:{
     getPostLink: ( post ) => Util.getPostLink( post ),
-    getLastUpdatedText: ( datestring ) => Util.timeAgo( datestring ),
+    getLastUpdatedText( post ){
+      var event_type = this.getEventType( post );
+      var text = Util.timeAgo( post.date );
+      if( event_type ){
+        text += ', ' + event_type;
+      }
+      return  text;
+    },
+    getEventType(post) {
+      return this.getTermName( 'event_type', post.event_type );
+    },
+    getTermName(field, term_id) {
+        var settings = this.$store.state.account;
+        //console.log( settings );
+        if (settings != undefined && settings[field] && settings[field][term_id]) {
+            return settings[field][term_id];
+        }
+        return '';
+    },
     getParamsForMembers: ( post ) => {
       return {
         per_page              : 5,

@@ -8,9 +8,9 @@
       <BackButton :defaultRoute='{ name: "Team" }' />
     </template>
     <template v-slot:headerright>
-      <router-link :to="getEditLink()" v-if='$store.state.post.id'>
+      <!--router-link :to="getEditLink()" v-if='$store.state.post.id'>
         <Icon type='Edit' class='inline' />
-      </router-link>
+      </router-link-->
     </template>
     <template v-slot:phonebody>
 
@@ -35,7 +35,7 @@
 <script>
 import BackButton from '@/templates/PhoneUI/BackButton'
 import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
+//import Icon from '@/components/Icon'
 
 import OrbitComments from '@/lib/OrbitComments'
 import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
@@ -55,7 +55,7 @@ export default {
   components: {
     PhoneUI,
     BackButton,
-    Icon,
+    //Icon,
     OrbitComments,
     ListWithImageAnimation,
     PaginationLoaderAnimation

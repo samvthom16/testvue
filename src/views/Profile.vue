@@ -21,17 +21,18 @@
         </div>
 
       </div>
-      <div class="text-sm text-black font-semibold">SETTINGS</div>
+      <div class="text-sm text-black font-semibold">MORE OPTIONS</div>
 
       <div
         class="text-base focus:outline-none sm:text-sm w-full  bg-lightergray rounded-lg py-2 px-4 drop-shadow-sm my-2 divide-y divide-lightgray"
         :key='newTeamMember.id'
       >
         <SettingItem
-          label='Comments'
+          label='Your Comments'
           icon='Comment'
           icon_classes='bg-darkorange'
           :route="{ 'name' : 'SingleTeamMember', 'params': { 'id': newTeamMember.id } }"
+          v-if='newTeamMember.id'
         />
 
         <SettingItem
@@ -68,7 +69,7 @@ export default {
   name: "Profile",
   components: {
     PhoneUI,
-    
+
     SettingItem
   },
 
