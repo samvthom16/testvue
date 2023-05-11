@@ -188,6 +188,14 @@ const api = {
     } );
   },
 
+  requestAnalytics: function() {
+    return this.makeRequest({
+      url     : this._getURL( '/wp-json/inpursuit/v1/analytics' ),
+      method  : 'get',
+      headers : this.getAuthHeaders()
+    } );
+  },
+
 }
 
 export default api

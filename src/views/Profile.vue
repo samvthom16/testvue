@@ -41,6 +41,14 @@
           icon_classes='bg-orange'
           :route="{ 'name' : 'Team' }"
         />
+
+        <SettingItem
+          label='Analytics'
+          icon='Chart'
+          icon_classes='bg-purple'
+          :route="{ 'name' : 'Analytics' }"
+        />
+
       </div>
 
 
