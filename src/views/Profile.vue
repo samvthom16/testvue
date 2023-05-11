@@ -28,7 +28,7 @@
         :key='newTeamMember.id'
       >
         <SettingItem
-          label='Your Comments'
+          label='History'
           icon='Comment'
           icon_classes='bg-darkorange'
           :route="{ 'name' : 'SingleTeamMember', 'params': { 'id': newTeamMember.id } }"
