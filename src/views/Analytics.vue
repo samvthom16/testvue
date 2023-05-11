@@ -11,17 +11,14 @@
 
     <template v-slot:phonebody>
 
-      <div class="text-sm text-black font-semibold">LAST 6 MONTHS (AVERAGE)</div>
+      <ul class='whitespace-nowrap border-b border-lightgray pb-4 mb-4 overflow-auto'>
+        <li class='inline-block mr-2' v-for='dropdownButton,field_name in dropdownButtons' :key='dropdownButton'>
+          <ButtonPopupModal :field_name='field_name' :field='dropdownButton' @selectItem='selectItem' />
+        </li>
+      </ul>
 
-      <div class="mb-4 text-base focus:outline-none sm:text-sm w-full  bg-lightergray rounded-lg drop-shadow-sm my-2 divide-y divide-lightgray">
-        <div class='p-4 px-6' v-for='stat in stats' :key='stat'>
-          <div class='relative'>
-            <div class='text-darkgray text-sm'>{{ stat.label }}</div>
-            <div class='absolute right-0 top-0 text-md text-darkorange font-bold'>{{ stat.growth }}</div>
-          </div>
-          <div class='font-bold text-4xl'>{{ stat.total }}</div>
-        </div>
-      </div>
+      <Stats :period='period' :key='period' />
+
     </template>
 
   </PhoneUI>
@@ -30,28 +27,50 @@
 
 <script>
 
-  import PhoneUI from '@/components/PhoneUI'
-  import BackButton from '@/templates/PhoneUI/BackButton'
+import PhoneUI from '@/components/PhoneUI'
+import BackButton from '@/templates/PhoneUI/BackButton'
 
-  import {ref} from 'vue'
+import ButtonPopupModal from '@/components/ButtonPopupModal'
 
-  import API from '@/api'
+import Stats from '@/components/Stats'
 
-  export default{
-    components : {
-      PhoneUI,
-      BackButton
-    },
-    setup(){
+import {ref} from 'vue'
 
-      const stats = ref( [] )
+export default{
+  components : {
+    PhoneUI,
+    BackButton,
+    ButtonPopupModal,
+    Stats
+  },
+  setup(){
 
-      API.requestAnalytics().then( ( response ) => stats.value = response.data )
+    const period = ref( 30 )
 
-      return {
-        stats
-      }
+    const dropdownButtons = ref( {
+      period : {
+        popupTitle: 'Select Period',
+        items: {
+          30    : 'Month',
+          90    : 'Quarter',
+          180   : '6 Months',
+          365   : 'Year'
+        },
+        selected: '30'
+      },
+    } )
 
+    const selectItem = ( data ) => {
+      dropdownButtons.value[ data.name ].selected = data.value
+      period.value = parseInt( data.value )
     }
+
+    return {
+      dropdownButtons,
+      selectItem,
+      period
+    }
+
   }
+}
 </script>

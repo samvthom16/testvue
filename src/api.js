@@ -188,9 +188,10 @@ const api = {
     } );
   },
 
-  requestAnalytics: function() {
+  requestAnalytics: function( params ) {
     return this.makeRequest({
       url     : this._getURL( '/wp-json/inpursuit/v1/analytics' ),
+      data    : params,
       method  : 'get',
       headers : this.getAuthHeaders()
     } );
