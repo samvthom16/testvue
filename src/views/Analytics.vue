@@ -19,7 +19,7 @@
             <div class='text-darkgray text-sm'>{{ stat.label }}</div>
             <div class='absolute right-0 top-0 text-md text-darkorange font-bold'>{{ stat.growth }}</div>
           </div>
-          <div class='font-bold text-4xl'>{{ stat.total_average }}</div>
+          <div class='font-bold text-4xl'>{{ stat.total }}</div>
         </div>
       </div>
     </template>
