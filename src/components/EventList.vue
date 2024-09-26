@@ -51,11 +51,11 @@
 <script>
 import AddEvent from "./AddEvent.vue";
 
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal.vue";
 import CircularProgressBar from "@/components/CircularProgressBar.vue";
 
-import PostTitle from '@/templates/Post/Title'
-import SubTitle from '@/templates/Misc/SubTitle'
+import PostTitle from '@/templates/Post/Title.vue'
+import SubTitle from '@/templates/Misc/SubTitle.vue'
 
 import store from "@/store";
 import API from "../api.js";

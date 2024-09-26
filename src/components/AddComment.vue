@@ -28,7 +28,7 @@
 <script>
 import apiMixin from '@/mixins/APIMixin.js'
 
-import Modal from '@/components/Modal'
+import Modal from '@/components/Modal.vue'
 
 export default{
   name: 'AddComment',

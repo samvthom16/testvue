@@ -16,9 +16,9 @@
 <script>
 import Util from '@/lib/Util'
 
-import PostTitle from '@/templates/Post/Title'
-import PostFeaturedImage from '@/templates/Post/FeaturedImage'
-import SubTitle from '@/templates/Misc/SubTitle'
+import PostTitle from '@/templates/Post/Title.vue'
+import PostFeaturedImage from '@/templates/Post/FeaturedImage.vue'
+import SubTitle from '@/templates/Misc/SubTitle.vue'
 
 export default{
   props: {

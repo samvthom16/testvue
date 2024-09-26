@@ -33,14 +33,14 @@
 
 <script>
 
-import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
-import SearchField from '@/components/SearchField'
+import PhoneUI from '@/components/PhoneUI.vue';
+import Icon from '@/components/Icon.vue';
+import SearchField from '@/components/SearchField.vue';
 
-import EventsDropdown from '@/components/EventsDropdown'
+import EventsDropdown from '@/components/EventsDropdown.vue';
 
-import SimpleListAnimation from '@/templates/Animation/SimpleList'
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+import SimpleListAnimation from '@/templates/Animation/SimpleList.vue';
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue';
 
 import {ref} from 'vue'
 

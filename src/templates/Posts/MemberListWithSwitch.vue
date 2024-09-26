@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import PostTitle from '@/templates/Post/Title'
-import PostFeaturedImage from '@/templates/Post/FeaturedImage'
+import PostTitle from '@/templates/Post/Title.vue'
+import PostFeaturedImage from '@/templates/Post/FeaturedImage.vue'
 
-import Switch from "@/components/switch"
+import Switch from "@/components/switch.vue"
 
 export default {
   props: {

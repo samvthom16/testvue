@@ -36,7 +36,7 @@
 
 <script>
 import apiMixin from "@/mixins/APIMixin";
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon.vue";
 
 import Util from '@/lib/Util'
 

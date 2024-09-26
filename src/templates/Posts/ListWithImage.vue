@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import PostTitle from '@/templates/Post/Title'
-import PostFeaturedImage from '@/templates/Post/FeaturedImage'
-import SubTitle from '@/templates/Misc/SubTitle'
+import PostTitle from '@/templates/Post/Title.vue'
+import PostFeaturedImage from '@/templates/Post/FeaturedImage.vue'
+import SubTitle from '@/templates/Misc/SubTitle.vue'
 
-import Util from '@/lib/Util'
+import Util from '@/lib/Util.js'
 
 export default {
   props: {

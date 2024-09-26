@@ -33,13 +33,12 @@
 </template>
 
 <script>
-import BackButton from '@/templates/PhoneUI/BackButton'
-import PhoneUI from '@/components/PhoneUI'
-//import Icon from '@/components/Icon'
+import BackButton from '@/templates/PhoneUI/BackButton.vue'
+import PhoneUI from '@/components/PhoneUI.vue'
 
-import OrbitComments from '@/lib/OrbitComments'
-import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+import OrbitComments from '@/lib/OrbitComments.vue'
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
 
 
 import API from '@/api'

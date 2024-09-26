@@ -43,12 +43,12 @@
 </template>
 
 <script>
-import PhoneHeader from '@/templates/PhoneUI/Header'
-import PhoneTitle from '@/templates/PhoneUI/Title'
-import PhoneFooter from '@/templates/PhoneUI/Footer'
-import PhoneProgressBar from '@/templates/PhoneUI/ProgressBar'
+import PhoneHeader from '@/templates/PhoneUI/Header.vue'
+import PhoneTitle from '@/templates/PhoneUI/Title.vue'
+import PhoneFooter from '@/templates/PhoneUI/Footer.vue'
+import PhoneProgressBar from '@/templates/PhoneUI/ProgressBar.vue'
 
-import Helper from '@/lib/Helper'
+import Helper from '@/lib/Helper.js'
 
 import {ref} from 'vue'
 

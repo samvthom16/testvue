@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import PhoneUI from '@/components/PhoneUI'
-import SearchField from '@/components/SearchField'
+import PhoneUI from '@/components/PhoneUI.vue'
+import SearchField from '@/components/SearchField.vue'
 
-import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
 
-import OrbitComments from '@/lib/OrbitComments'
+import OrbitComments from '@/lib/OrbitComments.vue'
 
 import {ref} from 'vue'
 

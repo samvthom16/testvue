@@ -87,25 +87,25 @@
 <script>
 import Util from '@/lib/Util'
 
-import BackButton from '@/templates/PhoneUI/BackButton'
-import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
-import SearchField from '@/components/SearchField'
-import MembersDropdown from '@/components/MembersDropdown'
+import BackButton from '@/templates/PhoneUI/BackButton.vue';
+import PhoneUI from '@/components/PhoneUI.vue'
+import Icon from '@/components/Icon.vue'
+import SearchField from '@/components/SearchField.vue'
+import MembersDropdown from '@/components/MembersDropdown.vue'
 
 import userMixin from "@/mixins/UserMixin";
 import defaultMixin from "@/mixins/DefaultMixin";
 import paginationMixin from "@/mixins/PaginationMixin";
 import apiMixin from "@/mixins/APIMixin";
 
-import EventTags from "@/components/EventTags";
+import EventTags from "@/components/EventTags.vue";
 //import UserTags from "@/components/UserTags";
 //import Switch from "@/components/switch";
 // import ProgressBarItem from "@/components/ProgressBarItem.vue";
-import CircularProgressBar from "@/components/CircularProgressBar";
+import CircularProgressBar from "@/components/CircularProgressBar.vue";
 
-import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
 
 //import PostFeaturedImage from '@/templates/Post/FeaturedImage'
 //import PostTitle from '@/templates/Post/Title'

@@ -27,7 +27,7 @@ import Helper from '@/lib/Helper'
 
 const {debounceEvent} = Helper()
 
-import Icon from '@/components/Icon'
+import Icon from '@/components/Icon.vue'
 
 export default{
   components:{
@@ -57,7 +57,7 @@ export default{
     } );
     $search.addEventListener( 'blur', () => {
       component.searchFocus = false
-    } );  
+    } );
   }
 }
 </script>

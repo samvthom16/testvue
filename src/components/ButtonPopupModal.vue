@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal'
-import Icon from '@/components/Icon'
+import Modal from '@/components/Modal.vue'
+import Icon from '@/components/Icon.vue'
 
 export default{
   components: {
