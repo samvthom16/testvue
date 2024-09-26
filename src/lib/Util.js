@@ -1,10 +1,9 @@
-import store from '@/store'
-import API from '@/api'
+import store from "@/store";
+import API from "@/api";
 
-import * as timeago from 'timeago.js';
+import * as timeago from "timeago.js";
 
-export default{
-
+export default {
   //debounce  : null,
 
   // REMOVE EMPTY PARAMS THAT COME FROM DEFAULT ATTRIBUTES
@@ -17,59 +16,62 @@ export default{
     return params;
   },
 
-  getPostLink: function( post ){
-
-    if( !post ) return {}
+  getPostLink: function (post) {
+    if (!post) return {};
 
     var route = {
-      name		: "",
-      params 	: { id : post.id, post: JSON.stringify( post ) }
+      name: "",
+      params: { id: post.id, post: JSON.stringify(post) },
     };
 
     //console.log( route );
 
-    if( post.type != undefined && post.type == 'inpursuit-members' ){
+    if (post.type != undefined && post.type == "inpursuit-members") {
       route.name = "SingleMember";
-    }
-    else if( post.type != undefined && post.type == 'inpursuit-events' ){
+    } else if (post.type != undefined && post.type == "inpursuit-events") {
       route.name = "SingleEvent";
     }
     return route;
   },
 
-  getPostEditLink: function( post ){
+  getPostEditLink: function (post) {
     var route = {
-      name		: "",
-      params 	: { post: JSON.stringify( post ) },
-      query   : { id: post.id }
+      name: "",
+      params: { post: JSON.stringify(post) },
+      query: { id: post.id },
     };
 
     //console.log( route );
 
-    if( post.type != undefined && post.type == 'inpursuit-members' ){
+    if (post.type != undefined && post.type == "inpursuit-members") {
       route.name = "NewMember";
-    }
-    else if( post.type != undefined && post.type == 'inpursuit-events' ){
+    } else if (post.type != undefined && post.type == "inpursuit-events") {
       route.name = "NewEvent";
     }
     return route;
   },
 
   /*
-  * LEADERSHIP TEAM ACCESS
-  */
-  getUserEditLink: function( user ){
+   * LEADERSHIP TEAM ACCESS
+   */
+  getUserEditLink: function (user) {
     return {
-      name    : "NewTeamMember",
-      params  : { user: JSON.stringify( user ) },
-      query   : { id: user.id }
-    }
+      name: "NewTeamMember",
+      params: { user: JSON.stringify(user) },
+      query: { id: user.id },
+    };
   },
-  getUserLink: function( teamMember ){
+  getUserLink: function (teamMember) {
     return {
-      name    : "SingleTeamMember",
-      params  : { teamMember: JSON.stringify( teamMember ), id: teamMember.id },
-    }
+      name: "SingleTeamMember",
+      params: { teamMember: JSON.stringify(teamMember), id: teamMember.id },
+    };
+  },
+  // RETURN TRUE IF ROLE EXISTS IN THE LIST ELSE FALSE
+  hasUserRole: function ({ user, searchRole }) {
+    const roles = user?.roles || [];
+    if (!roles.length || !searchRole) return false;
+    return roles.includes(searchRole.toLowerCase());
   },
 
   /*
@@ -82,25 +84,20 @@ export default{
   },
   */
 
-  fetchSettings: function( callback ){
-
+  fetchSettings: function (callback) {
     // ENABLE LOADING
-    store.commit( 'setProcessing', true )
+    store.commit("setProcessing", true);
 
-    API.requestSettings().then( ( response ) => {
-
+    API.requestSettings().then((response) => {
       // DISABLE LOADING
-      store.commit( 'setProcessing', false )
+      store.commit("setProcessing", false);
 
       // CALLBACK FUNCTION
-      callback( response.data )
-
-    } )
+      callback(response.data);
+    });
   },
 
-
-  timeAgo: function( dateParam ){
-    return timeago.format( dateParam );
-  }
-
-}
+  timeAgo: function (dateParam) {
+    return timeago.format(dateParam);
+  },
+};

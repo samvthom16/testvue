@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
-import API from '../api.js'
+import { createStore } from "vuex";
+import API from "../api.js";
 
 function authRequest(state, url) {
   var username = state.settings.username;
@@ -9,12 +9,12 @@ function authRequest(state, url) {
 
   if (username && password) {
     headers = {
-      'Authorization': 'Basic ' + btoa( username + ':' + password ),
-      'Content-Type': 'application/x-www-form-urlencoded'
+      Authorization: "Basic " + btoa(username + ":" + password),
+      "Content-Type": "application/x-www-form-urlencoded",
     };
     //console.log( headers );
   }
-  return API.makeRequest({ url: url, headers: headers, method: 'get' });
+  return API.makeRequest({ url: url, headers: headers, method: "get" });
 }
 
 export default createStore({
@@ -24,16 +24,17 @@ export default createStore({
     processing: false,
     errors: [],
     post: {},
-    teamMember: {}
+    teamMember: {},
   },
   mutations: {
     getLocalSettings(state) {
       if (localStorage.inpursuit_settings) {
-        state.settings = JSON.parse(localStorage.inpursuit_settings)
+        state.settings = JSON.parse(localStorage.inpursuit_settings);
       }
       return state.settings;
     },
     saveLocalSettings(state, payload) {
+      state.settings = payload;
       localStorage.inpursuit_settings = JSON.stringify(payload);
     },
     flushLocalSettings() {
@@ -43,26 +44,29 @@ export default createStore({
       state.post = payload;
       return state.post;
     },
-    setTeamMember( state, payload ){
+    setTeamMember(state, payload) {
       state.teamMember = payload;
       return state.teamMember;
     },
 
     /*
-    * THIS FUNCTION MAKES A SERVER REQUEST TO GET ALL
-    * THE ACCOUNT SETTINGS
-    * IMPORTANT FUNCTION CALL THAT IS CALLED ONCE FOR EVERY BROWSER RELOAD
-    * THIS FUNCTION SHOULD BE CALLED BEFORE PULLING ANY OTHER DATA
-    */
+     * THIS FUNCTION MAKES A SERVER REQUEST TO GET ALL
+     * THE ACCOUNT SETTINGS
+     * IMPORTANT FUNCTION CALL THAT IS CALLED ONCE FOR EVERY BROWSER RELOAD
+     * THIS FUNCTION SHOULD BE CALLED BEFORE PULLING ANY OTHER DATA
+     */
     getAccountSettings(state) {
-      var url = state.settings.account_url + '/wp-json/inpursuit/v1/settings';
+      var url = state.settings.account_url + "/wp-json/inpursuit/v1/settings";
 
-      authRequest(state, url).then((response) => {
-        return state.account = response.data;
-      }, (error) => {
-        state.error = '' + error;
-        //console.log( '' + error );
-      });
+      authRequest(state, url).then(
+        (response) => {
+          return (state.account = response.data);
+        },
+        (error) => {
+          state.error = "" + error;
+          //console.log( '' + error );
+        }
+      );
       return state.account;
     },
     setProcessing(state, flag) {
@@ -80,28 +84,27 @@ export default createStore({
   },
   actions: {
     getLocalSettings(context) {
-      context.commit('getLocalSettings');
+      context.commit("getLocalSettings");
     },
     saveLocalSettings(context, payload) {
-      context.commit('saveLocalSettings', payload)
+      context.commit("saveLocalSettings", payload);
     },
     flushLocalSettings(context) {
-      context.commit('flushLocalSettings');
+      context.commit("flushLocalSettings");
     },
     getAccountSettings(context, url) {
-      context.commit('getAccountSettings', url);
+      context.commit("getAccountSettings", url);
     },
     setProcessing(context, flag) {
-      context.commit('setProcessing', flag);
+      context.commit("setProcessing", flag);
     },
     notifyError(context, errorText) {
-      var text = '' + errorText;
-      context.commit('notifyError', text);
+      var text = "" + errorText;
+      context.commit("notifyError", text);
     },
     flushError(context, index) {
-      context.commit('flushError', index);
+      context.commit("flushError", index);
     },
   },
-  modules: {
-  }
-})
+  modules: {},
+});

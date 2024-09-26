@@ -1,104 +1,108 @@
 //import { createRouter, createWebHashHistory } from 'vue-router'
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home.vue'
-import Login from '@/views/Login.vue'
-import Logout from '@/views/Logout.vue'
-import Members from '@/views/Members.vue'
-import SingleMember from '@/views/SingleMember.vue'
-import Profile from '@/views/Profile.vue'
-import Events from '@/views/Events.vue'
-import SingleEvent from '@/views/SingleEvent.vue'
-import NewEvent from '@/views/NewEvent'
-import NewMember from '@/views/NewMember'
-
+import { createRouter, createWebHistory } from "vue-router";
+import Home from "@/views/Home.vue";
+import Login from "@/views/Login.vue";
+import Logout from "@/views/Logout.vue";
+import Members from "@/views/Members.vue";
+import SingleMember from "@/views/SingleMember.vue";
+import Profile from "@/views/Profile.vue";
+import Events from "@/views/Events.vue";
+import SingleEvent from "@/views/SingleEvent.vue";
+import NewEvent from "@/views/NewEvent";
+import NewMember from "@/views/NewMember";
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path: '/test',
-    name: 'TestDemo',
-    component: () => import( '@/views/Test' )
+    path: "/test",
+    name: "TestDemo",
+    component: () => import("@/views/Test"),
   },
   {
-    path: '/stats',
-    name: 'Analytics',
-    component: () => import( '@/views/Analytics' )
+    path: "/stats",
+    name: "Analytics",
+    component: () => import("@/views/Analytics"),
   },
   {
-    path: '/team',
-    name: 'Team',
-    component: () => import( '@/views/Team' )
+    path: "/team",
+    name: "Team",
+    component: () => import("@/views/Team"),
   },
   {
-    path: '/team/new',
-    name: 'NewTeamMember',
-    component: () => import( '@/views/NewTeamMember' )
+    path: "/team/new",
+    name: "NewTeamMember",
+    component: () => import("@/views/NewTeamMember"),
   },
   {
-    path: '/team/:id',
-    name: 'SingleTeamMember',
-    component: () => import( '@/views/SingleTeamMember' )
+    path: "/team/:id",
+    name: "SingleTeamMember",
+    component: () => import("@/views/SingleTeamMember"),
   },
   {
-    path: '/comments',
-    name: 'Comments',
-    component: () => import( '@/views/Comments' )
+    path: "/team/edit",
+    name: "EditTeamMember",
+    component: () => import("@/views/NewTeamMember"),
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
+    path: "/comments",
+    name: "Comments",
+    component: () => import("@/views/Comments"),
   },
   {
-    path: '/logout',
-    name: 'Logout',
-    component: Logout
+    path: "/login",
+    name: "Login",
+    component: Login,
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile
+    path: "/logout",
+    name: "Logout",
+    component: Logout,
   },
   {
-    path: '/members',
-    name: 'Members',
-    component: Members
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
   },
   {
-    path: '/members/:id',
-    name: 'SingleMember',
-    component: SingleMember
+    path: "/members",
+    name: "Members",
+    component: Members,
   },
   {
-    path: '/members/new',
-    name: 'NewMember',
-    component: NewMember
+    path: "/members/:id",
+    name: "SingleMember",
+    component: SingleMember,
   },
   {
-    path: '/events',
-    name: 'Events',
-    component: Events
+    path: "/members/new",
+    name: "NewMember",
+    component: NewMember,
   },
   {
-    path: '/events/:id',
-    name: 'SingleEvent',
-    component: SingleEvent
+    path: "/events",
+    name: "Events",
+    component: Events,
   },
   {
-    path: '/events/new',
-    name: 'NewEvent',
-    component: NewEvent
+    path: "/events/:id",
+    name: "SingleEvent",
+    component: SingleEvent,
   },
-]
+  {
+    path: "/events/new",
+    name: "NewEvent",
+    component: NewEvent,
+  },
+];
 
 const router = createRouter({
   //history: createWebHashHistory(),
   history: createWebHistory(),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

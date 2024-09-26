@@ -1,19 +1,21 @@
 <template>
-  <PhoneUI :configUI='configUI' title='Login'>
+  <PhoneUI :configUI="configUI" title="Login">
     <template v-slot:headericon>
       <button v-if="currentStep !== 0" @click="openPreviousForm()">
-        <Icon type='Back' />
+        <Icon type="Back" />
       </button>
     </template>
     <template v-slot:headerright>
       <button
-        class='text-white text-sm'
+        class="text-white text-sm"
         @click="submit"
-        v-if='!$store.state.processing'
-      >Next</button>
+        v-if="!$store.state.processing"
+      >
+        Next
+      </button>
       <Icon
-        type='CircularLoader'
-        class='ml-2'
+        type="CircularLoader"
+        class="ml-2"
         :class="{
           inline: $store.state.processing,
           hidden: !$store.state.processing,
@@ -36,8 +38,8 @@
 </template>
 
 <script>
-import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
+import PhoneUI from "@/components/PhoneUI";
+import Icon from "@/components/Icon";
 
 import API from "@/api";
 
@@ -48,42 +50,42 @@ export default {
   components: {
     PhoneUI,
     Icon,
-    TextField
+    TextField,
   },
-  data(){
-    return{
+  data() {
+    return {
       currentStep: 0,
       processing: false,
       form: {
         account_url: {
-          id        : 'account_url',
-          label     : "Account URL",
-          error_msg : "",
-          value     : "",
-          type      : "text",
-          placeholder: 'https://',
+          id: "account_url",
+          label: "Account URL",
+          error_msg: "",
+          value: "",
+          type: "text",
+          placeholder: "https://",
         },
         email_address: {
-          id        : 'email_address',
-          label     : "Email Address",
-          error_msg : "",
-          value     : "",
-          type      : "text",
+          id: "email_address",
+          label: "Email Address",
+          error_msg: "",
+          value: "",
+          type: "text",
         },
         otp: {
-          id        : 'otp',
-          label     : "OTP",
-          error_msg : "",
-          value     : "",
-          type      : "text",
+          id: "otp",
+          label: "OTP",
+          error_msg: "",
+          value: "",
+          type: "text",
         },
       },
       formSteps: ["account_url", "email_address", "otp"],
       sent_otp: "",
       configUI: {
-        hide_footer: true
-      }
-    }
+        hide_footer: true,
+      },
+    };
   },
   methods: {
     getBoolValue() {
@@ -136,25 +138,27 @@ export default {
       );
     },
 
-    delay( time ) {
-      return new Promise( resolve => setTimeout( resolve, time ) );
+    delay(time) {
+      return new Promise((resolve) => setTimeout(resolve, time));
     },
 
     /*
-    * FORM WITH THE NEXT STEP HAS TO BE OPENED
-    * STOP THE LOADER
-    * INCREASE THE CURRENT STEP
-    * FOCUS ON THE NEXT INPUT
-    */
-    _openNextPreviousForm(){
+     * FORM WITH THE NEXT STEP HAS TO BE OPENED
+     * STOP THE LOADER
+     * INCREASE THE CURRENT STEP
+     * FOCUS ON THE NEXT INPUT
+     */
+    _openNextPreviousForm() {
       this.$store.state.processing = false;
-      this.delay( 200 ).then( () => this.focusInput( this.formSteps[this.currentStep] ) );
+      this.delay(200).then(() =>
+        this.focusInput(this.formSteps[this.currentStep])
+      );
     },
-    openNextForm(){
+    openNextForm() {
       this.currentStep += 1;
       this._openNextPreviousForm();
     },
-    openPreviousForm(){
+    openPreviousForm() {
       this.currentStep -= 1;
       this._openNextPreviousForm();
     },
@@ -239,6 +243,7 @@ export default {
       //STORING THE USER DATA AND URL
       if (response.data && response.data.password && response.data.user) {
         this.$store.commit("saveLocalSettings", {
+          id: response.data.user.ID,
           username: response.data.user.user_login,
           password: response.data.password,
           account_url: component.getAccountURL(),
@@ -276,38 +281,36 @@ export default {
       }
     },
 
-    focusInput( element_id ){
-      const input = document.getElementById( element_id );
+    focusInput(element_id) {
+      const input = document.getElementById(element_id);
 
       //document.dispatchEvent(new KeyboardEvent("keypress", { key: "H" }));
 
       // create invisible dummy input to receive the focus first
-      const fakeInput = document.createElement('input')
-      fakeInput.setAttribute('type', 'text')
-      fakeInput.style.position = 'absolute'
-      fakeInput.style.opacity = 0
-      fakeInput.style.height = 0
-      fakeInput.style.fontSize = '16px' // disable auto zoom
+      const fakeInput = document.createElement("input");
+      fakeInput.setAttribute("type", "text");
+      fakeInput.style.position = "absolute";
+      fakeInput.style.opacity = 0;
+      fakeInput.style.height = 0;
+      fakeInput.style.fontSize = "16px"; // disable auto zoom
 
       // you may need to append to another element depending on the browser's auto
       // zoom/scroll behavior
-      document.body.prepend(fakeInput)
+      document.body.prepend(fakeInput);
 
       // focus so that subsequent async focus will work
-      fakeInput.focus()
+      fakeInput.focus();
 
-      this.delay( 1000 ).then( () => {
+      this.delay(1000).then(() => {
         input.focus();
         //input.click();
         fakeInput.remove();
-      } );
-
-
-    }
+      });
+    },
   },
-  mounted(){
-    this.focusInput( 'account_url' );
-  }
+  mounted() {
+    this.focusInput("account_url");
+  },
 };
 </script>
 
