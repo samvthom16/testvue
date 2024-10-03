@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ButtonPopupModal from '@/components/ButtonPopupModal'
+import ButtonPopupModal from '@/components/ButtonPopupModal.vue'
 
 import Util from '@/lib/Util'
 

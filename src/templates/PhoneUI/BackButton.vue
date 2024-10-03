@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Icon from '@/components/Icon'
+import Icon from '@/components/Icon.vue'
 
 import router from '@/router'
 

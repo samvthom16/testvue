@@ -14,13 +14,13 @@
 </template>
 <script>
 import OrbitQuery from "@/lib/OrbitQuery.js";
-import Util from "@/lib/Util";
-import Helper from '@/lib/Helper'
+import Util from "@/lib/Util.js";
+import Helper from '@/lib/Helper.js'
 
 import { onMounted, onUnmounted, computed } from "vue";
 
-import UsersList from '@/templates/Comments/UsersList'
-import UsersListWithComment from '@/templates/Comments/UsersListWithComment'
+import UsersList from '@/templates/Comments/UsersList.vue'
+import UsersListWithComment from '@/templates/Comments/UsersListWithComment.vue'
 
 import API from "@/api";
 

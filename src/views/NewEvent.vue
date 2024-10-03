@@ -32,11 +32,11 @@
   </PhoneUI>
 </template>
 <script>
-import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
-import TextField from "@/components/TextField";
-import TextAreaField from "@/components/TextAreaField";
-import DropDownField from "@/components/DropDownField";
+import PhoneUI from '@/components/PhoneUI.vue';
+import Icon from '@/components/Icon.vue';
+import TextField from "@/components/TextField.vue";
+import TextAreaField from "@/components/TextAreaField.vue";
+import DropDownField from "@/components/DropDownField.vue";
 
 import router from '@/router'
 

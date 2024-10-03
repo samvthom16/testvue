@@ -7,7 +7,7 @@
 <script>
 import userMixin from "@/mixins/UserMixin.js";
 
-import ListWithImage from '@/templates/Posts/ListWithImage'
+import ListWithImage from '@/templates/Posts/ListWithImage.vue'
 
 export default {
   name: "UsersList",

@@ -14,12 +14,12 @@
 
 <script>
 import store from '@/store'
-import Util from '@/lib/Util'
+import Util from '@/lib/Util.js'
 
-import PostTitle from '@/templates/Post/Title'
-import SubTitle from '@/templates/Misc/SubTitle'
+import PostTitle from '@/templates/Post/Title.vue'
+import SubTitle from '@/templates/Misc/SubTitle.vue'
 
-import AvatarsStackedAnimation from '@/templates/Animation/AvatarsStacked'
+import AvatarsStackedAnimation from '@/templates/Animation/AvatarsStacked.vue'
 
 export default{
   props: {
@@ -34,7 +34,7 @@ export default{
   setup(){
 
     store.commit( 'getAccountSettings' );
-  
+
   },
 
   methods:{

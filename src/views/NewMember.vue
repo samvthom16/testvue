@@ -61,11 +61,11 @@
   </PhoneUI>
 </template>
 <script>
-import PhoneUI from '@/components/PhoneUI'
-import BackButton from '@/templates/PhoneUI/BackButton'
-import Icon from '@/components/Icon'
-import TextField from "@/components/TextField";
-import DropDownField from "@/components/DropDownField";
+import PhoneUI from '@/components/PhoneUI.vue'
+import BackButton from '@/templates/PhoneUI/BackButton.vue'
+import Icon from '@/components/Icon.vue'
+import TextField from "@/components/TextField.vue";
+import DropDownField from "@/components/DropDownField.vue";
 
 import router from '@/router'
 

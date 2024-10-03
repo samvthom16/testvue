@@ -80,21 +80,18 @@
 </template>
 
 <script>
-import BackButton from '@/templates/PhoneUI/BackButton'
-import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
+import BackButton from '@/templates/PhoneUI/BackButton.vue'
+import PhoneUI from '@/components/PhoneUI.vue'
+import Icon from '@/components/Icon.vue'
 
 
 import Util from '@/lib/Util'
 import API from '@/api'
 
-import AddComment from '@/components/AddComment'
-import UserTags from "../components/UserTags";
-import HistoryList from "@/components/HistoryList";
+import AddComment from '@/components/AddComment.vue'
+import UserTags from "@/components/UserTags.vue";
+import HistoryList from "@/components/HistoryList.vue";
 
-//import defaultMixin from "@/mixins/DefaultMixin.js";
-//import userMixin from "@/mixins/UserMixin.js";
-//import apiMixin from "@/mixins/APIMixin.js";
 
 import store from '@/store'
 
@@ -126,6 +123,8 @@ export default {
 
     const route = useRoute()
     var post_id = route.params.id;
+
+    //console.log( route );
 
     // SAVE THE POST IN CLIENT STATE
     const setPost = ( post ) => {

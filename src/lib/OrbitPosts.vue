@@ -16,19 +16,19 @@
 <script>
 
 
-import OrbitQuery from "@/lib/OrbitQuery";
+import OrbitQuery from "@/lib/OrbitQuery.js";
 
-import Util from "@/lib/Util"
-import Helper from '@/lib/Helper'
+import Util from "@/lib/Util.js"
+import Helper from '@/lib/Helper.js'
 
 import { onMounted, onUnmounted, computed, watch } from "vue";
 
 
-import PostImagesSlider from '@/templates/Posts/PostImagesSlider'
-import EventList from '@/templates/Posts/EventList'
-import AvatarsStacked from '@/templates/Posts/AvatarsStacked'
-import ListWithImage from '@/templates/Posts/ListWithImage'
-import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch'
+import PostImagesSlider from '@/templates/Posts/PostImagesSlider.vue'
+import EventList from '@/templates/Posts/EventList.vue'
+import AvatarsStacked from '@/templates/Posts/AvatarsStacked.vue'
+import ListWithImage from '@/templates/Posts/ListWithImage.vue'
+import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch.vue'
 
 
 import API from "@/api";

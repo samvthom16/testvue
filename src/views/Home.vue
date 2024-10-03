@@ -38,22 +38,22 @@
 </template>
 
 <script>
-import PhoneUI from '@/components/PhoneUI'
+import PhoneUI from '@/components/PhoneUI.vue'
 
-import MainTitle from '@/templates/Misc/MainTitle'
+import MainTitle from '@/templates/Misc/MainTitle.vue'
 
-import Util from '@/lib/Util'
-import OrbitPosts from '@/lib/OrbitPosts'
-import OrbitComments from '@/lib/OrbitComments'
+import Util from '@/lib/Util.js'
+import OrbitPosts from '@/lib/OrbitPosts.vue'
+import OrbitComments from '@/lib/OrbitComments.vue'
 
-import API from '@/api'
+import API from '@/api.js'
 import store from '@/store'
 import router from '@/router'
 
 
-import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
-import MemberAvatarsAnimation from '@/templates/Animation/MemberAvatars'
-import SimpleListAnimation from '@/templates/Animation/SimpleList'
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
+import MemberAvatarsAnimation from '@/templates/Animation/MemberAvatars.vue'
+import SimpleListAnimation from '@/templates/Animation/SimpleList.vue'
 
 import {ref} from 'vue'
 

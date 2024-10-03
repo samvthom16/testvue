@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import Util from '@/lib/Util'
+import Util from '@/lib/Util.js'
 
-import PostFeaturedImage from '@/templates/Post/FeaturedImage'
+import PostFeaturedImage from '@/templates/Post/FeaturedImage.vue'
 
 export default{
   props: {

@@ -43,13 +43,13 @@
 </template>
 
 <script>
-import PhoneUI from '@/components/PhoneUI'
-import Icon from '@/components/Icon'
-import SearchField from '@/components/SearchField'
-import MembersDropdown from '@/components/MembersDropdown'
+import PhoneUI from '@/components/PhoneUI.vue'
+import Icon from '@/components/Icon.vue'
+import SearchField from '@/components/SearchField.vue'
+import MembersDropdown from '@/components/MembersDropdown.vue'
 
-import ListWithImageAnimation from '@/templates/Animation/ListWithImage'
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
 
 import MembersHelper from '@/lib/MembersHelper'
 

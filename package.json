@@ -1,59 +1,40 @@
 {
-  "name": "InPursuit",
-  "version": "0.1.0",
+  "name": "inpursuit-fe",
+  "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest"
   },
   "dependencies": {
-    "axios": "^0.25.0",
-    "core-js": "^3.6.5",
+    "axios": "^1.7.2",
+    "javascript-time-ago": "^2.5.11",
     "register-service-worker": "^1.7.1",
-    "tailwind": "^4.0.0",
-    "timeago.js": "^4.0.2",
-    "vue": "^3.0.0",
+    "vue": "^3.4.29",
     "vue-axios": "^3.4.0",
-    "vue-query": "^1.25.2",
-    "vue-router": "^4.0.0-0",
+    "vue-query": "^1.26.0",
+    "vue-router": "^4.3.3",
     "vue3-circle-progress": "^1.0.7",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss7-compat": "^2.2.17",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-pwa": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "autoprefixer": "^9.8.8",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0",
-    "postcss": "^7.0.39",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
-    "vue-cli-plugin-tailwind": "~2.2.18"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "@rushstack/eslint-patch": "^1.8.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/test-utils": "^2.4.5",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "jsdom": "^24.0.0",
+    "postcss": "^8.4.47",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.13",
+    "vite": "^5.2.8",
+    "vite-plugin-vue-devtools": "^7.0.25",
+    "vitest": "^1.4.0"
+  }
 }

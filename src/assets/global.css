@@ -33,22 +33,7 @@
 	}
 }
 
-/* route transitions *
-.router-enter-from{
-  opacity: 0;
-  transform: translateX( 10px );
-}
-.route-enter-active{
-  transition: all 0.3s ease-out;
-}
-.route-leave-to{
-  opacity: 0;
-  transform: translateX( -10px );
-}
-.route-leave-active{
-  transition: all 0.3s ease-out;
-}
-/* route transitions */
+
 
 /* we will explain what these classes do next! */
 .slideup-enter-to {

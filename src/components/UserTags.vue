@@ -25,7 +25,7 @@
 
 <script>
 import userMixin from "@/mixins/UserMixin";
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon.vue";
 
 export default {
   name: "UserTags",

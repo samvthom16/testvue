@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import Icon from '@/components/Icon'
-import ItemAnimation from '@/components/ItemAnimation'
+import Icon from '@/components/Icon.vue'
+import ItemAnimation from '@/components/ItemAnimation.vue'
 
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader'
+import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
 
 import OrbitQuery from "@/lib/OrbitQuery";
 import Util from '@/lib/Util'

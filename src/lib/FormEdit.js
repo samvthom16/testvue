@@ -1,28 +1,20 @@
 //import router from '@/router'
 //import API from '@/api'
-import store from '@/store'
+import store from "@/store";
 
 //import Util from "@/lib/Util"
 
-import { useRoute } from 'vue-router';
-import { ref } from 'vue'
+import { useRoute } from "vue-router";
+import { ref } from "vue";
 
-const post_edit = (
-  requestAPI,
-  afterUpdate,
-  afterDelete,
-  defaultData = {}
-) => {
-
-  store.commit( 'getLocalSettings' )
+const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
+  store.commit("getLocalSettings");
 
   //const settings = ref( {} )
 
-  const data = ref( defaultData )
+  const data = ref(defaultData);
 
-  const route = useRoute()
-
-
+  const route = useRoute();
 
   /*
   * PARSES SETTINGS TEXT FROM TAXONOMY SLUG & TERM ID
@@ -38,109 +30,93 @@ const post_edit = (
   * REQUEST DATA FROM SERVER
   */
 
-
-
-  const fetchDataFromServer = ( id ) => {
-
+  const fetchDataFromServer = (id) => {
     // ENABLE LOADING
-    store.commit( 'setProcessing', true )
+    store.commit("setProcessing", true);
 
-    requestAPI( { id: id } ).then(
-      ( response ) => {
-
+    requestAPI({ id: id }).then(
+      (response) => {
         // ENABLE LOADING
-        store.commit( 'setProcessing', false )
+        store.commit("setProcessing", false);
 
         //console.log( response.data )
-        data.value = response.data
+        data.value = response.data;
+      },
+      (error) => {
+        console.log(error.response.data.message);
+        store.commit("setProcessing", false); // DISABLE LOADING
       }
-    )
+    );
+  };
+
+  if (route.query && route.query.id && route.name === "EditTeamMember") {
+    fetchDataFromServer(route.query.id);
   }
 
-  if( route.query && route.query.id ){
-    fetchDataFromServer( route.query.id )
-  }
-
-
-
-
-  const createOrUpdateData = ( ev ) => {
-
+  const createOrUpdateData = (ev) => {
     ev.preventDefault();
 
     // ENABLE LOADING
-    store.commit( 'setProcessing', true )
+    store.commit("setProcessing", true);
 
     var params = data.value;
-    params.method = 'post'
+    params.method = "post";
 
     // CHANGE THE FORMAT OF THE DATE
     //if( newPost.date ){
-      //newPost.date = new Date( newPost.date ).toISOString();
+    //newPost.date = new Date( newPost.date ).toISOString();
     //}
 
-    requestAPI( params ).then(
-      ( response ) => {
-
+    requestAPI(params).then(
+      (response) => {
         // DISABLE LOADING
-        store.commit( 'setProcessing', false )
+        store.commit("setProcessing", false);
 
-        afterUpdate( response.data )
-
+        afterUpdate(response.data);
       },
-      ( error ) => {
-        console.log( error.response.data.message )
+      (error) => {
+        console.log(error.response.data.message);
+        store.commit("setProcessing", false); // DISABLE LOADING
       }
     );
-
-
-  }
+  };
 
   /*
-  * DELETE POST FROM SERVER
-  */
+   * DELETE POST FROM SERVER
+   */
   const deleteData = () => {
-
-    if( confirm( 'Are you sure you want to delete this information?' ) ){
-
+    if (confirm("Are you sure you want to delete this information?")) {
       // ENABLE LOADING
-      store.commit( 'setProcessing', true )
+      store.commit("setProcessing", true);
 
-      var params = { method  : 'delete', id: data.value.id }
+      var params = { method: "delete", id: data.value.id };
 
       //console.log( params )
-      requestAPI( params ).then(
-        ( response ) => {
-
+      requestAPI(params).then(
+        (response) => {
           // DISABLE LOADING
-          store.commit( 'setProcessing', false )
+          store.commit("setProcessing", false);
 
           //console.log( response.data )
 
-          afterDelete( response.data )
-
+          afterDelete(response.data);
         },
-        ( error ) => {
-          console.log( error.response.data.message )
+        (error) => {
+          console.log(error.response.data.message);
         }
       );
-
     }
-
-
-
-
-  }
+  };
 
   /*
-  * REDIRECT TO SINGLE POST AFTER UPDATING OR CREATING NEW POST
-  */
+   * REDIRECT TO SINGLE POST AFTER UPDATING OR CREATING NEW POST
+   */
   //const redirectToSinglePost = ( post ) => router.push( Util.getPostLink( post ) )
 
   /*
-  * REDIRECT TO MEMBERS LIST
-  * MOST PORBABLY CALLED AFTER DELETING THE POST
-  */
+   * REDIRECT TO MEMBERS LIST
+   * MOST PORBABLY CALLED AFTER DELETING THE POST
+   */
   //const redirectToPosts = () => router.push( { name : 'Members' } )
 
   /*
@@ -197,7 +173,7 @@ const post_edit = (
     data,
     fetchDataFromServer,
     createOrUpdateData,
-    deleteData
+    deleteData,
     /*
     post,
     fields,
@@ -207,8 +183,7 @@ const post_edit = (
     redirectToSinglePost,
     redirectToPosts
     */
-  }
+  };
+};
 
-}
-
-export default post_edit
+export default post_edit;
