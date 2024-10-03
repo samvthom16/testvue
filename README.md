@@ -1,6 +1,6 @@
 # inpursuit-fe
 
-Moved from Node 14 to 20
+Moved from Node 14 to 20. 
 
 This template should help get you started developing with Vue 3 in Vite.
 
