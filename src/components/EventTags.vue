@@ -10,8 +10,7 @@
       <Icon type="Group" />
       {{ getEventType(event) }}
     </li>
-
-    <li class="bg-lightred" v-if="getDate(event)">
+    <li class="bg-lightred" v-if="event?.date_gmt">
       <Icon type="Status" />
       {{ getDate(event) }}
     </li>
