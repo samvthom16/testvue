@@ -1,76 +1,78 @@
 <template>
-
   <PhoneUI
-    title='Analytics'
-    :configUI="{ 'hide_footer' : true, 'maintitle_classes' : 'hidden', 'stickytitle_classes' : 'opacity-100'}"
+    title="Analytics"
+    :configUI="{
+      hide_footer: true,
+      maintitle_classes: 'hidden',
+      stickytitle_classes: 'opacity-100',
+    }"
   >
-
     <template v-slot:headericon>
-      <BackButton :defaultRoute='{ name: "Profile" }' />
+      <BackButton :defaultRoute="{ name: 'Profile' }" />
     </template>
 
     <template v-slot:phonebody>
-
-      <ul class='whitespace-nowrap border-b border-lightgray pb-4 mb-4 overflow-auto'>
-        <li class='inline-block mr-2' v-for='dropdownButton,field_name in dropdownButtons' :key='dropdownButton'>
-          <ButtonPopupModal :field_name='field_name' :field='dropdownButton' @selectItem='selectItem' />
+      <ul
+        class="whitespace-nowrap border-b border-lightgray pb-4 mb-4 overflow-auto"
+      >
+        <li
+          class="inline-block mr-2"
+          v-for="(dropdownButton, field_name) in dropdownButtons"
+          :key="dropdownButton"
+        >
+          <ButtonPopupModal
+            :field_name="field_name"
+            :field="dropdownButton"
+            @selectItem="selectItem"
+          />
         </li>
       </ul>
 
-      <Stats :period='period' :key='period' />
-
+      <Stats :period="period" :key="period" />
     </template>
-
   </PhoneUI>
-
 </template>
 
 <script>
+import { ref } from "vue";
+import Stats from "@/components/Stats.vue";
+import PhoneUI from "@/components/PhoneUI.vue";
+import BackButton from "@/templates/PhoneUI/BackButton.vue";
+import ButtonPopupModal from "@/components/ButtonPopupModal.vue";
 
-import PhoneUI from '@/components/PhoneUI'
-import BackButton from '@/templates/PhoneUI/BackButton'
-
-import ButtonPopupModal from '@/components/ButtonPopupModal'
-
-import Stats from '@/components/Stats'
-
-import {ref} from 'vue'
-
-export default{
-  components : {
+export default {
+  components: {
     PhoneUI,
     BackButton,
     ButtonPopupModal,
-    Stats
+    Stats,
   },
-  setup(){
+  setup() {
+    const period = ref(30);
 
-    const period = ref( 30 )
-
-    const dropdownButtons = ref( {
-      period : {
-        popupTitle: 'Select Period',
+    const dropdownButtons = ref({
+      period: {
+        popupTitle: "Select Period",
         items: {
-          30    : 'Month',
-          90    : 'Quarter',
-          180   : '6 Months',
-          365   : 'Year'
+          30: "Month",
+          90: "Quarter",
+          180: "6 Months",
+          365: "Year",
         },
-        selected: '30'
+        selected: "30",
       },
-    } )
+    });
 
-    const selectItem = ( data ) => {
-      dropdownButtons.value[ data.name ].selected = data.value
-      period.value = parseInt( data.value )
-    }
+    const selectItem = (data) => {
+      dropdownButtons.value[data.name].selected = data.value;
+      period.value = parseInt(data.value);
+    };
 
     return {
       dropdownButtons,
       selectItem,
-      period
-    }
-
-  }
-}
+      period,
+    };
+  },
+};
 </script>
