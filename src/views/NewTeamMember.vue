@@ -100,7 +100,7 @@ export default {
 
     const requestAPI = (params) => API.requestUsers(params);
 
-    const afterUpdate = () => router.push({ name: "Team" });
+    const afterUpdate = () => router.replace({ name: "Team" });
 
     const { deleteData, createOrUpdateData, data } = FormEdit(
       requestAPI,

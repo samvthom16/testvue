@@ -17,38 +17,40 @@
     </template>
     <template v-slot:phonebody>
       <ul role="list" class="divide-y divide-lightgray">
-        <li class="py-3 sm:py-4" v-for="user in users" :key="user.id">
-          <router-link class="font-bold text-xl" :to="getUserEditLink(user)">
-            {{ user.name }}
-          </router-link>
+        <li
+          class="py-3 sm:py-4 flex items-center justify-between"
+          v-for="user in users"
+          :key="user.id"
+        >
+          <div>
+            <router-link class="font-bold text-xl" :to="getUserEditLink(user)">
+              {{ user.name }}
+            </router-link>
 
-          <p class="text-black">{{ user.email }}</p>
+            <p class="text-black">{{ user.email }}</p>
 
-          <ul class="text-xs text-gray">
-            <li
-              class="inline-block"
-              v-html="joinedText(user.registered_date)"
-            ></li>
-            <li
-              class="inline-block mx-2 mb-0.5 w-1 h-1 bg-gray rounded-full"
-              v-if="user.roles && user.roles.length"
-            ></li>
-            <li
-              class="inline-block capitalize"
-              v-if="user.roles && user.roles.length"
-              v-html="user.roles[0]"
-            ></li>
-            <li class="inline-block capitalize" v-if="isEditor({ user })">
-              <span
+            <ul class="text-xs text-gray">
+              <li
+                class="inline-block"
+                v-html="joinedText(user.registered_date)"
+              ></li>
+              <li
                 class="inline-block mx-2 mb-0.5 w-1 h-1 bg-gray rounded-full"
-              ></span>
-              <router-link
-                :to="{ name: 'EditTeamMember', query: { id: user.id } }"
-              >
-                Edit
-              </router-link>
-            </li>
-          </ul>
+                v-if="user.roles && user.roles.length"
+              ></li>
+              <li
+                class="inline-block capitalize"
+                v-if="user.roles && user.roles.length"
+                v-html="user.roles[0]"
+              ></li>
+            </ul>
+          </div>
+          <router-link
+            v-if="isEditor({ user })"
+            :to="{ name: 'EditTeamMember', query: { id: user.id } }"
+          >
+            <Icon type="Edit" class="inline" />
+          </router-link>
         </li>
       </ul>
     </template>
