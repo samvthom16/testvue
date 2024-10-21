@@ -89,7 +89,11 @@ const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
       // ENABLE LOADING
       store.commit("setProcessing", true);
 
-      var params = { method: "delete", id: data.value.id };
+      var params = {
+        method: "delete",
+        id: data.value.id,
+        reassign: store.state.settings.id,
+      };
 
       //console.log( params )
       requestAPI(params).then(
