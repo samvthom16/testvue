@@ -97,9 +97,10 @@
         </div>
 
         <div class="relative py-20" v-if="$store.state.post.id">
+          
           <HistoryList
             @deleteComment="deleteComment"
-            :id="$store.state.post.id"
+            :id="getPostID()"
             :item="$store.state.post"
             :key="historyKey"
           />
@@ -200,6 +201,8 @@ export default {
       return "Member";
     };
 
+    const getPostID = () => route.params.id;
+
     onMounted(() => {
       if (!Object.keys(store.state.account).length) {
         store.commit("getAccountSettings");
@@ -207,6 +210,7 @@ export default {
     });
 
     return {
+      getPostID,
       getHeaderTitle,
       archivePost,
     };
