@@ -11,6 +11,7 @@
       <BackButton :defaultRoute="{ name: 'Members' }" />
     </template>
     <template v-slot:headerright>
+      
       <router-link :to="getEditLink()" v-if="$store.state.post.id">
         <Icon type="Edit" class="inline" />
       </router-link>
@@ -97,7 +98,7 @@
         </div>
 
         <div class="relative py-20" v-if="$store.state.post.id">
-          
+
           <HistoryList
             @deleteComment="deleteComment"
             :id="getPostID()"

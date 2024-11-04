@@ -66,7 +66,30 @@
           icon_classes="bg-purple"
           :route="{ name: 'Analytics' }"
         />
+
+
       </div>
+
+      <div v-if="isAdmin({ user: newTeamMember })">
+
+        <div class="mt-8 text-sm text-black font-semibold">CATEGORIES</div>
+        <div
+          class="text-base focus:outline-none sm:text-sm w-full bg-lightergray rounded-lg py-2 px-4 drop-shadow-sm my-2 divide-y divide-lightgray"
+          :key="newTeamMember.id"
+        >
+
+          <SettingItem
+            v-for="category,type in categories"
+            :label="category.label"
+            :icon="category.icon"
+            icon_classes="bg-gray"
+            :route="{ name: 'Categories', params: { type: type } }"
+          />
+
+        </div>
+      </div>
+
+
     </template>
   </PhoneUI>
 </template>
@@ -78,6 +101,8 @@ import API from "@/api";
 import Util from "@/lib/Util";
 import PhoneUI from "@/components/PhoneUI.vue";
 import SettingItem from "@/components/SettingItem.vue";
+
+import CategoryHelper from '@/lib/CategoryHelper';
 
 export default {
   name: "Profile",
@@ -94,10 +119,13 @@ export default {
       data.value ? data.value.data : ref({ id: 0 })
     );
 
+    const { categories } = CategoryHelper();
+
     const isAdmin = ({ user }) =>
       Util.hasUserRole({ user, searchRole: "administrator" });
 
     return {
+      categories,
       isAdmin,
       newTeamMember,
     };

@@ -96,6 +96,16 @@ const routes = [
     name: "NewEvent",
     component: NewEvent,
   },
+  {
+    path: "/categories/:type",
+    name: "Categories",
+    component: () => import( "@/views/Categories.vue" )
+  },
+  {
+    path: "/categories/:type/new",
+    name: "NewCategory",
+    component: () => import( "@/views/NewCategory.vue" )
+  },
 ];
 
 const router = createRouter({

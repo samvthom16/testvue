@@ -28,6 +28,7 @@ import PostImagesSlider from '@/templates/Posts/PostImagesSlider.vue'
 import EventList from '@/templates/Posts/EventList.vue'
 import AvatarsStacked from '@/templates/Posts/AvatarsStacked.vue'
 import ListWithImage from '@/templates/Posts/ListWithImage.vue'
+import ListWithTermName from '@/templates/Posts/ListWithTermName.vue'
 import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch.vue'
 
 
@@ -41,6 +42,7 @@ export default {
     PostImagesSlider,
     AvatarsStacked,
     ListWithImage,
+    ListWithTermName,
     MemberListWithSwitch
   },
   setup( props, context ) {
