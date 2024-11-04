@@ -9,7 +9,12 @@ import router from '@/router'
 
 export default{
   props: {
-    defaultRoute: Object
+    defaultRoute: Object,
+    defaultRouteOnly: {
+      type    : Boolean,
+      required: false,
+      default : false
+    }
   },
   components:{
     Icon
@@ -17,9 +22,8 @@ export default{
   setup( props ){
 
     const goBack = () => {
-      if( window.history.length > 2 ) router.go( -1 )
+      if( window.history.length > 2 && !props.defaultRouteOnly ) router.go( -1 )
       else router.push( props.defaultRoute )
-      //router.push( props.defaultRoute )
     }
 
     return {

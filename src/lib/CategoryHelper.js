@@ -1,6 +1,12 @@
-import {ref} from 'vue'
+import { ref } from 'vue';
+
+import { useRoute } from "vue-router";
 
 const categoryhelper = () => {
+
+	const route = useRoute();
+
+	const getType = () => route.params.type;
 
 	const categories = ref( {
 		'groups' : {
@@ -35,11 +41,12 @@ const categoryhelper = () => {
 		},
 	} );
 
-	const getWPType = ( type ) => categories.value[ type ].wp_type;
+	const getWPType = () => categories.value[ getType() ].wp_type;
 
   return {
 		categories,
-		getWPType
+		getWPType,
+		getType
   }
 }
 

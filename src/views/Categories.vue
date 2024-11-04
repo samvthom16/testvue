@@ -15,9 +15,9 @@
 
     <template v-slot:headerright>
 
-      <!--router-link :to="{ name: 'NewCategory', params: { type: getType() } }">
+      <router-link :to="{ name: 'NewCategory', params: { type: getType() } }">
         <Icon type='Plus' class='inline text-white' />
-      </router-link-->
+      </router-link>
 
     </template>
 
@@ -67,9 +67,7 @@ import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vu
 import CategoryHelper from '@/lib/CategoryHelper';
 
 
-import { useRoute } from "vue-router";
-
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 export default {
   components: {
@@ -84,18 +82,14 @@ export default {
 
   setup(){
 
-    const route = useRoute();
+    const { categories, getWPType, getType } = CategoryHelper();
 
-    const { categories, getWPType } = CategoryHelper();
-
-    const getType = () => route.params.type;
-
-    const getCategoryName = () => categories.value[route.params.type].label;
+    const getCategoryName = () => categories.value[ getType() ].label;
 
     const params = ref( {
       unique_id   : 1,
       per_page    : 10,
-      post_type   : getWPType( route.params.type ),
+      post_type   : getWPType( getType() ),
       style       : 'ListWithTermName',
       //orderby     : 'title',
       //order       : 'asc',

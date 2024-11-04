@@ -70,7 +70,7 @@
 
       </div>
 
-      <div v-if="isAdmin({ user: newTeamMember })">
+      <div v-if="isAdmin( { user: newTeamMember } )">
 
         <div class="mt-8 text-sm text-black font-semibold">CATEGORIES</div>
         <div
@@ -113,10 +113,11 @@ export default {
 
   setup() {
     const getProfile = () => API.requestProfile();
-    const { data } = useQuery("profileQuery", getProfile);
 
-    const newTeamMember = computed(() =>
-      data.value ? data.value.data : ref({ id: 0 })
+    const { data } = useQuery( "profileQuery", getProfile );
+
+    const newTeamMember = computed( () =>
+      data.value ? data.value.data : ref( { id: 0 } )
     );
 
     const { categories } = CategoryHelper();

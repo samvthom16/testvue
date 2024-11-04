@@ -43,12 +43,12 @@
         </div>
       </form>
       <button
-        v-if="$route.query && $route.query.id && isEditor({ user: data })"
+        v-if="$route.query && $route.query.id"
         @click="deleteData"
         class="border border-red p-2 rounded text-red text-sm"
       >
         <Icon type="Delete" class="inline" />
-        Delete Team Member
+        Delete Term
       </button>
     </template>
   </PhoneUI>
@@ -63,6 +63,8 @@ import FormEdit from "@/lib/FormEdit";
 import Icon from "@/components/Icon.vue";
 import PhoneUI from "@/components/PhoneUI.vue";
 import BackButton from "@/templates/PhoneUI/BackButton.vue";
+
+import CategoryHelper from '@/lib/CategoryHelper';
 
 export default {
   components: {
@@ -81,6 +83,10 @@ export default {
   },
   setup() {
 
+    const { categories, getWPType, getType } = CategoryHelper();
+
+    const route = useRoute();
+
     const fields = ref( {
       name: {
         label: "Name",
@@ -89,9 +95,9 @@ export default {
       },
     } );
 
-    const requestAPI = (params) => API.requestUsers( params );
+    const requestAPI = ( params ) => API.requestPosts( getWPType( getType() ), params );
 
-    const afterUpdate = () => router.replace({ name: "Team" });
+    const afterUpdate = () => router.replace( { name: "Categories", params: { type: getType() } } );
 
     const { deleteData, createOrUpdateData, data } = FormEdit(
       requestAPI,
@@ -102,12 +108,11 @@ export default {
       }
     );
 
-    const route = useRoute();
 
     //console.log( route.query )
 
-    const isEditor = ({ user }) =>
-      Util.hasUserRole({ user, searchRole: "editor" });
+    const isAdmin = ({ user }) =>
+      Util.hasUserRole( { user, searchRole: "administrator" } );
 
 
 
@@ -142,7 +147,7 @@ export default {
       data,
       fields,
       submit,
-      isEditor,
+      isAdmin,
       deleteData,
     };
   },
