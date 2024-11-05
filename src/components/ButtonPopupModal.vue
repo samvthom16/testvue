@@ -51,7 +51,8 @@ export default{
         name  : this.field_name,
         value : key
       }
-      this.$emit( 'selectItem', data )
+      this.$emit( 'selectItem', data );
+      this.close();
     }
   }
 }
