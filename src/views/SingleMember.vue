@@ -11,7 +11,7 @@
       <BackButton :defaultRoute="{ name: 'Members' }" />
     </template>
     <template v-slot:headerright>
-      
+
       <router-link :to="getEditLink()" v-if="$store.state.post.id">
         <Icon type="Edit" class="inline" />
       </router-link>
@@ -202,7 +202,7 @@ export default {
       return "Member";
     };
 
-    const getPostID = () => route.params.id;
+    const getPostID = () => parseInt( route.params.id );
 
     onMounted(() => {
       if (!Object.keys(store.state.account).length) {

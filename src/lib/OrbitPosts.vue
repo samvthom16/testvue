@@ -24,12 +24,13 @@ import Helper from '@/lib/Helper.js'
 import { onMounted, onUnmounted, computed, watch } from "vue";
 
 
-import PostImagesSlider from '@/templates/Posts/PostImagesSlider.vue'
-import EventList from '@/templates/Posts/EventList.vue'
-import AvatarsStacked from '@/templates/Posts/AvatarsStacked.vue'
-import ListWithImage from '@/templates/Posts/ListWithImage.vue'
-import ListWithTermName from '@/templates/Posts/ListWithTermName.vue'
-import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch.vue'
+import PostImagesSlider from '@/templates/Posts/PostImagesSlider.vue';
+import EventList from '@/templates/Posts/EventList.vue';
+import AvatarsStacked from '@/templates/Posts/AvatarsStacked.vue';
+import EventsCount from '@/templates/Posts/EventsCount.vue';
+import ListWithImage from '@/templates/Posts/ListWithImage.vue';
+import ListWithTermName from '@/templates/Posts/ListWithTermName.vue';
+import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch.vue';
 
 
 import API from "@/api";
@@ -43,7 +44,8 @@ export default {
     AvatarsStacked,
     ListWithImage,
     ListWithTermName,
-    MemberListWithSwitch
+    MemberListWithSwitch,
+    EventsCount
   },
   setup( props, context ) {
 

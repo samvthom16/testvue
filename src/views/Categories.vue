@@ -10,7 +10,9 @@
   >
 
     <template v-slot:headericon>
-      <BackButton :defaultRoute="{ name: 'Profile' }" />
+      <router-link :to="{ name: 'Profile' }">
+        <Icon type='Back' class='inline mt-1' />
+      </router-link>
     </template>
 
     <template v-slot:headerright>
@@ -65,7 +67,6 @@ import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
 import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
 
 import CategoryHelper from '@/lib/CategoryHelper';
-
 
 import { ref } from 'vue';
 

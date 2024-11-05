@@ -10,6 +10,12 @@
 					{{ post.name }}
 				</router-link>
 
+				<OrbitPosts :params="getParams( post )">
+	        <template v-slot:loadingAnimation>
+	          <AvatarsStackedAnimation />
+	        </template>
+	      </OrbitPosts>
+
 			</div>
 			<router-link :to="getEditLink( post )">
 				<Icon type="Edit" class="inline" />
@@ -25,12 +31,17 @@ import Util from "@/lib/Util.js";
 
 import Icon from "@/components/Icon.vue";
 
+import AvatarsStackedAnimation from '@/templates/Animation/AvatarsStacked.vue';
+
+import CategoryHelper from '@/lib/CategoryHelper';
+
 export default {
   props: {
     posts: Array,
   },
   components: {
-		Icon
+		Icon,
+		AvatarsStackedAnimation
   },
 	setup(){
 
@@ -41,8 +52,30 @@ export default {
 			}
     };
 
+		const getParams = ( post ) => {
+
+			var params = {
+				per_page              : 5,
+				post_type             : 'inpursuit-members',
+				style                 : 'AvatarsStacked',
+			};
+
+			if( post.taxonomy == 'inpursuit-event-type' ){
+				params.post_type = 'inpursuit-events';
+				params.style = 'EventsCount';
+			}
+
+
+			const { getWPJsonType } = CategoryHelper();
+
+			params[ getWPJsonType( post.taxonomy ) ] = post.id;
+
+			return params;
+		};
+
 		return{
-			getEditLink
+			getEditLink,
+			getParams
 		}
 
 	}

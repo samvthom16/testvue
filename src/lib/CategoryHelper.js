@@ -43,10 +43,18 @@ const categoryhelper = () => {
 
 	const getWPType = () => categories.value[ getType() ].wp_type;
 
+	const getWPJsonType = ( wptype ) => {
+		var type = wptype.split( "inpursuit-" ).pop();
+		if( type == 'status' ) return 'member_status';
+		if( type == 'event-type' ) return 'event_type';
+		return type;
+	}
+
   return {
 		categories,
 		getWPType,
-		getType
+		getType,
+		getWPJsonType
   }
 }
 
