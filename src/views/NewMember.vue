@@ -109,9 +109,11 @@ export default{
     const { fields, post, createOrUpdatePost, deletePost } = PostEdit( 'inpursuit-members',
       // TEXTFIELDS
       {
-        'title' : 'Full Name',
-        'email' : 'Email Address',
-        'phone' : 'Phone'
+        'title'     : 'Full Name',
+        'email'     : 'Email Address',
+        'phone'     : 'Phone',
+        'birthday'  : 'Birthday',
+        'wedding'   : 'Wedding'
       },
       // DROPDOWNFIELDS
       {
