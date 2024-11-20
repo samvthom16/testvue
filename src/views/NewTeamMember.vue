@@ -128,15 +128,14 @@ export default {
 
     const fetchLimitAccessOptions = async () => {
       try {
-        const response = await requestProfile();
+        const response = await requestSettings();
 
-        if (response?.data && response?.data.inpursuit_group_terms) {
-          fields.value.limit_access.options =
-            response?.data.inpursuit_group_terms.map((term) => ({
-              label: term.name,
-              value: term.id,
-            }));
-        }
+        fields.value.limit_access.options = Object.entries(
+          response?.data?.group
+        ).map(([id, name]) => ({
+          label: name,
+          value: id,
+        }));
       } catch (error) {
         console.error("Error fetching limit_access options:", error);
       }
@@ -159,9 +158,7 @@ export default {
       }
     };
 
-    // const requestAPI = (params) => API.requestUsers(params);
-
-    const requestProfile = () => API.requestProfile();
+    const requestSettings = () => API.requestSettings();
 
     const afterUpdate = () => router.replace({ name: "Team" });
 
@@ -244,10 +241,7 @@ export default {
     };
 
     onMounted(async () => {
-      const userId = route.query?.id;
-      if (!userId) {
-        await fetchLimitAccessOptions();
-      }
+      await fetchLimitAccessOptions();
     });
 
     return {
