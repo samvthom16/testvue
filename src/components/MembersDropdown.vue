@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import ButtonPopupModal from '@/components/ButtonPopupModal.vue'
+import ButtonPopupModal from '@/components/ButtonPopupModal.vue';
 
-import Util from '@/lib/Util'
+import { ref } from 'vue';
 
-import {ref} from 'vue'
+import FiltersHelper from "@/lib/FiltersHelper.js";
 
 export default{
   props:{
@@ -54,26 +54,21 @@ export default{
           all  : 'All Profile Types',
         },
         selected: 'all'
+      },
+      /*
+      group : {
+        popupTitle: 'Groups',
+        badgeText : '',
+        items: {
+          all  : 'All Groups',
+        },
+        selected: 'all'
       }
-    } )
+      */
+    } );
 
-    const selectItem = ( data ) => {
-      dropdownButtons.value[ data.name ].selected = data.value
-      context.emit( 'selectItem', data )
-    }
-
-    /*
-    * FETCH SETTINGS FROM THE SERVER
-    */
-    Util.fetchSettings( ( data ) => {
-      var dropdown_slugs = [ 'member_status' ]
-      for( var i=0; i<dropdown_slugs.length; i++ ){
-        var slug = dropdown_slugs[ i ]
-        for( var id in data[ slug ] ){
-          dropdownButtons.value[ slug ].items[ id ] = data[ slug ][ id ]
-        }
-      }
-    } )
+    const { syncTabWithUrl, selectItem } =
+      FiltersHelper( dropdownButtons, context, [ 'member_status', /*'group'*/ ] );
 
     return {
       dropdownButtons,

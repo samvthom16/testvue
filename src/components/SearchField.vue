@@ -52,12 +52,17 @@ export default{
   mounted(){
     var $search = document.getElementById( 'search' );
     var component = this;
-    $search.addEventListener( 'focus', () => {
-      component.searchFocus = true
-    } );
-    $search.addEventListener( 'blur', () => {
-      component.searchFocus = false
-    } );
+
+    if( $search ){
+      $search.addEventListener( 'focus', () => {
+        component.searchFocus = true
+      } );
+      $search.addEventListener( 'blur', () => {
+        component.searchFocus = false
+      } );  
+    }
+
+
   }
 }
 </script>
