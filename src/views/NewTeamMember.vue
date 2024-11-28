@@ -46,7 +46,7 @@
               <input
                 type="checkbox"
                 :id="option.value"
-                v-model="data.limit_access"
+                v-model="data.group"
                 :value="option.value"
                 class="mr-2 border-2 border-solid border-black rounded"
               />
@@ -118,7 +118,7 @@ export default {
         type: "text",
         errorMsg: "",
       },
-      limit_access: {
+      group: {
         label: "Limit User Access",
         type: "checkbox",
         options: [],
@@ -126,37 +126,23 @@ export default {
       },
     });
 
-    const fetchLimitAccessOptions = async () => {
+    const getUserGroups = async () => {
       try {
         const response = await requestSettings();
 
-        fields.value.limit_access.options = Object.entries(
-          response?.data?.group
-        ).map(([id, name]) => ({
-          label: name,
-          value: id,
-        }));
+        fields.value.group.options = Object.entries(response?.data?.group).map(
+          ([id, name]) => ({
+            label: name,
+            value: id,
+          })
+        );
       } catch (error) {
-        console.error("Error fetching limit_access options:", error);
+        console.error("Error fetching user groups");
+        console.log(error);
       }
     };
 
-    const requestAPI = async (params) => {
-      try {
-        const response = await API.requestUsers(params);
-        if (response?.data && response?.data.inpursuit_group_terms) {
-          fields.value.limit_access.options =
-            response?.data.inpursuit_group_terms.map((term) => ({
-              label: term.name,
-              value: term.id,
-            }));
-        }
-        return response;
-      } catch (error) {
-        console.error("Error fetching API data:", error);
-        return null;
-      }
-    };
+    const requestAPI = (params) => API.requestUsers(params);
 
     const requestSettings = () => API.requestSettings();
 
@@ -170,7 +156,7 @@ export default {
         first_name: "",
         last_name: "",
         email: "",
-        limit_access: [],
+        group: [],
       }
     );
 
@@ -241,7 +227,7 @@ export default {
     };
 
     onMounted(async () => {
-      await fetchLimitAccessOptions();
+      await getUserGroups();
     });
 
     return {
