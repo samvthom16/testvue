@@ -40,7 +40,7 @@ export default {
   getPostEditLink: function (post) {
     var route = {
       name: "",
-      state: { post },
+      //state: { post },
       query: { id: post.id },
     };
 

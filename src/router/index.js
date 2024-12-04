@@ -101,6 +101,14 @@ const routes = [
     path: "/special-events",
     name: "SpecialEvents",
     component: SpecialEvents,
+    path: "/categories/:type",
+    name: "Categories",
+    component: () => import("@/views/Categories.vue")
+  },
+  {
+    path: "/categories/:type/new",
+    name: "NewCategory",
+    component: () => import("@/views/NewCategory.vue")
   },
 ];
 

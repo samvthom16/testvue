@@ -1,40 +1,27 @@
-//import router from '@/router'
-//import API from '@/api'
 import store from "@/store";
 
-//import Util from "@/lib/Util"
-
 import { useRoute } from "vue-router";
+
 import { ref } from "vue";
 
-const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
-  store.commit("getLocalSettings");
+const post_edit = ( requestAPI, afterUpdate, afterDelete, defaultData = {} ) => {
 
-  //const settings = ref( {} )
+  store.commit( "getLocalSettings" );
 
   const data = ref(defaultData);
 
   const route = useRoute();
 
-  /*
-  * PARSES SETTINGS TEXT FROM TAXONOMY SLUG & TERM ID
-  *
-  const _getSettingsTextFromID = ( slug, id ) => {
-    if( settings.value[ slug ] && settings.value[ slug ][ id ] ) return settings.value[ slug ][ id ]
-    return ''
-  }
-
-
 
   /*
   * REQUEST DATA FROM SERVER
   */
+  const fetchDataFromServer = ( id ) => {  console.log( 'fetch from server' )
 
-  const fetchDataFromServer = (id) => {
     // ENABLE LOADING
     store.commit("setProcessing", true);
 
-    requestAPI({ id: id }).then(
+    requestAPI( { id: id } ).then(
       (response) => {
         // ENABLE LOADING
         store.commit("setProcessing", false);
@@ -49,7 +36,8 @@ const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
     );
   };
 
-  if (route.query && route.query.id && route.name === "EditTeamMember") {
+  //if ( route.query && route.query.id && route.name === "EditTeamMember" ) {
+  if ( route.query && route.query.id ) {
     fetchDataFromServer(route.query.id);
   }
 
@@ -81,6 +69,8 @@ const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
     );
   };
 
+  //console.log( route.name )
+
   /*
    * DELETE POST FROM SERVER
    */
@@ -94,6 +84,11 @@ const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
         id: data.value.id,
         reassign: store.state.settings.id,
       };
+
+      // SPECIAL CONDITION FOR THE TERM EDIT
+      if( route.name == 'NewCategory' )
+        params.force = true;
+
 
       //console.log( params )
       requestAPI(params).then(
@@ -112,81 +107,12 @@ const post_edit = (requestAPI, afterUpdate, afterDelete, defaultData = {}) => {
     }
   };
 
-  /*
-   * REDIRECT TO SINGLE POST AFTER UPDATING OR CREATING NEW POST
-   */
-  //const redirectToSinglePost = ( post ) => router.push( Util.getPostLink( post ) )
-
-  /*
-   * REDIRECT TO MEMBERS LIST
-   * MOST PORBABLY CALLED AFTER DELETING THE POST
-   */
-  //const redirectToPosts = () => router.push( { name : 'Members' } )
-
-  /*
-  * SET FORM VALUES FROM THE POST RESPONSE
-  * EITHER PASSED THROUGH THE PROPS
-  * OR FETCH FROM THE SERVER
-  *
-  const setFormValues = () => {
-    if( route.query && route.query.params && route.query.params.post ){
-      feedFormFromPost( route.query.params.post )
-    }
-    else if( route.query && route.query.id ){
-      fetchPostFromServer( route.query.id )
-    }
-  }
-
-  /*
-  * REQUEST SETTINGS API FROM SERVER
-  *
-  const fetchSettingsFromServer = () => {
-
-    Util.fetchSettings( ( data ) => {
-
-      settings.value = data
-
-      // ITERATE THROUGH THE DROPDOWNFIELDS TO SET OPTIONS DATA
-      for( var key in dropdownfields ){
-        if( data[ key ] ){
-          let finalOptions = Object.assign( {
-            'Choose': 'Choose'
-          }, data[ key ] );
-          fields.value.push( {
-            id        : key,
-            label     : dropdownfields[ key ],
-            component : 'DropDownField',
-            value     : 'Choose',
-            options   : finalOptions
-          } )
-        }
-      }
-
-      // SET FORM VALUES FROM THE POST
-      setFormValues()
-
-    } )
-  }
-
-  /*
-  * FIRST FUNCTION TO BE CALLED
-  */
-  //fetchSettingsFromServer()
 
   return {
     data,
     fetchDataFromServer,
     createOrUpdateData,
     deleteData,
-    /*
-    post,
-    fields,
-
-    deletePost,
-    fetchDataFromServer,
-    redirectToSinglePost,
-    redirectToPosts
-    */
   };
 };
 

@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import ButtonPopupModal from '@/components/ButtonPopupModal.vue'
+import ButtonPopupModal from '@/components/ButtonPopupModal.vue';
 
-import Util from '@/lib/Util'
+import FiltersHelper from "@/lib/FiltersHelper.js";
 
-import {ref} from 'vue'
+import { ref } from 'vue';
 
 export default{
   props:{
@@ -36,25 +36,9 @@ export default{
         },
         selected: 'all'
       }
-    } )
+    } );
 
-    const selectItem = ( data ) => {
-      dropdownButtons.value[ data.name ].selected = data.value
-      context.emit( 'selectItem', data )
-    }
-
-    /*
-    * FETCH SETTINGS FROM THE SERVER
-    */
-    Util.fetchSettings( ( data ) => {
-      var dropdown_slugs = [ 'event_type' ]
-      for( var i=0; i<dropdown_slugs.length; i++ ){
-        var slug = dropdown_slugs[ i ]
-        for( var id in data[ slug ] ){
-          dropdownButtons.value[ slug ].items[ id ] = data[ slug ][ id ]
-        }
-      }
-    } )
+    const { syncTabWithUrl, selectItem } = FiltersHelper( dropdownButtons, context, [ 'event_type' ] );
 
     return {
       dropdownButtons,
