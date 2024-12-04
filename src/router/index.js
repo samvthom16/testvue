@@ -9,6 +9,7 @@ import Events from "@/views/Events.vue";
 import SingleEvent from "@/views/SingleEvent.vue";
 import NewEvent from "@/views/NewEvent.vue";
 import NewMember from "@/views/NewMember.vue";
+import SpecialEvents from "@/views/SpecialEvents.vue";
 
 const routes = [
   {
@@ -95,6 +96,11 @@ const routes = [
     path: "/events/new",
     name: "NewEvent",
     component: NewEvent,
+  },
+  {
+    path: "/special-events",
+    name: "SpecialEvents",
+    component: SpecialEvents,
   },
 ];
 
