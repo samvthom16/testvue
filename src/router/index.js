@@ -9,6 +9,7 @@ import Events from "@/views/Events.vue";
 import SingleEvent from "@/views/SingleEvent.vue";
 import NewEvent from "@/views/NewEvent.vue";
 import NewMember from "@/views/NewMember.vue";
+import SpecialEvents from "@/views/SpecialEvents.vue";
 
 const routes = [
   {
@@ -97,14 +98,14 @@ const routes = [
     component: NewEvent,
   },
   {
-    path: "/categories/:type",
-    name: "Categories",
-    component: () => import( "@/views/Categories.vue" )
+    path: "/special-events",
+    name: "SpecialEvents",
+    component: SpecialEvents,
   },
   {
     path: "/categories/:type/new",
     name: "NewCategory",
-    component: () => import( "@/views/NewCategory.vue" )
+    component: () => import("@/views/NewCategory.vue")
   },
 ];
 

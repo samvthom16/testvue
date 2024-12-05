@@ -200,6 +200,15 @@ const api = {
       headers: this.getAuthHeaders(),
     });
   },
+
+  requestSpecialDates: function (params) {
+    return this.makeRequest({
+      url: this._getURL("/wp-json/inpursuit/v1/special-dates"),
+      data: params,
+      method: "get",
+      headers: this.getAuthHeaders(),
+    });
+  },
 };
 
 export default api;
