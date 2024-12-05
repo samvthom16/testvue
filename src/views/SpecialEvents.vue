@@ -1,7 +1,7 @@
 <template>
   <PhoneUI title="Special Events">
     <template v-slot:phonebody>
-      <OrbitDates :params="params" :key="params.unique_id">
+      <OrbitDates :params="params">
         <template v-slot:loadingAnimation>
           <ListWithImageAnimation :total="10" />
         </template>
@@ -10,48 +10,32 @@
         </template>
       </OrbitDates>
     </template>
-
-    <template v-slot:mainttitle_footer>
-      <SearchField @searching="onSearch" />
-    </template>
   </PhoneUI>
 </template>
 
 <script>
+import { ref } from "vue";
 import PhoneUI from "@/components/PhoneUI.vue";
-import SearchField from "@/components/SearchField.vue";
 import OrbitDates from "@/lib/OrbitDates.vue";
-
 import ListWithImageAnimation from "@/templates/Animation/ListWithImage.vue";
 import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
-
-import { ref } from "vue";
 
 export default {
   components: {
     PhoneUI,
-    SearchField,
-    ListWithImageAnimation,
     OrbitDates,
+    ListWithImageAnimation,
     PaginationLoaderAnimation,
   },
   setup() {
     const params = ref({
-      //unique_id: 1,
       per_page: 10,
       style: "SpecialDates",
-      //pagination: 1,
-      search: "",
+      pagination: 1,
     });
-
-    const onSearch = (searchText) => {
-      params.value.search = searchText;
-      params.value.unique_id++;
-    };
 
     return {
       params,
-      onSearch,
     };
   },
 };
