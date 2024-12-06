@@ -43,7 +43,7 @@
 
       <OrbitPosts
         :params="{
-          per_page: 5,
+          per_page: 3,
           post_type: 'inpursuit-events',
           style: 'EventList',
         }"
