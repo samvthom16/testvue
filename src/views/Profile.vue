@@ -66,6 +66,12 @@
           icon_classes="bg-purple"
           :route="{ name: 'Analytics' }"
         />
+        <SettingItem
+          label="Special Events"
+          icon="SpecialEvent"
+          icon_classes="bg-red"
+          :route="{ name: 'SpecialEvents' }"
+        />
 
 
       </div>
