@@ -55,7 +55,7 @@ export default {
 
       if (event.event_date) {
         const eventDate = new Date(event.event_date);
-        dateStr += `${eventDate.getDay()} ${eventDate.toLocaleString("default", { month: "long" })}`;
+        dateStr += `${eventDate.getDate()} ${eventDate.toLocaleString("default", { month: "long" })} ${eventDate.getFullYear()}`;
       }
 
       return `${eventType} on ${dateStr}`;
