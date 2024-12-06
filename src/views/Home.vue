@@ -55,24 +55,24 @@
           <SimpleListAnimation />
         </template>
       </OrbitPosts>
-
-      <OrbitDates
-        :params="{
-          per_page: '5',
-          style: 'SpecialDates',
-        }"
-      >
-        <template v-slot:title>
-          <MainTitle
-            title="Special Events"
-            :route="{ name: 'SpecialEvents' }"
-          />
-        </template>
-        <template v-slot:loadingAnimation>
-          <SimpleListAnimation />
-        </template>
-      </OrbitDates>
-
+      <div class="-ml-4 -mr-4 p-4 pt-6 bg-lightergray mb-6">
+        <OrbitDates
+          :params="{
+            per_page: '5',
+            style: 'SpecialDates',
+          }"
+        >
+          <template v-slot:title>
+            <MainTitle
+              title="Special Events"
+              :route="{ name: 'SpecialEvents' }"
+            />
+          </template>
+          <template v-slot:loadingAnimation>
+            <SimpleListAnimation />
+          </template>
+        </OrbitDates>
+      </div>
       <div class="mb-8"></div>
     </template>
   </PhoneUI>
