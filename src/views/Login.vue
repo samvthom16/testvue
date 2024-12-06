@@ -111,6 +111,9 @@ export default {
       return url.protocol === "http:" || url.protocol === "https:";
     },
     validateURL(url) {
+      if ( !/^https?:\/\//i.test(url) ) {
+        url = 'https://' + url;
+      }
       return url.replace(/\/$/, "");
     },
 

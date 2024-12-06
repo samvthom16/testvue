@@ -22,6 +22,8 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
     var component = 'TextField';
 
     switch( slug ){
+      case 'birthday':
+      case 'wedding':
       case 'date':
         type = 'date';
         break;
@@ -74,6 +76,14 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
         // CHECK FOR DATE INFORMATION
         var dateArr = post.value.date.split( 'T' );
         if( dateArr.length ) fields.value[i]['value'] = dateArr[0]
+      }
+      else if ( fields.value[i] && ( slug == 'birthday' || slug == 'wedding' ) ) {
+        // CHECK FOR SPECIAL DATES INFORMATION
+        var temp_date = post.value.special_events[ slug ];
+        if( temp_date ){
+          var dateArr = temp_date.split( 'T' );
+          if( dateArr.length ) fields.value[i]['value'] = dateArr[0];
+        }
       }
       else if( post.value[ slug ] && Array.isArray( post.value[ slug ] ) ){
         // CHECK FOR CHECKBOX INFORMATION
@@ -151,6 +161,8 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
     )
   }
 
+  const changeDateToISOString = ( datestr ) => new Date( datestr ).toISOString();
+
   const createOrUpdatePost = ( post = {} ) => {
 
     var newPost = Object.assign( {
@@ -168,7 +180,16 @@ const post_edit = ( post_type = 'inpursuit-members', textfields = {}, dropdownfi
 
     // CHANGE THE FORMAT OF THE DATE
     if( newPost.date ){
-      newPost.date = new Date( newPost.date ).toISOString();
+      newPost.date = changeDateToISOString( newPost.date );
+      //new Date( newPost.date ).toISOString();
+    }
+
+    if( newPost.birthday || newPost.wedding ){
+      if( !newPost.special_events ) newPost.special_events = {};
+      if( newPost.birthday )
+        newPost.special_events.birthday = changeDateToISOString( newPost.birthday );
+      if( newPost.wedding )
+        newPost.special_events.wedding = changeDateToISOString( newPost.wedding );
     }
 
     //console.log( newPost )
