@@ -9,6 +9,7 @@ import Events from "@/views/Events.vue";
 import SingleEvent from "@/views/SingleEvent.vue";
 import NewEvent from "@/views/NewEvent.vue";
 import NewMember from "@/views/NewMember.vue";
+import SingleComments from "@/views/SingleComments.vue";
 
 const routes = [
   {
@@ -49,7 +50,8 @@ const routes = [
   {
     path: "/comments",
     name: "Comments",
-    component: () => import("@/views/Comments.vue"),
+    component: SingleComments,
+    //   component: () => import("@/views/Comments.vue"),
   },
   {
     path: "/login",
@@ -99,12 +101,12 @@ const routes = [
   {
     path: "/categories/:type",
     name: "Categories",
-    component: () => import( "@/views/Categories.vue" )
+    component: () => import("@/views/Categories.vue")
   },
   {
     path: "/categories/:type/new",
     name: "NewCategory",
-    component: () => import( "@/views/NewCategory.vue" )
+    component: () => import("@/views/NewCategory.vue")
   },
 ];
 

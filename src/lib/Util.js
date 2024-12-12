@@ -3,7 +3,7 @@ import API from "@/api";
 
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
-TimeAgo.addDefaultLocale( en );
+TimeAgo.addDefaultLocale(en);
 
 export default {
   //debounce  : null,
@@ -66,8 +66,10 @@ export default {
   },
   getUserLink: function (teamMember) {
     return {
-      name: "SingleTeamMember",
-      params: { teamMember: JSON.stringify(teamMember), id: teamMember.id },
+      // name: "SingleTeamMember",
+      // params: { teamMember: JSON.stringify(teamMember), id: teamMember.id },
+      name: "Comments",
+      query: { team_member: teamMember.id }
     };
   },
   // RETURN TRUE IF ROLE EXISTS IN THE LIST ELSE FALSE
@@ -102,9 +104,9 @@ export default {
 
   timeAgo: function (dateParam) {
 
-    const timeAgo = new TimeAgo( 'en-US' );
+    const timeAgo = new TimeAgo('en-US');
 
 
-    return timeAgo.format( new Date( dateParam ) );
+    return timeAgo.format(new Date(dateParam));
   },
 };
