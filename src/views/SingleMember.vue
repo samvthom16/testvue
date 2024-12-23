@@ -11,17 +11,16 @@
       <BackButton :defaultRoute="{ name: 'Members' }" />
     </template>
     <template v-slot:headerright>
-
-      <router-link :to="getEditLink()" v-if="$store.state.post.id">
+      <router-link :to="getEditLink()" v-if="post.id">
         <Icon type="Edit" class="inline" />
       </router-link>
     </template>
     <template v-slot:phonebody>
       <AddComment
-        :id="$store.state.post.id"
-        :item="$store.state.post"
+        :id="post.id"
+        :item="post"
         :showModal="showCommentModal"
-        v-if="$store.state.post.id"
+        v-if="post.id"
         @close="closeCommentModal()"
         @postComment="forceHistoryRerender()"
       />
@@ -29,27 +28,24 @@
       <div class="pb-6 justify-center items-center mx-auto">
         <div
           class="pt-20 pb-4 relative bg-lightergray rounded-sm -my-12"
-          v-if="$store.state.post.id"
-          :key="$store.state.post.id"
+          v-if="post.id"
+          :key="post.id"
         >
           <div
             class="bg-gray absolute -top-10 left-1/2 transform -translate-x-1/2 h-28 w-28 overflow-hidden border-white border-4 rounded-full"
           >
             <img
               class="object-cover w-full h-full"
-              :src="$store.state.post.featured_image"
+              :src="post.featured_image"
             />
           </div>
 
           <div class="px-2">
-            <h1
-              class="text-xl text-center font-semibold"
-              v-if="$store.state.post.title"
-            >
-              {{ $store.state.post.title.rendered }}
+            <h1 class="text-xl text-center font-semibold" v-if="post.title">
+              {{ post.title.rendered }}
             </h1>
             <div class="text-center mt-3">
-              <UserTags :user="$store.state.post" />
+              <UserTags :user="post" />
               <ul class="mt-4">
                 <li class="inline-block p-2">
                   <Icon
@@ -61,7 +57,7 @@
                     Comment
                   </p>
                 </li>
-                <li class="inline-block p-2" v-if="$store.state.post.phone">
+                <li class="inline-block p-2" v-if="post.phone">
                   <Icon
                     @click="openWhatsapp"
                     type="Phone"
@@ -77,19 +73,13 @@
                     type="Archive"
                     class="cursor-pointer block p-3 h-12 w-12 rounded-full"
                     :class="{
-                      'bg-white text-black':
-                        $store.state.post.status == 'publish',
-                      'bg-orange text-white':
-                        $store.state.post.status == 'draft',
+                      'bg-white text-black': post.status == 'publish',
+                      'bg-orange text-white': post.status == 'draft',
                     }"
                   />
                   <p
                     class="text-xs mt-2 text-black text-center block"
-                    v-html="
-                      $store.state.post.status == 'draft'
-                        ? 'Unarchive'
-                        : 'Archive'
-                    "
+                    v-html="post.status == 'draft' ? 'Unarchive' : 'Archive'"
                   ></p>
                 </li>
               </ul>
@@ -97,12 +87,11 @@
           </div>
         </div>
 
-        <div class="relative py-20" v-if="$store.state.post.id">
-
+        <div class="relative py-20" v-if="post.id">
           <HistoryList
             @deleteComment="deleteComment"
             :id="getPostID()"
-            :item="$store.state.post"
+            :item="post"
             :key="historyKey"
           />
         </div>
@@ -125,7 +114,7 @@ import HistoryList from "@/components/HistoryList.vue";
 
 import store from "@/store";
 
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 
@@ -152,34 +141,28 @@ export default {
   setup() {
     const route = useRoute();
     var post_id = route.params.id;
-
-    //console.log( route );
+    const post = computed(() => store.state.cachedMembers);
 
     // SAVE THE POST IN CLIENT STATE
     const setPost = (post) => {
       const newPost = ref(post);
       store.commit("setPost", newPost);
+      store.commit("setCachedMembers", newPost);
     };
 
     // GET POST FROM SERVER AND SET TO CLIENT STATE
     const setPostFromServer = () => {
-      const getPost = () => API.requestPost("inpursuit-members", post_id);
+      const getPost = async () =>
+        await API.requestPost("inpursuit-members", post_id);
       const { data } = useQuery("postQuery" + post_id, getPost);
       watch(data, (data) => setPost(data.data));
     };
-
-    if (route.params && route.params.post) {
-      /* PRELOADED CONTENT FROM ROUTER */
-      setPost(JSON.parse(route.params.post));
-    } else {
-      setPostFromServer();
-    }
 
     /*
      * ARCHIVE OR UNARCHIVE POST
      */
     const archivePost = () => {
-      var post = JSON.parse(JSON.stringify(store.state.post));
+      var post = JSON.parse(JSON.stringify(post));
 
       // CHANGING POST STATUS TO TRASH & PUBLISH
       if (post.status == "publish") post.status = "draft";
@@ -195,18 +178,20 @@ export default {
     };
 
     const getHeaderTitle = () => {
-      var post = store.state.post;
       if (post && post.title && post.title.rendered) {
         return post.title.rendered;
       }
       return "Member";
     };
 
-    const getPostID = () => parseInt( route.params.id );
+    const getPostID = () => parseInt(route.params.id);
 
     onMounted(() => {
       if (!Object.keys(store.state.account).length) {
         store.commit("getAccountSettings");
+      }
+      if (!post.value.id) {
+        setPostFromServer();
       }
     });
 
@@ -214,6 +199,7 @@ export default {
       getPostID,
       getHeaderTitle,
       archivePost,
+      post,
     };
   },
 
@@ -236,7 +222,7 @@ export default {
     },
 
     openWhatsapp() {
-      var phone_number = this.$store.state.post.phone;
+      var phone_number = this.post.phone;
 
       if (phone_number) {
         var link = "https://wa.me/" + phone_number;
@@ -254,7 +240,7 @@ export default {
     },
 
     getEditLink() {
-      return Util.getPostEditLink(this.$store.state.post);
+      return Util.getPostEditLink(this.post);
     },
   },
 };

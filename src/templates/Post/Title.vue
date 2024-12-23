@@ -1,22 +1,29 @@
 <template>
   <router-link
-    class='text-lg leading-tight'
+    class="text-lg leading-tight"
     v-bind="$attrs"
-    :to="getPostLink( post )"
-    v-html='post.title.rendered'
-    v-if='post.title && post.title.rendered'
+    :to="getPostLink(post)"
+    v-html="post.title.rendered"
+    @click="handleClick(post)"
+    v-if="post.title && post.title.rendered"
   />
 </template>
 
 <script>
-import Util from '@/lib/Util'
+import Util from "@/lib/Util";
+import store from "@/store";
+import { ref } from "vue";
 
-export default{
+export default {
   props: {
-    post: Object
+    post: Object,
   },
   methods: {
-    getPostLink: ( post ) => Util.getPostLink( post ),
-  }
-}
+    getPostLink: (post) => Util.getPostLink(post),
+    handleClick: (post) => {
+      const newPost = ref(post);
+      store.commit("setCachedMembers", newPost);
+    },
+  },
+};
 </script>

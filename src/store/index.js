@@ -25,6 +25,7 @@ export default createStore({
     errors: [],
     post: {},
     teamMember: {},
+    cachedMembers: {},
   },
   mutations: {
     getLocalSettings(state) {
@@ -47,6 +48,14 @@ export default createStore({
     setTeamMember(state, payload) {
       state.teamMember = payload;
       return state.teamMember;
+    },
+
+    setCachedMembers(state, data) {
+      state.cachedMembers = data;
+      return state.cachedMembers;
+    },
+    clearCachedMembers(state) {
+      state.cachedMembers = [];
     },
 
     /*
