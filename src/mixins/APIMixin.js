@@ -1,4 +1,4 @@
-import API from '@/api.js'
+import API from "@/api.js";
 //import { filter } from 'core-js/core/array';
 
 export default {
@@ -12,8 +12,8 @@ export default {
       var headers = {};
       if (username && password) {
         headers = {
-          'Authorization': 'Basic ' + btoa(username + ':' + password),
-          'Content-Type': 'application/x-www-form-urlencoded'
+          Authorization: "Basic " + btoa(username + ":" + password),
+          "Content-Type": "application/x-www-form-urlencoded",
         };
       }
       return headers;
@@ -21,32 +21,32 @@ export default {
 
     requestUser(user_id) {
       var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-members/' + user_id;
+      var endpoint = "/wp-json/wp/v2/inpursuit-members/" + user_id;
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'get',
-        headers: component.getAuthHeaders()
+        method: "get",
+        headers: component.getAuthHeaders(),
       });
     },
 
-    requestUsers(page, search = '', filterData = {}) {
+    requestUsers(page, search = "", filterData = {}) {
       //var component = this;
       //var endpoint = '/wp-json/wp/v2/inpursuit-members/';
 
-      if( filterData.status && 'all' == filterData.status ){
-        filterData.status = ["draft", "publish"]
+      if (filterData.status && "all" == filterData.status) {
+        filterData.status = ["draft", "publish"];
       }
 
       var data = {
-        'orderby': 'title',
-        'order' : 'asc',
-        'page'  : page,
-        'search': search,
+        orderby: "title",
+        order: "asc",
+        page: page,
+        search: search,
       };
 
       let finalData = Object.assign(data, filterData);
 
-      return API.requestPosts( 'inpursuit-members', finalData )
+      return API.requestPosts("inpursuit-members", finalData);
 
       /*
       return API.makeRequest({
@@ -60,129 +60,128 @@ export default {
 
     requestEvent(event_id) {
       var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-events/' + event_id;
+      var endpoint = "/wp-json/wp/v2/inpursuit-events/" + event_id;
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'get',
-        headers: component.getAuthHeaders()
+        method: "get",
+        headers: component.getAuthHeaders(),
       });
     },
 
-    requestEvents(page, search = '', filterData = {}) {
+    requestEvents(page, search = "", filterData = {}) {
       var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-events/';
+      var endpoint = "/wp-json/wp/v2/inpursuit-events/";
 
       var data = {
         //'orderby' : 'ID',
         //'order'   : 'asc',
-        'page'    : page,
-        'search'  : search,
-        'status'  : 'publish',
+        page: page,
+        search: search,
+        status: "publish",
       };
 
       let finalData = Object.assign(data, filterData);
 
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'get',
+        method: "get",
         data: finalData,
-        headers: component.getAuthHeaders()
+        headers: component.getAuthHeaders(),
       });
     },
 
     requestHistory(options) {
       var component = this;
-      var endpoint = '/wp-json/inpursuit/v1/history';
+      var endpoint = "/wp-json/inpursuit/v1/history";
       if (options.id) {
-        endpoint += '/' + options.id;
+        endpoint += "/" + options.id;
       }
       if (options.page) {
-        endpoint += '?page=' + options.page;
+        endpoint += "?page=" + options.page;
       }
 
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'get',
-        headers: component.getAuthHeaders()
+        method: "get",
+        headers: component.getAuthHeaders(),
       });
     },
 
     requestProfile() {
       var component = this;
-      var endpoint = '/wp-json/wp/v2/users/me?context=edit';
+      var endpoint = "/wp-json/wp/v2/users/me?context=edit";
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'get',
-        headers: component.getAuthHeaders()
+        method: "get",
+        headers: component.getAuthHeaders(),
       });
     },
 
     deleteComment(comment_id) {
       var component = this;
-      var endpoint = '/wp-json/inpursuit/v1/comments/' + comment_id;
+      var endpoint = "/wp-json/inpursuit/v1/comments/" + comment_id;
       var headers = component.getAuthHeaders();
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'delete',
-        headers: headers
+        method: "delete",
+        headers: headers,
       });
     },
 
-    postComment(post_id, comment) {
+    postComment(post_id, comment, comments_category) {
       var component = this;
-      var endpoint = '/wp-json/inpursuit/v1/comments';
+      var endpoint = "/wp-json/inpursuit/v1/comments";
       var headers = component.getAuthHeaders();
-      headers['Content-Type'] = 'application/json';
+      headers["Content-Type"] = "application/json";
 
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'post',
+        method: "post",
         data: {
           comment: comment,
-          post: post_id
+          post: post_id,
+          ...(comments_category ? { comments_category } : {}),
         },
-        headers: headers
+        headers: headers,
       });
     },
 
     addEvent(title, date, description, event_type, location, status) {
       var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-events';
+      var endpoint = "/wp-json/wp/v2/inpursuit-events";
       var headers = component.getAuthHeaders();
-      headers['Content-Type'] = 'application/json';
+      headers["Content-Type"] = "application/json";
 
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'post',
+        method: "post",
         data: {
           title: title,
           date: date,
           description: description,
-          'inpursuit-event-type': event_type,
+          "inpursuit-event-type": event_type,
           location: location,
-          status: status
+          status: status,
         },
-        headers: headers
+        headers: headers,
       });
-
     },
 
     updateAttendance(member_id, event_id, attended) {
       var component = this;
-      var endpoint = '/wp-json/wp/v2/inpursuit-members/' + member_id;
+      var endpoint = "/wp-json/wp/v2/inpursuit-members/" + member_id;
       var headers = component.getAuthHeaders();
-      headers['Content-Type'] = 'application/json';
+      headers["Content-Type"] = "application/json";
 
       return API.makeRequest({
         url: component.$store.state.settings.account_url + endpoint,
-        method: 'post',
+        method: "post",
         data: {
           event_id: event_id,
           attended: attended,
         },
-        headers: headers
+        headers: headers,
       });
-
-    }
-  }
-}
+    },
+  },
+};
