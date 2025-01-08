@@ -88,7 +88,7 @@
             :route="{ name: 'Categories', params: { type: type } }"
           />
           <SettingItem
-            label="Comments Category"
+            label="Comment Types"
             icon="Comment"
             icon_classes="bg-gray"
             :route="{
