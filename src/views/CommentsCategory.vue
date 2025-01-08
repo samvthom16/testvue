@@ -1,6 +1,6 @@
 <template>
   <PhoneUI
-    title="Comments Category"
+    title="Comment Types"
     :configUI="{
       hide_footer: true,
       maintitle_classes: 'hidden',

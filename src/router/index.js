@@ -113,12 +113,12 @@ const routes = [
     component: () => import("@/views/NewCategory.vue"),
   },
   {
-    path: "/categories/comments-category",
+    path: "/categories/comment-types",
     name: "CommentsCategory",
     component: () => import("@/views/CommentsCategory.vue"),
   },
   {
-    path: "/categories/comments-category/new",
+    path: "/categories/comment-types/new",
     name: "NewCommentsCategory",
     component: () => import("@/views/NewCommentsCategory.vue"),
   },
