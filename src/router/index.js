@@ -112,6 +112,16 @@ const routes = [
     name: "NewCategory",
     component: () => import("@/views/NewCategory.vue"),
   },
+  {
+    path: "/categories/comments-category",
+    name: "CommentsCategory",
+    component: () => import("@/views/CommentsCategory.vue"),
+  },
+  {
+    path: "/categories/comments-category/new",
+    name: "NewCommentsCategory",
+    component: () => import("@/views/NewCommentsCategory.vue"),
+  },
 ];
 
 const router = createRouter({
