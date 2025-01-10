@@ -9,7 +9,6 @@ import Events from "@/views/Events.vue";
 import SingleEvent from "@/views/SingleEvent.vue";
 import NewEvent from "@/views/NewEvent.vue";
 import NewMember from "@/views/NewMember.vue";
-import SingleComments from "@/views/SingleComments.vue";
 
 const routes = [
   {
@@ -50,8 +49,7 @@ const routes = [
   {
     path: "/comments",
     name: "Comments",
-    component: SingleComments,
-    //   component: () => import("@/views/Comments.vue"),
+    component: () => import("@/views/Comments.vue"),
   },
   {
     path: "/login",
