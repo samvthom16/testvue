@@ -49,8 +49,6 @@
           </div>
         </div>
 
-        {{ console.log(fields) }}
-
         <component
           v-for="field in fields"
           :is="field.component"

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-5">
     <label class="block font-semibold text-black mb-2">{{ field.label }}</label>
     <div class="flex flex-wrap gap-4 items-center">
       <div
@@ -8,6 +8,7 @@
         class="flex items-center"
       >
         <input
+          name="inpursuit-group"
           type="checkbox"
           :id="`${field.id}-${optionValue}`"
           :value="optionValue"

@@ -159,16 +159,18 @@ const post_edit = (post_type = 'inpursuit-members', textfields = {}, dropdownfie
     var form = document.querySelector('form')
     var formData = new FormData(form)
     for (var key of formData.keys()) {
-      var value = formData.get(key)
-      if (value && value != "Choose")
-        newPost[key] = value
-    }
+      var value;
 
-    fields.value.forEach((field) => {
-      if (field.component === "CheckboxGroupField" && Array.isArray(field.value)) {
-        newPost['inpursuit-group'] = field.value;
+      if (key === "inpursuit-group") {
+        value = formData.getAll(key);
+      } else {
+        value = formData.get(key);
       }
-    });
+
+      if (value && value !== "Choose") {
+        newPost[key] = value;
+      }
+    }
 
     // CHANGE THE FORMAT OF THE DATE
     if (newPost.date) {
@@ -256,13 +258,10 @@ const post_edit = (post_type = 'inpursuit-members', textfields = {}, dropdownfie
 
       for (var key in checkboxFields) {
         if (data[key]) {
-          let finalOptions = Object.assign({
-            // 'Choose': 'Choose'
-          }, data[key]);
+          let finalOptions = Object.assign({}, data[key]);
           fields.value.push({
             id: key,
-            // label: dropdownfields[key] || key,
-            label: "Groups",
+            label: checkboxFields[key] || key,
             component: 'CheckboxGroupField',
             value: [],
             options: finalOptions
