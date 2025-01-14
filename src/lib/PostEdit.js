@@ -209,6 +209,10 @@ const post_edit = (post_type = 'inpursuit-members', textfields = {}, dropdownfie
   const redirectToSinglePost = (post) => {
     if (window.history.length > 2) router.go(-1)
     else router.push(Util.getPostLink(post))
+
+    const newPost = ref(post);
+    store.commit("setPost", newPost);
+    store.commit("setCachedMembers", newPost);
   }
 
   /*
