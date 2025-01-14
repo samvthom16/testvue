@@ -6,7 +6,7 @@
       :key="post"
     >
       <div>
-        <router-link class="font-bold text-xl" :to="getEditLink(post, false)">
+        <router-link class="font-bold text-xl" :to="getRedirectionLink(post)">
           {{ post.name }}
         </router-link>
 
@@ -16,7 +16,7 @@
           </template>
         </OrbitPosts>
       </div>
-      <router-link :to="getEditLink(post, true)">
+      <router-link :to="getEditLink(post)">
         <Icon type="Edit" class="inline" />
       </router-link>
     </li>
@@ -41,12 +41,32 @@ export default {
     AvatarsStackedAnimation,
   },
   setup() {
-    const getEditLink = (post, edit) => {
-      if (post.taxonomy === "inpursuit-event-type" && !edit)
+    const getRedirectionLink = (post) => {
+      const taxonomyToQueryMap = {
+        "inpursuit-event-type": { name: "Events", queryKey: "event_type" },
+        "inpursuit-group": { name: "Members", queryKey: "group" },
+        "inpursuit-profession": { name: "Members", queryKey: "profession" },
+        "inpursuit-gender": { name: "Members", queryKey: "gender" },
+        "inpursuit-location": { name: "Members", queryKey: "location" },
+        "inpursuit-status": { name: "Members", queryKey: "member_status" },
+      };
+
+      const match = taxonomyToQueryMap[post.taxonomy];
+
+      if (match) {
         return {
-          name: "Events",
-          query: { event_type: post.id },
+          name: match.name,
+          query: { [match.queryKey]: post.id },
         };
+      }
+
+      return {
+        name: "NewCategory",
+        query: { id: post.id },
+      };
+    };
+
+    const getEditLink = (post) => {
       return {
         name: "NewCategory",
         query: { id: post.id },
@@ -75,6 +95,7 @@ export default {
     return {
       getEditLink,
       getParams,
+      getRedirectionLink,
     };
   },
 };
