@@ -102,7 +102,7 @@ export default {
         items: {
           all: "All Team Members",
         },
-        selected: team_member.value,
+        // selected: team_member.value,
       },
     });
 
@@ -156,14 +156,19 @@ export default {
         const response = await API.requestUsers();
         const users = response.data;
 
-        const userItems = users.reduce((acc, user) => {
-          acc[user.id] = user.name;
-          return acc;
-        }, {});
+        const userItems = {};
+        users.map((user) => {
+          userItems[user.id] = user.name;
+        });
 
-        dropdownButtons.value.member.items = {
-          ...dropdownButtons.value.member.items,
-          ...userItems,
+        dropdownButtons.value.member = {
+          popupTitle: "Team Member",
+          badgeText: "",
+          items: {
+            all: "All Team Members",
+            ...userItems,
+          },
+          selected: team_member.value,
         };
       } catch (error) {
         console.error("Error fetching users:", error);
