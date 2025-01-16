@@ -22,7 +22,7 @@ export default {
     getPostLink: (post) => Util.getPostLink(post),
     handleClick: (post) => {
       const newPost = ref(post);
-      store.commit("setCachedMembers", newPost);
+      store.commit("setCachedMember", newPost);
     },
   },
 };

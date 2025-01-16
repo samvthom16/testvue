@@ -212,7 +212,7 @@ const post_edit = (post_type = 'inpursuit-members', textfields = {}, dropdownfie
 
     const newPost = ref(post);
     store.commit("setPost", newPost);
-    store.commit("setCachedMembers", newPost);
+    store.commit("setCachedMember", newPost);
   }
 
   /*

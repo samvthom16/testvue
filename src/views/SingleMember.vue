@@ -141,13 +141,13 @@ export default {
   setup() {
     const route = useRoute();
     var post_id = route.params.id;
-    const post = computed(() => store.state.cachedMembers);
+    const post = computed(() => store.state.cachedMember);
 
     // SAVE THE POST IN CLIENT STATE
     const setPost = (post) => {
       const newPost = ref(post);
       store.commit("setPost", newPost);
-      store.commit("setCachedMembers", newPost);
+      store.commit("setCachedMember", newPost);
     };
 
     // GET POST FROM SERVER AND SET TO CLIENT STATE
