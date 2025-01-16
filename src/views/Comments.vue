@@ -1,8 +1,19 @@
 <template>
   <PhoneUI title="Comments">
     <template v-slot:phonebody>
+      <div
+        v-if="isLoadingDropdown"
+        class="animate-pulse flex md:w-1/6 w-1/2 mb-5"
+      >
+        <div class="flex-1">
+          <div class="border border-lightgray shadow rounded-xl">
+            <div class="h-4 bg-lightgray rounded"></div>
+          </div>
+        </div>
+      </div>
       <ul
         class="whitespace-nowrap border-b border-lightgray pb-4 mb-2 overflow-auto"
+        v-if="isAdmin({ user: userProfile })"
       >
         <li
           class="inline-block mr-2"
@@ -13,7 +24,6 @@
             :field_name="field_name"
             :field="dropdownButton"
             @selectItem="selectItem"
-            v-if="isAdmin({ user: userProfile })"
           />
         </li>
       </ul>
@@ -74,6 +84,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const team_member = ref(route.query.team_member || "all");
+    const isLoadingDropdown = ref(true);
 
     const params = ref({
       unique_id: 1,
@@ -84,7 +95,16 @@ export default {
       user_id: team_member.value === "all" ? "" : team_member.value,
     });
 
-    const dropdownButtons = ref({});
+    const dropdownButtons = ref({
+      member: {
+        popupTitle: "Team Member",
+        badgeText: "",
+        items: {
+          all: "All Team Members",
+        },
+        selected: team_member.value,
+      },
+    });
 
     const onSearch = (searchText) => {
       params.value.search = searchText;
@@ -93,7 +113,14 @@ export default {
 
     const getProfile = () => API.requestProfile();
 
-    const { data } = useQuery("profileQuery", getProfile);
+    const { data } = useQuery("profileQuery", getProfile, {
+      onSuccess: () => {
+        isLoadingDropdown.value = false;
+      },
+      onError: () => {
+        isLoadingDropdown.value = false;
+      },
+    });
 
     const userProfile = computed(() =>
       data.value ? data.value.data : ref({ id: 0 })
@@ -134,16 +161,9 @@ export default {
           return acc;
         }, {});
 
-        dropdownButtons.value = {
-          member: {
-            popupTitle: "Team Member",
-            badgeText: "",
-            items: {
-              all: "All Team Members",
-              ...userItems,
-            },
-            selected: team_member.value,
-          },
+        dropdownButtons.value.member.items = {
+          ...dropdownButtons.value.member.items,
+          ...userItems,
         };
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -163,6 +183,7 @@ export default {
       selectItem,
       isAdmin,
       userProfile,
+      isLoadingDropdown,
     };
   },
 };
