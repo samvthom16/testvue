@@ -66,6 +66,7 @@ import ButtonPopupModal from "@/components/ButtonPopupModal.vue";
 import API from "@/api";
 import Util from "@/lib/Util";
 import { useQuery } from "vue-query";
+import store from "@/store";
 
 export default {
   name: "Comments",
@@ -145,7 +146,6 @@ export default {
           };
         }
         router.push({ path: "/comments", query: { team_member: data.value } });
-        console.log("Selected Item Data:", data);
         dropdownButtons.value[data.name].selected = data.value;
         context.emit("selectItem", data);
       }
@@ -171,7 +171,10 @@ export default {
           selected: team_member.value,
         };
       } catch (error) {
-        console.error("Error fetching users:", error);
+        store.commit(
+          "notifyError",
+          "Something went wrong, please try again later!"
+        );
       }
     };
 
