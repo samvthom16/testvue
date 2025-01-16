@@ -52,15 +52,13 @@
 
 <script>
 import PhoneUI from "@/components/PhoneUI.vue";
-import Icon from "@/components/Icon.vue";
 import SearchField from "@/components/SearchField.vue";
-import MembersDropdown from "@/components/MembersDropdown.vue";
 import OrbitComments from "@/lib/OrbitComments.vue";
 
 import ListWithImageAnimation from "@/templates/Animation/ListWithImage.vue";
 import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
 
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ButtonPopupModal from "@/components/ButtonPopupModal.vue";
 import API from "@/api";
@@ -72,9 +70,7 @@ export default {
   name: "Comments",
   components: {
     PhoneUI,
-    Icon,
     SearchField,
-    MembersDropdown,
     ListWithImageAnimation,
     PaginationLoaderAnimation,
     OrbitComments,
