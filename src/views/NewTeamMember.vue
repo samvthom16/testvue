@@ -17,29 +17,50 @@
       ></button>
     </template>
     <template v-slot:phonebody>
-      <form class="" @submit="submit">
-        <div class="mb-5" v-for="(field, slug) in fields" :key="field">
+      <form @submit="submit">
+        <div class="mb-5" v-for="(field, slug) in fields" :key="slug">
           <label class="block font-semibold text-black">{{
             field.label
           }}</label>
           <input
-            disabled
-            type="text"
-            :value="data[slug]"
-            v-if="$route.name === 'EditTeamMember' && slug === 'email'"
-            class="inline-block w-full p-2 border-2 border-solid border-black rounded mb-1 mt-2 opacity-60 cursor-not-allowed"
-          />
-          <input
-            v-else
+            v-if="field.type === 'text'"
             type="text"
             v-model.trim="data[slug]"
-            class="inline-block w-full p-2 border-2 border-solid border-black rounded mb-1 mt-2 outline-none focus:border-red"
+            :disabled="slug === 'email' && $route.name === 'EditTeamMember'"
+            :class="[
+              'inline-block w-full p-2 border-2 border-solid rounded mb-1 mt-2',
+              slug === 'email' && $route.name === 'EditTeamMember'
+                ? 'border-black opacity-60 cursor-not-allowed'
+                : 'border-black outline-none focus:border-red',
+            ]"
           />
+          <div
+            v-else-if="field.type === 'checkbox'"
+            class="flex flex-wrap gap-2 mt-2"
+          >
+            <div
+              v-for="option in field.options"
+              :key="option.value"
+              class="flex items-center"
+            >
+              <input
+                type="checkbox"
+                :id="option.value"
+                v-model="data.group"
+                :value="option.value"
+                class="mr-2 border-2 border-solid border-black rounded"
+              />
+              <label :for="option.value" class="text-black text-sm">
+                {{ option.label }}
+              </label>
+            </div>
+          </div>
           <span
             v-if="field['errorMsg']"
             class="py-1 inline-block text-purple text-sm font-medium"
-            >{{ field["errorMsg"] }}</span
           >
+            {{ field["errorMsg"] }}
+          </span>
         </div>
       </form>
       <button
@@ -53,8 +74,9 @@
     </template>
   </PhoneUI>
 </template>
+
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import API from "@/api";
@@ -96,9 +118,33 @@ export default {
         type: "text",
         errorMsg: "",
       },
+      group: {
+        label: "Limit User Access",
+        type: "checkbox",
+        options: [],
+        errorMsg: "",
+      },
     });
 
+    const getUserGroups = async () => {
+      try {
+        const response = await requestSettings();
+
+        fields.value.group.options = Object.entries(response?.data?.group).map(
+          ([id, name]) => ({
+            label: name,
+            value: id,
+          })
+        );
+      } catch (error) {
+        console.error("Error fetching user groups");
+        console.log(error);
+      }
+    };
+
     const requestAPI = (params) => API.requestUsers(params);
+
+    const requestSettings = () => API.requestSettings();
 
     const afterUpdate = () => router.replace({ name: "Team" });
 
@@ -110,6 +156,7 @@ export default {
         first_name: "",
         last_name: "",
         email: "",
+        group: [],
       }
     );
 
@@ -178,6 +225,10 @@ export default {
 
       createOrUpdateData(ev);
     };
+
+    onMounted(async () => {
+      await getUserGroups();
+    });
 
     return {
       data,

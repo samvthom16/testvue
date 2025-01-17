@@ -121,6 +121,8 @@ export default {
         title: "Full Name",
         email: "Email Address",
         phone: "Phone",
+        birthday: "Birthday",
+        wedding: "Wedding",
       },
       // DROPDOWNFIELDS
       {

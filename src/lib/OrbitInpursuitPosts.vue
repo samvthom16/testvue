@@ -4,7 +4,7 @@
     <component
       v-bind="$attrs"
       :is="params.style"
-      :items="items"
+      :posts="items"
       :total="total"
       v-if="status == 'success'"
     ></component>
@@ -14,38 +14,34 @@
   </div>
 </template>
 <script>
-import OrbitQuery from "@/lib/OrbitQuery.js";
+import API from "@/api";
 import Util from "@/lib/Util.js";
 import Helper from "@/lib/Helper.js";
-
-import { onMounted, onUnmounted, computed } from "vue";
-
-import UsersList from "@/templates/Comments/UsersList.vue";
-import UsersListWithComment from "@/templates/Comments/UsersListWithComment.vue";
-import CommentsCount from "@/templates/Comments/CommentsCount.vue";
-
-import API from "@/api";
+import OrbitQuery from "@/lib/OrbitQuery.js";
+import { onMounted, onUnmounted, computed, watch } from "vue";
+import ListWithTermName from "@/templates/InpursuitPosts/ListWithTermName.vue";
 
 export default {
+  name: "OrbitInpursuitPosts",
   props: {
     params: Object,
   },
   components: {
-    UsersList,
-    CommentsCount,
-    UsersListWithComment,
+    ListWithTermName,
   },
-  setup(props) {
+  setup(props, context) {
     const params = computed(() => {
       var params = Util.removeEmptyParams(
         JSON.parse(JSON.stringify(props.params))
       );
-
       delete params["style"];
+      params.post_type = params.post_type ? params.post_type : "";
       return params;
     });
 
-    const requestAPI = (params) => API.requestComments(params);
+    const requestAPI = (params) =>
+      API.requestInpursuitPosts(params.post_type, params);
+
     const {
       items,
       total,
@@ -73,10 +69,16 @@ export default {
         window.removeEventListener("scroll", handleScroll);
       }
     });
+
+    watch(total, () => context.emit("totalChanged", total.value));
+
+    // FOR THE FIRST API CALL
+    context.emit("totalChanged", total.value);
+
     return {
       items,
-      status,
       total,
+      status,
       scrollComponent,
       isFetchingNextPage,
     };

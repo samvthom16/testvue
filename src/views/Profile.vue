@@ -66,30 +66,37 @@
           icon_classes="bg-purple"
           :route="{ name: 'Analytics' }"
         />
-
-
+        <SettingItem
+          label="Special Events"
+          icon="SpecialEvent"
+          icon_classes="bg-red"
+          :route="{ name: 'SpecialEvents' }"
+        />
       </div>
 
-      <div v-if="isAdmin( { user: newTeamMember } )">
-
+      <div v-if="isAdmin({ user: newTeamMember })">
         <div class="mt-8 text-sm text-black font-semibold">CATEGORIES</div>
         <div
           class="text-base focus:outline-none sm:text-sm w-full bg-lightergray rounded-lg py-2 px-4 drop-shadow-sm my-2 divide-y divide-lightgray"
           :key="newTeamMember.id"
         >
-
           <SettingItem
-            v-for="category,type in categories"
+            v-for="(category, type) in categories"
             :label="category.label"
             :icon="category.icon"
             icon_classes="bg-gray"
             :route="{ name: 'Categories', params: { type: type } }"
           />
-
+          <SettingItem
+            label="Comment Types"
+            icon="Comment"
+            icon_classes="bg-gray"
+            :route="{
+              name: 'CommentsCategory',
+            }"
+          />
         </div>
       </div>
-
-
     </template>
   </PhoneUI>
 </template>
@@ -102,7 +109,7 @@ import Util from "@/lib/Util";
 import PhoneUI from "@/components/PhoneUI.vue";
 import SettingItem from "@/components/SettingItem.vue";
 
-import CategoryHelper from '@/lib/CategoryHelper';
+import CategoryHelper from "@/lib/CategoryHelper";
 
 export default {
   name: "Profile",
@@ -114,10 +121,10 @@ export default {
   setup() {
     const getProfile = () => API.requestProfile();
 
-    const { data } = useQuery( "profileQuery", getProfile );
+    const { data } = useQuery("profileQuery", getProfile);
 
-    const newTeamMember = computed( () =>
-      data.value ? data.value.data : ref( { id: 0 } )
+    const newTeamMember = computed(() =>
+      data.value ? data.value.data : ref({ id: 0 })
     );
 
     const { categories } = CategoryHelper();

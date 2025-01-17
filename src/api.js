@@ -67,25 +67,23 @@ const api = {
 
   _getURL: (endpoint) => store.state.settings.account_url + endpoint,
 
-  requestPosts: function ( post_type, params = {} ) {
-
+  requestPosts: function (post_type, params = {}) {
     /*
-    * SPECIAL CONDITION TO CHECK IF ID WAS PASSED IN PARAMS
-    * IF PASSED THEN MAKE A REQUEST TO INDIVIDUAL POST API
-    */
-    if( params.id ){
+     * SPECIAL CONDITION TO CHECK IF ID WAS PASSED IN PARAMS
+     * IF PASSED THEN MAKE A REQUEST TO INDIVIDUAL POST API
+     */
+    if (params.id) {
       var post_id = params.id;
-      delete params[ "id" ];
-      return this.requestPost( post_type, post_id, params );
+      delete params["id"];
+      return this.requestPost(post_type, post_id, params);
     }
-
 
     delete params["post_type"];
     return this.makeRequest({
-      url     : this._getURL("/wp-json/wp/v2/" + post_type + "/"),
-      method  : params.method ? params.method : "get",
-      data    : params,
-      headers : this.getAuthHeaders(),
+      url: this._getURL("/wp-json/wp/v2/" + post_type + "/"),
+      method: params.method ? params.method : "get",
+      data: params,
+      headers: this.getAuthHeaders(),
     });
   },
 
@@ -197,6 +195,47 @@ const api = {
       url: this._getURL("/wp-json/inpursuit/v1/analytics"),
       data: params,
       method: "get",
+      headers: this.getAuthHeaders(),
+    });
+  },
+
+  requestSpecialDates: function (params) {
+    return this.makeRequest({
+      url: this._getURL("/wp-json/inpursuit/v1/special-dates"),
+      data: params,
+      method: "get",
+      headers: this.getAuthHeaders(),
+    });
+  },
+
+  requestInpursuitPosts: function (post_type, params = {}) {
+    /*
+     * SPECIAL CONDITION TO CHECK IF ID WAS PASSED IN PARAMS
+     * IF PASSED THEN MAKE A REQUEST TO INDIVIDUAL POST API
+     */
+    if (params.id) {
+      var post_id = params.id;
+      delete params["id"];
+      return this.requestInpursuitPost(post_type, post_id, params);
+    }
+
+    delete params["post_type"];
+
+    return this.makeRequest({
+      url: this._getURL("/wp-json/inpursuit/v1/" + post_type + "/"),
+      method: params.method ? params.method : "get",
+      data: params,
+      headers: this.getAuthHeaders(),
+    });
+  },
+
+  requestInpursuitPost: function (post_type, post_id, params = {}) {
+    var partUrl = `/wp-json/inpursuit/v1/${post_type}/${post_id}`;
+
+    return this.makeRequest({
+      url: this._getURL(partUrl),
+      method: params.method ? params.method : "get",
+      data: params,
       headers: this.getAuthHeaders(),
     });
   },
