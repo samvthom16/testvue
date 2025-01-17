@@ -158,6 +158,13 @@ export default {
       watch(data, (data) => setPost(data.data));
     };
 
+    if (route.params && route.params.post) {
+      /* PRELOADED CONTENT FROM ROUTER */
+      setPost(JSON.parse(route.params.post));
+    } else {
+      setPostFromServer();
+    }
+
     /*
      * ARCHIVE OR UNARCHIVE POST
      */
