@@ -2,16 +2,16 @@
   <button
     @click="openModal"
     class="button-popup-modal"
-    :disabled="!field.items[field.selected]"
+    :disabled="isFieldDisabled(field.items)"
     :class="{
-      'opacity-50 cursor-not-allowed': !field.items[field.selected],
-      'opacity-100 cursor-pointer': field.items[field.selected],
+      'opacity-50 cursor-not-allowed': isFieldDisabled(field.items),
+      'opacity-100 cursor-pointer': !isFieldDisabled(field.items),
     }"
   >
     {{
       field.items[field.selected]
         ? field.items[field.selected]
-        : field.popupTitle
+        : field.items.all || "All"
     }}
     <span v-if="field.badgeText" class="badge" v-html="field.badgeText"></span>
     <Icon type="Chevron-Down" class="inline" v-else />
@@ -73,6 +73,9 @@ export default {
       };
       this.$emit("selectItem", data);
       this.close();
+    },
+    isFieldDisabled(items) {
+      return Boolean(Object.keys(items).length <= 1);
     },
   },
 };

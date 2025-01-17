@@ -99,7 +99,7 @@ export default {
         items: {
           all: "All Team Members",
         },
-        // selected: team_member.value,
+        selected: team_member.value,
       },
     });
 
@@ -157,14 +157,9 @@ export default {
           userItems[user.id] = user.name;
         });
 
-        dropdownButtons.value.member = {
-          popupTitle: "Team Member",
-          badgeText: "",
-          items: {
-            all: "All Team Members",
-            ...userItems,
-          },
-          selected: team_member.value,
+        dropdownButtons.value.member.items = {
+          ...dropdownButtons.value.member.items,
+          ...userItems,
         };
       } catch (error) {
         store.commit(
