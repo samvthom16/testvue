@@ -1,79 +1,113 @@
 <template>
-  <ul class='whitespace-nowrap border-b border-lightgray pb-4 mb-2 overflow-auto'>
-    <li class='inline-block mr-2' v-for='dropdownButton,field_name in dropdownButtons' :key='dropdownButton'>
-      <ButtonPopupModal :field_name='field_name' :field='dropdownButton' @selectItem='selectItem' />
+  <ul
+    class="whitespace-nowrap border-b border-lightgray pb-4 mb-2 overflow-auto"
+  >
+    <li
+      class="inline-block mr-2"
+      v-for="(dropdownButton, field_name) in dropdownButtons"
+      :key="dropdownButton"
+    >
+      <ButtonPopupModal
+        :field_name="field_name"
+        :field="dropdownButton"
+        @selectItem="selectItem"
+      />
     </li>
   </ul>
 </template>
 
 <script>
-import ButtonPopupModal from '@/components/ButtonPopupModal.vue';
+import ButtonPopupModal from "@/components/ButtonPopupModal.vue";
 
-import { ref } from 'vue';
+import { ref } from "vue";
 
 import FiltersHelper from "@/lib/FiltersHelper.js";
 
-export default{
-  props:{
-    totalItems: Number
+export default {
+  props: {
+    totalItems: Number,
   },
-  components:{
-    ButtonPopupModal
+  components: {
+    ButtonPopupModal,
   },
   watch: {
-    totalItems(){
-      this.dropdownButtons.status.badgeText = this.totalItems
-    }
+    totalItems() {
+      this.dropdownButtons.status.badgeText = this.totalItems;
+    },
   },
-  setup( props, context ){
+  setup(props, context) {
+    const dropdownButtons = ref({
+      status: {
+        popupTitle: "View Members",
+        badgeText: props.totalItems,
+        items: {
+          all: "All Members",
+          publish: "Active Members",
+          draft: "Archived Members",
+        },
+        selected: "publish",
+      },
+      orderby: {
+        popupTitle: "Sort By",
+        badgeText: "",
+        items: {
+          title: "Alphabetical",
+          id: "Newest Members",
+        },
+        selected: "title",
+      },
+      member_status: {
+        popupTitle: "Profile Type",
+        badgeText: "",
+        items: {
+          all: "All Profile Types",
+        },
+        selected: "all",
+      },
+      group: {
+        popupTitle: "Groups",
+        badgeText: "",
+        items: {
+          all: "All Groups",
+        },
+        selected: "all",
+      },
+      gender: {
+        popupTitle: "Gender",
+        badgeText: "",
+        items: {
+          all: "All Genders",
+        },
+        selected: "all",
+      },
+      location: {
+        popupTitle: "Location",
+        badgeText: "",
+        items: {
+          all: "All Locations",
+        },
+        selected: "all",
+      },
+      profession: {
+        popupTitle: "Profession",
+        badgeText: "",
+        items: {
+          all: "All Professions",
+        },
+        selected: "all",
+      },
+    });
 
-    const dropdownButtons = ref( {
-      status : {
-        popupTitle: 'View Members',
-        badgeText : props.totalItems,
-        items: {
-          all     : 'All Members',
-          publish : 'Active Members',
-          draft   : 'Archived Members'
-        },
-        selected: 'publish'
-      },
-      orderby:{
-        popupTitle: 'Sort By',
-        badgeText : '',
-        items: {
-          title  : 'Alphabetical',
-          id     : 'Newest Members',
-        },
-        selected: 'title'
-      },
-      member_status : {
-        popupTitle: 'Profile Type',
-        badgeText : '',
-        items: {
-          all  : 'All Profile Types',
-        },
-        selected: 'all'
-      },
-      /*
-      group : {
-        popupTitle: 'Groups',
-        badgeText : '',
-        items: {
-          all  : 'All Groups',
-        },
-        selected: 'all'
-      }
-      */
-    } );
-
-    const { syncTabWithUrl, selectItem } =
-      FiltersHelper( dropdownButtons, context, [ 'member_status', /*'group'*/ ] );
+    const { syncTabWithUrl, selectItem } = FiltersHelper(
+      dropdownButtons,
+      context,
+      ["member_status", "group", "gender", "location", "profession"]
+    );
 
     return {
       dropdownButtons,
-      selectItem
-    }
-  }
-}
+      selectItem,
+    };
+  },
+};
 </script>
