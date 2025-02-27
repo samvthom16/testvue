@@ -6,7 +6,10 @@
       :key="post"
     >
       <div>
-        <router-link class="font-bold text-xl" :to="getEditLink(post)">
+        <router-link
+          class="font-bold text-xl"
+          :to="getUserRedirectionLink(post)"
+        >
           {{ post.name }}
         </router-link>
         <OrbitComments :params="getParams(post)">
@@ -43,6 +46,13 @@ export default {
       };
     };
 
+    const getUserRedirectionLink = (user) => {
+      return {
+        name: "Comments",
+        query: { comment_type: user?.term_id },
+      };
+    };
+
     const getParams = (post) => {
       var params = {
         per_page: 5,
@@ -56,6 +66,7 @@ export default {
     return {
       getParams,
       getEditLink,
+      getUserRedirectionLink,
     };
   },
 };
