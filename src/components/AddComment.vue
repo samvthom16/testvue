@@ -19,7 +19,7 @@
           class="border-2 border-solid border-black p-2 w-full rounded mb-1 mt-2 bg-white"
         >
           <option
-            v-for="(termName, termId) in comments_category.options"
+            v-for="(termName, termId) in commentsCategoryOptions"
             :key="termId"
             v-html="termName"
             :value="termId"
@@ -64,12 +64,16 @@ export default {
         id: "comments_category",
         label: "Categories",
         value: 0,
-        options: {
-          0: "Select",
-          ...this.$store.state.account?.comments_category,
-        },
       },
     };
+  },
+  computed: {
+    commentsCategoryOptions() {
+      return {
+        0: "Select",
+        ...this.$store.state.account?.comments_category,
+      };
+    },
   },
   methods: {
     getScheduleLink() {
