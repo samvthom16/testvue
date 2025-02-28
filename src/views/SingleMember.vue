@@ -169,11 +169,11 @@ export default {
      * ARCHIVE OR UNARCHIVE POST
      */
     const archivePost = () => {
-      var post = JSON.parse(JSON.stringify(post));
+      var post = JSON.parse(JSON.stringify(store.state.post));
+      if (!post) return;
 
       // CHANGING POST STATUS TO TRASH & PUBLISH
-      if (post.status == "publish") post.status = "draft";
-      else post.status = "publish";
+      post.status = post.status === "publish" ? "draft" : "publish";
 
       post.method = "post";
 
