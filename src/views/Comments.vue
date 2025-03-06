@@ -141,54 +141,40 @@ export default {
       Util.hasUserRole({ user, searchRole: "administrator" });
 
     const selectDropdownItem = (data) => {
-      if (data.value) {
-        const dropdownMapping = {
-          member: { queryParam: "team_member", paramName: "user_id" },
-          comments_category: {
-            queryParam: "comment_type",
-            paramName: "comments_category",
-          },
-        };
+      if (!data.value) return;
 
-        const mapping = dropdownMapping[data.name];
+      const dropdownMapping = {
+        member: { queryParam: "team_member", paramName: "user_id" },
+        comments_category: {
+          queryParam: "comment_type",
+          paramName: "comments_category",
+        },
+      };
 
-        if (mapping) {
-          const queryParam = mapping.queryParam;
-          const paramName = mapping.paramName;
-          const currentQuery = { ...router.currentRoute.value.query };
+      const mapping = dropdownMapping[data.name];
+      if (!mapping) return;
 
-          if (data.value === "all") {
-            params.value = {
-              ...params.value,
-              [paramName]: "",
-              unique_id: params.value.unique_id + 1,
-            };
-            router.push({
-              path: "/comments",
-              query: {
-                ...currentQuery,
-                [queryParam]: "all",
-              },
-            });
-          } else {
-            params.value = {
-              ...params.value,
-              [paramName]: data.value,
-              unique_id: params.value.unique_id + 1,
-            };
-            router.push({
-              path: "/comments",
-              query: {
-                ...currentQuery,
-                [queryParam]: data.value,
-              },
-            });
-          }
+      const { queryParam, paramName } = mapping;
+      const currentQuery = { ...router.currentRoute.value.query };
 
-          dropdownButtons.value[data.name].selected = data.value;
-          context.emit("selectDropdownItem", data);
-        }
-      }
+      const isAllSelected = data.value === "all";
+
+      params.value = {
+        ...params.value,
+        [paramName]: isAllSelected ? "" : data.value,
+        unique_id: params.value.unique_id + 1,
+      };
+
+      router.push({
+        path: "/comments",
+        query: {
+          ...currentQuery,
+          [queryParam]: isAllSelected ? "all" : data.value,
+        },
+      });
+
+      dropdownButtons.value[data.name].selected = data.value;
+      context.emit("selectDropdownItem", data);
     };
 
     const { selectItem } = filtershelper(dropdownButtons, context, [
