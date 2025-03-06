@@ -5,7 +5,7 @@
         <div
           v-for="(dropdownButton, index) in dropdownButtons"
           :key="index"
-          class="animate-pulse flex md:w-1/6 w-1/2 mb-5 mr-3"
+          class="animate-pulse flex md:w-1/6 w-1/3 mb-5 mr-3"
         >
           <div class="flex-1">
             <div class="border border-lightgray shadow rounded-xl">
@@ -108,10 +108,10 @@ export default {
         selected: team_member.value,
       },
       comments_category: {
-        popupTitle: "Comment Category",
+        popupTitle: "Comment Types",
         badgeText: "",
         items: {
-          all: "All Comment Categories",
+          all: "All Comment Types",
         },
         selected: comment_type.value,
       },
@@ -155,6 +155,7 @@ export default {
         if (mapping) {
           const queryParam = mapping.queryParam;
           const paramName = mapping.paramName;
+          const currentQuery = { ...router.currentRoute.value.query };
 
           if (data.value === "all") {
             params.value = {
@@ -162,7 +163,13 @@ export default {
               [paramName]: "",
               unique_id: params.value.unique_id + 1,
             };
-            router.push({ path: "/comments", query: { [queryParam]: "all" } });
+            router.push({
+              path: "/comments",
+              query: {
+                ...currentQuery,
+                [queryParam]: "all",
+              },
+            });
           } else {
             params.value = {
               ...params.value,
@@ -171,7 +178,10 @@ export default {
             };
             router.push({
               path: "/comments",
-              query: { [queryParam]: data.value },
+              query: {
+                ...currentQuery,
+                [queryParam]: data.value,
+              },
             });
           }
 
