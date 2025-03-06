@@ -141,8 +141,6 @@ export default {
       Util.hasUserRole({ user, searchRole: "administrator" });
 
     const selectDropdownItem = (data) => {
-      if (!data.value) return;
-
       const dropdownMapping = {
         member: { queryParam: "team_member", paramName: "user_id" },
         comments_category: {
@@ -152,7 +150,6 @@ export default {
       };
 
       const mapping = dropdownMapping[data.name];
-      if (!mapping) return;
 
       const { queryParam, paramName } = mapping;
       const currentQuery = { ...router.currentRoute.value.query };
