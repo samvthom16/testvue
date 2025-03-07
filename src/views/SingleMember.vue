@@ -69,7 +69,7 @@
                 </li>
                 <li class="inline-block p-2">
                   <Icon
-                    @click="archivePost"
+                    @click="archivePost(post)"
                     type="Archive"
                     class="cursor-pointer block p-3 h-12 w-12 rounded-full"
                     :class="{
@@ -168,12 +168,9 @@ export default {
     /*
      * ARCHIVE OR UNARCHIVE POST
      */
-    const archivePost = () => {
-      var post = JSON.parse(JSON.stringify(post));
-
+    const archivePost = (post) => {
       // CHANGING POST STATUS TO TRASH & PUBLISH
-      if (post.status == "publish") post.status = "draft";
-      else post.status = "publish";
+      post.status = post.status === "publish" ? "draft" : "publish";
 
       post.method = "post";
 

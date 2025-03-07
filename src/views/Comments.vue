@@ -1,19 +1,22 @@
 <template>
   <PhoneUI title="Comments">
     <template v-slot:phonebody>
-      <div
-        v-if="isLoadingDropdown"
-        class="animate-pulse flex md:w-1/6 w-1/2 mb-5"
-      >
-        <div class="flex-1">
-          <div class="border border-lightgray shadow rounded-xl">
-            <div class="h-4 bg-lightgray rounded"></div>
+      <div v-if="isLoadingDropdown" class="flex flex-wrap">
+        <div
+          v-for="(dropdownButton, index) in dropdownButtons"
+          :key="index"
+          class="animate-pulse flex md:w-1/6 w-1/3 mb-5 mr-3"
+        >
+          <div class="flex-1">
+            <div class="border border-lightgray shadow rounded-xl">
+              <div class="h-5 bg-lightgray rounded"></div>
+            </div>
           </div>
         </div>
       </div>
       <ul
         class="whitespace-nowrap border-b border-lightgray pb-4 mb-2 overflow-auto"
-        v-if="isAdmin({ user: userProfile })"
+        v-if="isAdmin({ user: userProfile }) && !isLoadingDropdown"
       >
         <li
           class="inline-block mr-2"
@@ -23,7 +26,7 @@
           <ButtonPopupModal
             :field_name="field_name"
             :field="dropdownButton"
-            @selectItem="selectItem"
+            @selectItem="selectDropdownItem"
           />
         </li>
       </ul>
@@ -65,6 +68,7 @@ import API from "@/api";
 import Util from "@/lib/Util";
 import { useQuery } from "vue-query";
 import store from "@/store";
+import filtershelper from "@/lib/FiltersHelper";
 
 export default {
   name: "Comments",
@@ -81,6 +85,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const team_member = ref(route.query.team_member || "all");
+    const comment_type = ref(route.query.comment_type || "all");
     const isLoadingDropdown = ref(true);
 
     const params = ref({
@@ -90,6 +95,7 @@ export default {
       pagination: 1,
       search: "",
       user_id: team_member.value === "all" ? "" : team_member.value,
+      comments_category: comment_type.value === "all" ? "" : comment_type.value,
     });
 
     const dropdownButtons = ref({
@@ -100,6 +106,14 @@ export default {
           all: "All Team Members",
         },
         selected: team_member.value,
+      },
+      comments_category: {
+        popupTitle: "Comment Types",
+        badgeText: "",
+        items: {
+          all: "All Comment Types",
+        },
+        selected: comment_type.value,
       },
     });
 
@@ -126,26 +140,43 @@ export default {
     const isAdmin = ({ user }) =>
       Util.hasUserRole({ user, searchRole: "administrator" });
 
-    const selectItem = (data) => {
-      if (data.value) {
-        if (data.value === "all") {
-          params.value = {
-            ...params.value,
-            user_id: "",
-            unique_id: params.value.unique_id + 1,
-          };
-        } else {
-          params.value = {
-            ...params.value,
-            user_id: data.value,
-            unique_id: params.value.unique_id + 1,
-          };
-        }
-        router.push({ path: "/comments", query: { team_member: data.value } });
-        dropdownButtons.value[data.name].selected = data.value;
-        context.emit("selectItem", data);
-      }
+    const selectDropdownItem = (data) => {
+      const dropdownMapping = {
+        member: { queryParam: "team_member", paramName: "user_id" },
+        comments_category: {
+          queryParam: "comment_type",
+          paramName: "comments_category",
+        },
+      };
+
+      const mapping = dropdownMapping[data.name];
+
+      const { queryParam, paramName } = mapping;
+      const currentQuery = { ...router.currentRoute.value.query };
+
+      const isAllSelected = data.value === "all";
+
+      params.value = {
+        ...params.value,
+        [paramName]: isAllSelected ? "" : data.value,
+        unique_id: params.value.unique_id + 1,
+      };
+
+      router.push({
+        path: "/comments",
+        query: {
+          ...currentQuery,
+          [queryParam]: isAllSelected ? "all" : data.value,
+        },
+      });
+
+      dropdownButtons.value[data.name].selected = data.value;
+      context.emit("selectDropdownItem", data);
     };
+
+    const { selectItem } = filtershelper(dropdownButtons, context, [
+      "comments_category",
+    ]);
 
     const fetchUsers = async () => {
       try {
@@ -183,6 +214,7 @@ export default {
       isAdmin,
       userProfile,
       isLoadingDropdown,
+      selectDropdownItem,
     };
   },
 };
