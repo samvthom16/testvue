@@ -24,14 +24,10 @@
           class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none mb-4"
           v-model="selectedDate"
           :max="maxDate(new Date(item.date))"
+          :min="minDate(new Date(item.date))"
         />
       </div>
-      <div
-        v-if="
-          selectedDate < maxDate(new Date(item.date)) || modalType == 'edit'
-        "
-        class="h-8 relative mt-4 mb-2"
-      >
+      <div v-if="checkCondition(item.date)" class="h-8 relative mt-4 mb-2">
         <button
           class="absolute right-0 bg-purple text-white p-2 text-sm rounded"
           @click="saveComment"
@@ -137,8 +133,16 @@ export default {
     maxDate(dateString) {
       if (dateString) {
         const date = new Date(dateString);
-        date.setDate(dateString.getDate());
+        date.setDate(date.getDate());
         return date.toISOString().split("T")[0];
+      }
+      return "";
+    },
+    minDate(dateString) {
+      if (dateString) {
+        const oneMonthBefore = new Date(dateString);
+        oneMonthBefore.setMonth(oneMonthBefore.getMonth() - 1);
+        return oneMonthBefore.toISOString().split("T")[0];
       }
       return "";
     },
@@ -147,12 +151,20 @@ export default {
       if (isNaN(date.getTime())) {
         return false;
       }
+
       const year = date.getFullYear();
       if (year < 2000 || year > 3000) {
         return false;
       }
 
       return true;
+    },
+    checkCondition(date) {
+      return (
+        (this.selectedDate < this.maxDate(new Date(date)) &&
+          this.selectedDate > this.minDate(new Date(date))) ||
+        this.modalType == "edit"
+      );
     },
   },
 };
