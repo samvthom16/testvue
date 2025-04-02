@@ -49,7 +49,10 @@
           ></span>
         </div>
         <button
-          v-if="item.type == 'comment'"
+          v-if="
+            item.type == 'comment' &&
+            (isAdmin({ user: user }) || item.user_id === String(user.id))
+          "
           type="button"
           class="rounded-sm text-gray outline-none absolute right-2 top-4"
           @click="toggleMenu(item.id)"
@@ -112,6 +115,7 @@ import Icon from "@/components/Icon.vue";
 import ItemAnimation from "@/components/ItemAnimation.vue";
 import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
 import EditComment from "./EditComment.vue";
+import { useQuery } from "vue-query";
 
 export default {
   name: "HistoryList",
@@ -133,8 +137,12 @@ export default {
     });
 
     const requestAPI = (params) => API.requestHistory(params);
+    const requestProfile = () => API.requestProfile();
     var { items, watchScroll, scrollComponent, status, isFetchingNextPage } =
       OrbitQuery(params.value, requestAPI);
+
+    const { data } = useQuery("profileQuery", requestProfile);
+    const user = computed(() => (data.value ? data.value.data : { id: 0 }));
 
     const showMenu = reactive({});
     const showModal = reactive({});
@@ -205,6 +213,9 @@ export default {
       showMenu[itemId] = !showMenu[itemId];
     };
 
+    const isAdmin = ({ user }) =>
+      Util.hasUserRole({ user, searchRole: "administrator" });
+
     return {
       items,
       showMenu,
@@ -219,6 +230,8 @@ export default {
       closeCommentModal,
       openCommentModal,
       forceHistoryRerender,
+      user,
+      isAdmin,
     };
   },
   methods: {
