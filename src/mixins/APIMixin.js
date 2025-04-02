@@ -146,6 +146,21 @@ export default {
       });
     },
 
+    putComment(comment_id, data) {
+      var component = this;
+      var endpoint = `/wp-json/inpursuit/v1/comments/${comment_id}`;
+      var headers = component.getAuthHeaders();
+      headers["Content-Type"] = "application/json";
+
+      return API.makeRequest({
+        url: component.$store.state.settings.account_url + endpoint,
+        method: "post",
+        data: data,
+        headers: headers,
+      });
+    },
+
+
     addEvent(title, date, description, event_type, location, status) {
       var component = this;
       var endpoint = "/wp-json/wp/v2/inpursuit-events";

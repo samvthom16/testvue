@@ -93,6 +93,7 @@
             :id="getPostID()"
             :item="post"
             :key="historyKey"
+            @updateComment="forceHistoryRerender()"
           />
         </div>
       </div>
