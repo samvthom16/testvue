@@ -21,7 +21,7 @@
           type="date"
           id="dateInput"
           name="dateInput"
-          class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none mb-4"
+          class="inline-block w-full p-2 border-2 border-solid border-black rounded mb-1 mt-2 outline-none focus:border-red"
           v-model="selectedDate"
           :max="maxDate(new Date(item.date))"
           :min="minDate(new Date(item.date))"
