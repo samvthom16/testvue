@@ -101,7 +101,7 @@ export default {
         }
         data.modified_on = updatedDateStamp;
       } else {
-        if (!component.newComment) {
+        if (!component.newComment || component.newComment.trim() == "") {
           component.error_msg = "This field cannot be left empty.";
           return false;
         }
