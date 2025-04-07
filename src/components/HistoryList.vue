@@ -49,10 +49,7 @@
           ></span>
         </div>
         <button
-          v-if="
-            item.type == 'comment' &&
-            (isAdmin({ user: user }) || item.user_id === String(user.id))
-          "
+          v-if="isAdmin({ user: user }) || item.user_id == user.id"
           type="button"
           class="rounded-sm text-gray outline-none absolute right-2 top-4"
           @click="toggleMenu(item.id)"
@@ -60,59 +57,14 @@
           <Icon type="Ellipsis" class="w-4 h-4" />
         </button>
 
-        <div
+        <CommentActionsMenu
           v-if="showMenu[item.id]"
-          class="absolute right-6 top-8 bg-white z-10 shadow-lg p-3 rounded-md"
-        >
-          <ul class="space-y-2">
-            <li>
-              <button
-                v-if="showEditButton(item.date, user)"
-                type="button"
-                class="flex items-center space-x-2 hover:text-darkgray transition-all"
-                @click="openCommentModal(item.id, 'edit')"
-              >
-                <Icon type="Edit" />
-                <span>Edit</span>
-              </button>
-              <div
-                v-else
-                class="flex space-x-2 text-darkgray cursor-not-allowed"
-              >
-                <Icon type="Edit" />
-                <span>Edit</span>
-              </div>
-            </li>
-            <li>
-              <button
-                v-if="showRescheduleButton(item.date)"
-                type="button"
-                class="flex items-center space-x-2 hover:text-darkgray transition-all"
-                @click="openCommentModal(item.id, 'reschedule')"
-              >
-                <Icon type="Clock" />
-                <span>Re-schedule</span>
-              </button>
-              <div
-                v-else
-                class="flex space-x-2 text-darkgray cursor-not-allowed"
-              >
-                <Icon type="Clock" />
-                <span>Re-schedule</span>
-              </div>
-            </li>
-            <li>
-              <button
-                type="button"
-                class="flex items-center space-x-2 text-red hover:text-lightred transition-all"
-                @click="deleteComment(item)"
-              >
-                <Icon type="Delete" />
-                <span>Delete</span>
-              </button>
-            </li>
-          </ul>
-        </div>
+          :item="item"
+          :isMenuVisible="showMenu[item.id]"
+          :user="user"
+          @openCommentModal="openCommentModal"
+          @deleteComment="deleteComment"
+        />
       </li>
     </ul>
     <PaginationLoaderAnimation v-if="isFetchingNextPage" />
@@ -131,6 +83,7 @@ import Icon from "@/components/Icon.vue";
 import ItemAnimation from "@/components/ItemAnimation.vue";
 import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
 import EditComment from "./EditComment.vue";
+import CommentActionsMenu from "./CommentActionsMenu.vue";
 import { useQuery } from "vue-query";
 
 export default {
@@ -140,6 +93,7 @@ export default {
     ItemAnimation,
     Icon,
     EditComment,
+    CommentActionsMenu,
   },
   props: {
     id: Number,
@@ -232,18 +186,6 @@ export default {
     const isAdmin = ({ user }) =>
       Util.hasUserRole({ user, searchRole: "administrator" });
 
-    const showEditButton = (dateString, user) => {
-      if (isAdmin({ user: user })) return true;
-      return showRescheduleButton(dateString);
-    };
-    const showRescheduleButton = (dateString) => {
-      const currentDate = new Date();
-      const inputDate = new Date(dateString);
-      const timeDifference = currentDate - inputDate;
-      const oneMonthInMillis = 30 * 24 * 60 * 60 * 1000;
-      return timeDifference < oneMonthInMillis;
-    };
-
     return {
       items,
       showMenu,
@@ -260,8 +202,9 @@ export default {
       forceHistoryRerender,
       user,
       isAdmin,
-      showEditButton,
-      showRescheduleButton,
+      openCommentModal,
+      closeCommentModal,
+      toggleMenu,
     };
   },
   methods: {
