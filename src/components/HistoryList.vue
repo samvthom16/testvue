@@ -58,9 +58,9 @@
         </button>
 
         <CommentActionsMenu
-          v-if="showMenu[item.id]"
+          v-if="showMenu.id == item.id"
           :item="item"
-          :isMenuVisible="showMenu[item.id]"
+          :isMenuVisible="showMenu.id == item.id"
           :user="user"
           @openCommentModal="openCommentModal"
           @deleteComment="deleteComment"
@@ -108,7 +108,7 @@ export default {
 
     const requestAPI = (params) => API.requestHistory(params);
     const requestProfile = () => API.requestProfile();
-    var { items, watchScroll, scrollComponent, status, isFetchingNextPage } =
+    const { items, watchScroll, scrollComponent, status, isFetchingNextPage } =
       OrbitQuery(params.value, requestAPI);
 
     const { data } = useQuery("profileQuery", requestProfile);
@@ -174,13 +174,8 @@ export default {
     });
 
     const toggleMenu = (itemId) => {
-      Object.keys(showMenu).forEach((key) => {
-        if (key !== String(itemId)) {
-          showMenu[key] = false;
-        }
-      });
-
-      showMenu[itemId] = !showMenu[itemId];
+      if (showMenu.id === itemId) showMenu.id = null;
+      else showMenu.id = itemId;
     };
 
     const isAdmin = ({ user }) =>

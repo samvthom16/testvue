@@ -27,7 +27,7 @@
           :min="minDate(new Date(item.date))"
         />
       </div>
-      <div v-if="checkCondition(item.date)" class="h-8 relative mt-4 mb-2">
+      <div v-if="isDateWithinRange(item.date)" class="h-8 relative mt-4 mb-2">
         <button
           class="absolute right-0 bg-purple text-white p-2 text-sm rounded"
           @click="saveComment"
@@ -100,7 +100,7 @@ export default {
           return;
         }
         data.modified_on = updatedDateStamp;
-      } else {
+      } else if (this.modalType == "edit") {
         if (!component.newComment || component.newComment.trim() == "") {
           component.error_msg = "This field cannot be left empty.";
           return false;
@@ -159,7 +159,7 @@ export default {
 
       return true;
     },
-    checkCondition(date) {
+    isDateWithinRange(date) {
       return (
         (this.selectedDate < this.maxDate(new Date(date)) &&
           this.selectedDate > this.minDate(new Date(date))) ||
