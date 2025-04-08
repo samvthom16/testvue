@@ -49,6 +49,7 @@
           ></span>
         </div>
         <button
+          ref="menuButtonRef"
           v-if="isAdmin({ user: user }) || item.user_id == user.id"
           type="button"
           class="rounded-sm text-gray outline-none absolute right-2 top-4"
@@ -78,7 +79,7 @@ import store from "@/store";
 import Util from "@/lib/Util";
 import Helper from "@/lib/Helper";
 import OrbitQuery from "@/lib/OrbitQuery";
-import { computed, onMounted, onUnmounted, reactive } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import Icon from "@/components/Icon.vue";
 import ItemAnimation from "@/components/ItemAnimation.vue";
 import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
@@ -116,6 +117,7 @@ export default {
 
     const showMenu = reactive({});
     const showModal = reactive({});
+    const menuButtonRef = ref(null);
 
     const forceHistoryRerender = () => {
       context.emit("updateComment");
@@ -168,9 +170,11 @@ export default {
 
     onMounted(() => {
       window.addEventListener("scroll", handleScroll);
+      window.addEventListener("click", handleClickOutside);
     });
     onUnmounted(() => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("click", handleClickOutside);
     });
 
     const toggleMenu = (itemId) => {
@@ -180,6 +184,18 @@ export default {
 
     const isAdmin = ({ user }) =>
       Util.hasUserRole({ user, searchRole: "administrator" });
+
+    const handleClickOutside = (event) => {
+      if (menuButtonRef.value?.length) {
+        const isInside = menuButtonRef.value.some((button) =>
+          button.contains(event.target)
+        );
+
+        if (!isInside && showMenu.id !== null) {
+          showMenu.id = null;
+        }
+      }
+    };
 
     return {
       items,
@@ -200,6 +216,7 @@ export default {
       openCommentModal,
       closeCommentModal,
       toggleMenu,
+      menuButtonRef,
     };
   },
   methods: {
