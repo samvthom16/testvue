@@ -36,6 +36,7 @@
           Post Comment
         </button>
       </div>
+      <div class="text-red text-xs">{{ error_msg }}</div>
     </template>
   </Modal>
 </template>
@@ -96,6 +97,7 @@ export default {
 
     close() {
       this.$emit("close");
+      this.error_msg = "";
     },
 
     saveComment(ev) {
@@ -103,7 +105,7 @@ export default {
 
       var component = this;
 
-      if (!component.newComment) {
+      if (component.newComment.trim() == "") {
         component.error_msg = "This field cannot be left empty.";
         return false;
       }
