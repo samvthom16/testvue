@@ -107,6 +107,7 @@ export default {
         }
         data.comment = component.newComment;
       }
+      data.post = this.item.post_id;
 
       component.setProcessing(true);
 
