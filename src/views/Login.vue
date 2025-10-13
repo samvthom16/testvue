@@ -1,5 +1,4 @@
 <template>
-
   <PhoneUI :configUI="configUI" title="Login">
     <template v-slot:headericon>
       <button v-if="currentStep !== 0" @click="openPreviousForm()">
@@ -111,8 +110,8 @@ export default {
       return url.protocol === "http:" || url.protocol === "https:";
     },
     validateURL(url) {
-      if ( !/^https?:\/\//i.test(url) ) {
-        url = 'https://' + url;
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
       }
       return url.replace(/\/$/, "");
     },
@@ -195,7 +194,7 @@ export default {
           (error) => {
             console.log(error);
             component.form.email_address.error_msg =
-              "Email Address does not exist";
+              error?.response?.data?.message ?? "Email Address does not exist";
             component.$store.state.processing = false;
           }
         );
