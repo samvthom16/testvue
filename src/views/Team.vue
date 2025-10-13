@@ -34,23 +34,26 @@
                 class="inline-block"
                 v-html="joinedText(user.registered_date)"
               ></li>
-              <li
-                class="inline-block mx-2 mb-0.5 w-1 h-1 bg-gray rounded-full"
-                v-if="user.roles && user.roles.length"
-              ></li>
-              <li
-                class="inline-block capitalize"
-                v-if="user.roles && user.roles.length"
-                v-html="user.roles[0]"
-              ></li>
+              <template v-if="isAccountActive({ user })">
+                <li
+                  class="inline-block mx-2 mb-0.5 w-1 h-1 bg-gray rounded-full"
+                ></li>
+                <li class="inline-block capitalize" v-html="user.roles[0]"></li>
+              </template>
             </ul>
+            <span
+              :class="[
+                'account-status',
+                isAccountActive({ user }) ? 'bg-purple' : 'bg-red',
+              ]"
+            >
+              {{ isAccountActive({ user }) ? "Active" : "Inactive" }}
+            </span>
           </div>
-          <router-link
-            v-if="isEditor({ user })"
-            :to="{ name: 'EditTeamMember', query: { id: user.id } }"
-          >
-            <Icon type="Edit" class="inline" />
-          </router-link>
+          <TeamMemberProfileActions
+            :user="user"
+            @accountStatus="fetchTeamMembers"
+          />
         </li>
       </ul>
     </template>
@@ -64,32 +67,42 @@ import Util from "@/lib/Util";
 import Icon from "@/components/Icon.vue";
 import PhoneUI from "@/components/PhoneUI.vue";
 import BackButton from "@/templates/PhoneUI/BackButton.vue";
+import TeamMemberProfileActions from "@/components/TeamMemberProfileActions.vue";
 
 export default {
   components: {
     Icon,
     PhoneUI,
     BackButton,
+    TeamMemberProfileActions,
   },
 
   setup() {
     const users = ref([]);
 
-    API.requestUsers().then((response) => (users.value = response.data));
+    const fetchTeamMembers = () =>
+      API.requestUsers().then((response) => (users.value = response.data));
+
+    fetchTeamMembers();
 
     const joinedText = (datestring) => "Joined " + Util.timeAgo(datestring);
 
     const getUserEditLink = (user) => Util.getUserLink(user);
 
-    const isEditor = ({ user }) =>
-      Util.hasUserRole({ user, searchRole: "editor" });
+    const isAccountActive = ({ user }) => user.roles && user.roles.length;
 
     return {
       users,
-      isEditor,
       joinedText,
       getUserEditLink,
+      isAccountActive,
+      fetchTeamMembers,
     };
   },
 };
 </script>
+<style scoped>
+.account-status {
+  @apply inline-block rounded-full py-1 px-2 mt-2 text-xs text-white font-medium;
+}
+</style>
