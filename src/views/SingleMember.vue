@@ -168,11 +168,12 @@ export default {
     /*
      * ARCHIVE OR UNARCHIVE POST
      */
-    const archivePost = (post) => {
-      // CHANGING POST STATUS TO TRASH & PUBLISH
-      post.status = post.status === "publish" ? "draft" : "publish";
-
-      post.method = "post";
+    const archivePost = (postObj) => {
+      const post = {
+        ...postObj,
+        status: postObj.status === "publish" ? "draft" : "publish", // TOGGLE POST_STATUS
+        method: "post",
+      };
 
       setPost(post);
 
