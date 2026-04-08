@@ -22,12 +22,10 @@ const VueQueryPluginOptions = {
 };
 
 import OrbitPosts from "@/lib/OrbitPosts.vue";
-import OrbitInpursuitPosts from "@/lib/OrbitInpursuitPosts.vue";
 
 const app = createApp(App);
 
 app.component("OrbitPosts", OrbitPosts);
-app.component("OrbitInpursuitPosts", OrbitInpursuitPosts);
 
 app
   .use(VueQueryPlugin, VueQueryPluginOptions)

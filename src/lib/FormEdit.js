@@ -12,99 +12,60 @@ const post_edit = ( requestAPI, afterUpdate, afterDelete, defaultData = {} ) => 
 
   const route = useRoute();
 
-
-  /*
-  * REQUEST DATA FROM SERVER
-  */
-  const fetchDataFromServer = ( id ) => {  console.log( 'fetch from server' )
-
-    // ENABLE LOADING
+  const withProcessing = (apiCall, onSuccess, onError = (e) => console.log(e.response.data.message)) => {
     store.commit("setProcessing", true);
-
-    requestAPI( { id: id } ).then(
+    apiCall().then(
       (response) => {
-        // ENABLE LOADING
         store.commit("setProcessing", false);
-
-        //console.log( response.data )
-        data.value = response.data;
+        onSuccess(response);
       },
       (error) => {
-        console.log(error.response.data.message);
-        store.commit("setProcessing", false); // DISABLE LOADING
+        store.commit("setProcessing", false);
+        onError(error);
       }
     );
   };
 
-  //if ( route.query && route.query.id && route.name === "EditTeamMember" ) {
+  /*
+  * REQUEST DATA FROM SERVER
+  */
+  const fetchDataFromServer = (id) =>
+    withProcessing(
+      () => requestAPI({ id }),
+      (response) => { data.value = response.data; }
+    );
+
   if ( route.query && route.query.id ) {
     fetchDataFromServer(route.query.id);
   }
 
   const createOrUpdateData = (ev) => {
     ev.preventDefault();
-
-    // ENABLE LOADING
-    store.commit("setProcessing", true);
-
-    var params = data.value;
-    params.method = "post";
-
-    // CHANGE THE FORMAT OF THE DATE
-    //if( newPost.date ){
-    //newPost.date = new Date( newPost.date ).toISOString();
-    //}
-
-    requestAPI(params).then(
-      (response) => {
-        // DISABLE LOADING
-        store.commit("setProcessing", false);
-
-        afterUpdate(response.data);
-      },
-      (error) => {
-        console.log(error.response.data.message);
-        store.commit("setProcessing", false); // DISABLE LOADING
-      }
+    const params = { ...data.value, method: "post" };
+    withProcessing(
+      () => requestAPI(params),
+      (response) => afterUpdate(response.data)
     );
   };
-
-  //console.log( route.name )
 
   /*
    * DELETE POST FROM SERVER
    */
   const deleteData = () => {
-    if (confirm("Are you sure you want to delete this information?")) {
-      // ENABLE LOADING
-      store.commit("setProcessing", true);
+    if (!confirm("Are you sure you want to delete this information?")) return;
 
-      var params = {
-        method: "delete",
-        id: data.value.id,
-        reassign: store.state.settings.id,
-      };
+    const params = {
+      method: "delete",
+      id: data.value.id,
+      reassign: store.state.settings.id,
+    };
 
-      // SPECIAL CONDITION FOR THE TERM EDIT
-      if( route.name == 'NewCategory' )
-        params.force = true;
+    if ( route.name === 'NewCategory' ) params.force = true;
 
-
-      //console.log( params )
-      requestAPI(params).then(
-        (response) => {
-          // DISABLE LOADING
-          store.commit("setProcessing", false);
-
-          //console.log( response.data )
-
-          afterDelete(response.data);
-        },
-        (error) => {
-          console.log(error.response.data.message);
-        }
-      );
-    }
+    withProcessing(
+      () => requestAPI(params),
+      (response) => afterDelete(response.data)
+    );
   };
 
 
