@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Logout from "@/views/Logout.vue";
-import Members from "@/views/Members.vue";
+import Members from "@/views/MembersNew.vue";
 import SingleMember from "@/views/SingleMember.vue";
 import Profile from "@/views/Profile.vue";
 import Events from "@/views/Events.vue";
@@ -71,11 +71,6 @@ const routes = [
     path: "/members",
     name: "Members",
     component: Members,
-  },
-  {
-    path: "/members-new",
-    name: "MembersNew",
-    component: () => import("@/views/MembersNew.vue"),
   },
   {
     path: "/members/:id",

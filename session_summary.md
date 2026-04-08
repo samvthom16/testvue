@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-08 (Session 5)
+> Last updated: 2026-04-08 (Session 7)
 
 ---
 
@@ -95,11 +95,60 @@ src/
 - **Bug fixed:** `requestHistory()` was missing `headers: this.getAuthHeaders()` → 401 on history tab in `SingleMember`. Fixed in `api.js`.
 - Intentionally unauthenticated calls (pre-login): plugin validate, OTP send, authentication, VAPID public key fetch.
 
+### Session 7 — Events Redesign + Nav Shell + HistoryList Polish (`fresh-design` branch)
+
+#### Summary
+Continued design work on `fresh-design`. `SingleMember` gained the app-level nav shell (desktop sidebar + mobile bottom nav). `HistoryList` was substantially redesigned: events become a dot timeline, comments show author monograms and emphasise the comment text. `Events.vue` and `SingleEvent.vue` were fully redesigned to match the members design language. `/members` route now points at `MembersNew`.
+
+#### Navigation Shell
+- **`SingleMember.vue`**: Added `PhoneUI`-style desktop sidebar (`bg-lightergray`, nav items, "New Entry" CTA) and mobile bottom nav bar directly in the component. Sticky top bar removed; back button moved inside the purple hero. 3-dot button now opens a **bottom sheet** (`<Teleport to="body">`, slide-up transition, semi-transparent backdrop, drag handle pill, max-width capped at `max-w-lg`) with Edit / Archive / Delete options. Inactive tab buttons no longer render a border.
+- **`SingleEvent.vue`**: Identical nav shell added (sidebar + bottom nav). Events nav item is highlighted as active via `allowedRoutes`.
+
+#### HistoryList.vue — Full Redesign
+- **Events**: Replaced card + icon badge with a **dot timeline**. Each item gets a coloured dot (8-colour palette, index-seeded) connected by a vertical grey line. Event name is bold, relative date sits below it in `text-xs text-gray`.
+- **Comments**: Icon badge replaced by **author monogram** — `rounded-full` circle with 2-letter initials, colour seeded from the first 3 chars of `author_name`. Card border removed. Comment text is now the prominent element (`font-medium text-darkblack`); attribution line below shows `AUTHOR NAME · Category pill · date` all in `text-xs text-gray`. Author name is `uppercase tracking-wide`. Category renders as a soft pill with colour seeded from `term_id`.
+- **Category bug fix**: Added `normaliseTerms()` helper that wraps a bare integer into an array before iterating — fixes categories not showing when the API returns a single number instead of `[n]`. `showCategories` now delegates to `getCommentCategories().length > 0` to prevent the separator dot rendering when no pills resolve.
+- **Empty states**: Both event and comment tabs show a centred icon + message when `visibleCount === 0` and loading is complete.
+
+#### Icon.vue — Consistency Fix
+- `Edit` SVG: removed hardcoded `class="h-6 w-6"` so passed size classes take effect.
+- `Delete` SVG: added `v-bind="$attrs"` and removed hardcoded `class="h-5 w-5"`.
+
+#### Events Page Redesign
+- **`EventsGrid.vue`** *(new)*: Template matching `MembersGrid` design. Mobile: list rows with a coloured calendar icon badge (colour seeded from `event_type` ID), event name, date + type pill. Desktop: table with Event, Type, Status, Date, hover-reveal View columns.
+- **`Events.vue`**: Rebuilt to mirror `MembersNew` — `EventsGrid` style, polished empty state with icon + "Add First Event" CTA, mobile FAB, search wired into desktop header slot.
+- **`OrbitPosts.vue`**: Registered `EventsGrid` as a local component.
+
+#### SingleEvent.vue — Full Redesign
+No longer uses `PhoneUI`. Custom layout matching `SingleMember`:
+- **Hero**: purple band, calendar icon badge, event name, status pill + event type + relative date.
+- **Left panel** (sticky desktop): inline SVG donut ring showing `attendants_percentage` + member count; meta rows for Event Type (purple), Date (blue), Description (orange) — same soft-badge icon style as `SingleMember`.
+- **Right panel**: "Attendees" heading, `SearchField`, `MembersDropdown` filters, `OrbitPosts` with `MemberListWithSwitch` (attendance toggle preserved). Polished empty state.
+- **3-dot bottom sheet**: Edit Event only.
+- Removed `CircularProgressBar`, `defaultMixin`, `paginationMixin` dependencies.
+
+#### Router
+- **`/members`** now loads `MembersNew.vue` (import alias changed). Route name stays `'Members'` — all nav links unchanged.
+- **`/members-new`** route removed.
+
+---
+
+### Session 6 — SingleMember Redesign + MembersNew Polish (`fresh-design` branch)
+
+#### Summary
+Continued design work on the `fresh-design` branch. `SingleMember.vue` was fully rebuilt without `PhoneUI`. `MembersNew.vue` received several polish fixes. `HistoryList.vue` gained a `type` filter prop and a card-based item layout.
+
+#### Components
+- **`HistoryList.vue`**: Added optional `type` prop (`"event"` | `"comment"`). Passed to API params; also applied as `v-show` client-side filter. Items redesigned from a divided list into individual `rounded-2xl border border-lightgray` cards. Each card has a small colored icon badge (soft red for events, soft purple for comments), title/author + right-aligned date, description text, category chips, and a hover-reveal delete button.
+- **`MembersDropdown.vue`**: Removed `border-b border-lightgray` divider from the filter chip row.
+
+---
+
 ### Session 5 — Fresh Design Overhaul (`fresh-design` branch)
 
 #### Shell / Layout
-- **`PhoneUI.vue`**: Desktop sidebar redesigned — light gray (`bg-lightergray`), dark text, "Admin Console" subtitle, active nav pill is white+purple, "New Entry" CTA at bottom. Mobile title default changed from `bg-purple text-white` → `bg-white text-purple`. CSS overrides (`maintitle`, `phone-sticky-header`) recolour `text-white` icons to purple without touching view files.
-- **`Title.vue`**: Page title now `font-bold`.
+- **`PhoneUI.vue`**: Desktop sidebar redesigned — light gray (`bg-lightergray`), dark text, "Admin Console" subtitle, active nav pill is white+purple, "New Entry" CTA at bottom. Mobile title default changed from `bg-purple text-white` → `bg-white text-purple`. CSS overrides (`maintitle`, `phone-sticky-header`) recolour `text-white` icons to purple without touching view files. Desktop page header now renders the `mainttitle_footer` slot (search field appears on desktop). Added `hide_desktop_header` configUI option (`v-if` on the desktop header bar). Added `hide_desktop_header` to setup/return.
+- **`Title.vue`**: Page title now `font-bold`. Added `v-if="!hide_maintitle || $slots['mainttitle_footer']"` on the root div — prevents an empty padded bar rendering on pages like `SingleMember` that hide the title and have no slot content.
 - **`Header.vue`**: Added `phone-sticky-header` class + `shadow-sm` on scroll.
 - **`Footer.vue`**: White bg, `text-darkgray` inactive icons, `uppercase tracking-widest` labels.
 
@@ -121,8 +170,14 @@ src/
 
 #### Views
 - **`Members.vue`**: Added mobile FAB (fixed, bottom-right, `rounded-2xl`).
-- **`SingleMember.vue`**: Profile avatar `rounded-2xl`, card `rounded-2xl`, archive button `bg-red`.
-- **`MembersNew.vue`** *(new)*: `/members-new` route. Desktop stats bar (total count, last sync). Uses `MembersGrid` template. Improved empty state with icon + "Add First Member" CTA.
+- **`MembersNew.vue`** *(new)*: `/members-new` route. Uses `MembersGrid` template. Desktop stats bar removed. Filter divider removed (`MembersDropdown` `border-b` stripped). Search field wired into desktop page header via `mainttitle_footer` slot. Improved empty state with icon + "Add First Member" CTA.
+- **`SingleMember.vue`** *(fully redesigned, Session 6)*: No longer uses `PhoneUI`. Fully custom layout:
+  - **Top bar**: sticky glass (`bg-white/90 backdrop-blur-md`), back button left, edit icon right.
+  - **Hero**: `bg-purple` full-width band, left-aligned round avatar (real photo or monogram with name-seeded gradient color), member name in white, status pill (`bg-white/20`), profile type + member ID.
+  - **Desktop layout**: `grid-cols-[300px_1fr]`. Left panel is sticky (`top-14`, `h-[calc(100vh-3.5rem)]`, scrollable). Right panel scrolls freely.
+  - **Left panel**: action cards (Comment / WhatsApp / Archive) + labeled meta rows (Location, Gender & Age, Profession, Group, Phone) each with a soft-colored icon badge using inline styles.
+  - **Right panel**: underline-style tab bar (Events / Comments) + `HistoryList` per tab.
+  - **Mobile**: all sections stack vertically; meta rows sit in a `bg-lightergray` section between actions and activity.
 
 #### Config
 - **`tailwind.config.js`**: Added `green: '#16a34a'` for status badges.
@@ -142,7 +197,6 @@ Direct properties on the post object: `post.gender`, `post.location`, `post.memb
 | Medium | `btoa(username:password)` duplicated in `api.js` and `store/index.js` |
 | Medium | `selectDropdownItem()` near-identical in `Members.vue`, `Events.vue`, `Comments.vue` |
 | Medium | `btoa()` used on credentials before sending AND in Basic Auth header — only header should use it |
-| Low | `SingleMember.vue` mixes Options API (`data()`) and Composition API (`setup()`) |
 | Low | `Helper.js` (17 lines, just `debounceEvent()`) should merge into `Util.js` |
 | Low | Dead/commented-out code in `Util.js` and `Home.vue` |
 | Low | `==` instead of `===` in 10+ files — enable ESLint `eqeqeq` |

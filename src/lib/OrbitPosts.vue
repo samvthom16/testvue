@@ -27,6 +27,7 @@ import ListWithImage from "@/templates/Posts/ListWithImage.vue";
 import PostsListWithTermName from "@/templates/Posts/ListWithTermName.vue";
 import MemberListWithSwitch from "@/templates/Posts/MemberListWithSwitch.vue";
 import MembersGrid from "@/templates/Posts/MembersGrid.vue";
+import EventsGrid from "@/templates/Posts/EventsGrid.vue";
 import InpursuitListWithTermName from "@/templates/InpursuitPosts/ListWithTermName.vue";
 
 import API from "@/api";
@@ -47,6 +48,7 @@ export default {
     PostsListWithTermName,
     MemberListWithSwitch,
     MembersGrid,
+    EventsGrid,
     EventsCount,
     InpursuitListWithTermName,
   },

@@ -1,56 +1,83 @@
 <template>
   <div>
-    <ul class="divide-y divide-lightgray space-y-4" ref="scrollComponent">
+    <ul ref="scrollComponent">
       <li
-        class="pb-2 pt-6 relative"
-        :item="item"
-        v-for="item in items"
+        v-for="(item, index) in items"
         :key="item.id"
+        v-show="!type || item.type === type"
       >
-        <div class="flex items-center space-x-4">
-          <div class="flex-shrink-1">
-            <Icon
-              type="Event"
-              class="bg-red text-white rounded p-3 w-12 h-12 inline mr-1"
-              v-if="item.type == 'event'"
-            />
-            <Icon
-              type="Comment"
-              class="bg-orange text-white rounded p-3 w-12 h-12 inline mr-1"
-              v-if="item.type == 'comment'"
-            />
+
+        <!-- ── EVENT: timeline row ──────────────────────── -->
+        <div v-if="item.type === 'event'" class="flex gap-4">
+          <!-- Dot + vertical line -->
+          <div class="flex flex-col items-center shrink-0 pt-1">
+            <div
+              class="w-3 h-3 rounded-full shrink-0"
+              :style="{ background: dotColor(index) }"
+            ></div>
+            <div class="w-px flex-1 mt-1.5" style="background: #e5e7eb; min-height: 1.5rem;"></div>
           </div>
-          <div class="flex-1 min-w-0">
-            <h2 class="text-lg truncate" v-if="item.type == 'event'">
-              {{ item.title.rendered }}
-            </h2>
-            <h2 class="text-lg" v-else>{{ item.author_name }} commented</h2>
-            <div class="text-gray text-sm">
-              {{ formatDate(item.date) }}
+          <!-- Content -->
+          <div class="flex-1 pb-5 min-w-0">
+            <p class="font-semibold text-darkblack text-sm leading-snug" v-html="item.title?.rendered"></p>
+            <p class="text-xs text-gray mt-0.5">{{ formatDate(item.date) }}</p>
+          </div>
+        </div>
+
+        <!-- ── COMMENT: card row ────────────────────────── -->
+        <div v-else class="flex items-start gap-3 mb-5">
+            <!-- Author monogram -->
+            <div
+              class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5 text-white text-xs font-bold select-none tracking-wide"
+              :style="{ background: monogramColor(item.author_name) }"
+            >{{ monogram(item.author_name) }}</div>
+            <!-- Content -->
+            <div class="flex-1 min-w-0">
+              <p
+                v-if="item.text"
+                class="text-sm font-medium text-darkblack leading-relaxed whitespace-pre-line"
+              >{{ item.text }}</p>
+              <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                <span class="text-xs text-gray uppercase tracking-wide">{{ item.author_name }}</span>
+                <template v-if="showCategories(item)">
+                  <span class="text-xs text-gray/50">·</span>
+                  <span
+                    v-for="category in getCommentCategories(item)"
+                    :key="category.term_id"
+                    class="inline-block text-xs font-medium px-2 py-0.5 rounded-full"
+                    :style="pillStyle(category.term_id)"
+                  >{{ category.name }}</span>
+                </template>
+                <span class="text-xs text-gray/50">·</span>
+                <span class="text-xs text-gray">{{ formatDate(item.date) }}</span>
+              </div>
             </div>
-          </div>
+            <!-- Delete -->
+            <button
+              @click="deleteComment(item)"
+              type="button"
+              class="shrink-0 text-lightgray hover:text-red transition-colors mt-0.5"
+            >
+              <Icon type="Delete" class="w-4 h-4" />
+            </button>
         </div>
-        <div class="card-desc whitespace-pre-line mt-3">{{ item.text }}</div>
-        <div v-if="showCategories(item)" class="inline-block mt-3">
-          <span
-            v-for="category in getCommentCategories(item)"
-            :key="category.term_id"
-            v-html="category.name"
-            class="inline-block py-1 px-2 mr-3 rounded bg-gray text-white text-sm"
-          ></span>
-        </div>
-        <button
-          v-if="item.type == 'comment'"
-          @click="deleteComment(item)"
-          type="button"
-          class="rounded-sm text-gray outline-none absolute right-2 top-4"
-        >
-          <Icon type="Delete" />
-        </button>
+
       </li>
     </ul>
     <PaginationLoaderAnimation v-if="isFetchingNextPage" />
     <ItemAnimation v-if="$store.state.processing && !items.length" />
+
+    <!-- Empty state -->
+    <div
+      v-if="!$store.state.processing && !isFetchingNextPage && visibleCount === 0"
+      class="flex flex-col items-center justify-center py-16 text-center"
+    >
+      <div class="w-12 h-12 rounded-full bg-lightergray flex items-center justify-center mb-3">
+        <Icon :type="type === 'event' ? 'Event' : 'Comment'" class="w-5 h-5 text-gray" />
+      </div>
+      <p class="text-sm font-medium text-darkgray">{{ type === 'event' ? 'No events recorded' : 'No comments yet' }}</p>
+      <p class="text-xs text-gray mt-1">{{ type === 'event' ? 'Events this member attends will appear here' : 'Notes added for this member will appear here' }}</p>
+    </div>
   </div>
 </template>
 
@@ -75,12 +102,13 @@ export default {
   props: {
     id: Number,
     item: Object,
+    type: { type: String, default: null },
   },
   setup(props, context) {
     const params = computed(() => {
-      return {
-        id: props.id,
-      };
+      const p = { id: props.id };
+      if (props.type) p.type = props.type;
+      return p;
     });
 
     const requestAPI = (params) => API.requestHistory(params);
@@ -91,20 +119,22 @@ export default {
 
     const { debounceEvent } = Helper();
 
+    const normaliseTerms = (raw) => {
+      if (!raw && raw !== 0) return [];
+      return Array.isArray(raw) ? raw : [raw];
+    };
+
     const showCategories = (item) => {
-      return (
-        item.type === "comment" &&
-        item?.comments_category &&
-        item.comments_category.length
-      );
+      if (item.type !== "comment") return false;
+      return getCommentCategories(item).length > 0;
     };
 
     const getCommentCategories = (comment) => {
       const termsArr = [];
-      const terms = comment?.comments_category;
+      const terms = normaliseTerms(comment?.comments_category);
 
       for (const term_id of terms) {
-        const term_name = store.state?.account?.comments_category[term_id];
+        const term_name = store.state?.account?.comments_category?.[term_id];
         if (term_name) {
           termsArr.push({ term_id, name: term_name });
         }
@@ -126,8 +156,13 @@ export default {
       window.removeEventListener("scroll", handleScroll);
     });
 
+    const visibleCount = computed(() =>
+      props.type ? items.value.filter((i) => i.type === props.type).length : items.value.length
+    );
+
     return {
       items,
+      visibleCount,
       scrollComponent,
       status,
       isFetchingNextPage,
@@ -138,6 +173,37 @@ export default {
   },
   methods: {
     formatDate: (dateString) => Util.timeAgo(dateString),
+    pillStyle(term_id) {
+      const palettes = [
+        { bg: '#F5F0F6', color: '#89558d' },
+        { bg: '#EAF4FA', color: '#006491' },
+        { bg: '#FFF5EC', color: '#DB6933' },
+        { bg: '#ECFDF5', color: '#16a34a' },
+        { bg: '#FEF2F4', color: '#E16075' },
+        { bg: '#EEF2F8', color: '#0369a1' },
+        { bg: '#FEF3EE', color: '#c2410c' },
+        { bg: '#F3F0F5', color: '#9E81A0' },
+      ];
+      const p = palettes[Number(term_id) % palettes.length];
+      return { background: p.bg, color: p.color };
+    },
+    dotColor(index) {
+      const colors = ['#89558d', '#DB6933', '#006491', '#16a34a', '#E16075', '#0369a1', '#c2410c', '#9E81A0'];
+      return colors[index % colors.length];
+    },
+    monogram(name) {
+      if (!name) return '?';
+      const parts = name.trim().split(/\s+/);
+      return parts.length >= 2
+        ? (parts[0][0] + parts[1][0]).toUpperCase()
+        : parts[0].substring(0, 2).toUpperCase();
+    },
+    monogramColor(name) {
+      const colors = ['#89558d', '#006491', '#DB6933', '#16a34a', '#E16075', '#c2410c', '#0369a1', '#9E81A0'];
+      if (!name) return colors[0];
+      const seed = name.charCodeAt(0) + (name.charCodeAt(1) || 0) + (name.charCodeAt(2) || 0);
+      return colors[seed % colors.length];
+    },
   },
 };
 </script>
