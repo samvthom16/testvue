@@ -376,3 +376,51 @@ Make the app look good on desktop without touching any page or feature logic. Al
 - Branch: `refactor/code-cleanup`
 - Commit: `eb07105`
 - Remote: `https://github.com/samvthom16/testvue`
+
+---
+
+## Session 3 — Web Push Notifications (2026-04-08)
+
+### Goal
+Integrate web push notifications into the frontend, connected to the WordPress backend's push API.
+
+### Files Created
+
+#### `src/sw.js`
+- Custom service worker using Workbox `precacheAndRoute` (injected by VitePWA)
+- Listens for `push` events and calls `showNotification()` with `{ title, body }` from JSON payload
+
+#### `src/lib/usePushNotifications.js`
+- `unsubscribeFromNotifications()` — standalone async export, safe to call outside `setup()` (used in Logout)
+- `usePushNotifications()` — composable exposing `isSubscribed`, `isProcessing`, `successMessage`, `isSupported`, `toggleNotifications()`
+- Fetches VAPID public key from `/push/vapid-public-key`, subscribes via `pushManager.subscribe()`, POSTs subscription to `/push/subscribe` with Basic Auth
+- All API calls use `store.state.settings.account_url` — fully multi-tenant, no hardcoded URLs
+
+### Files Modified
+
+#### `vite.config.js`
+- Switched VitePWA from `generateSW` to `injectManifest` strategy (`srcDir: "src"`, `filename: "sw.js"`)
+- Required so custom push event listener in `src/sw.js` survives the production build
+
+#### `src/components/Icon.vue`
+- Added `Bell` SVG icon (`type="Bell"`)
+
+#### `src/views/Profile.vue`
+- Added notification toggle row to MORE OPTIONS section
+- Shows "Enable Notifications" / "Disable Notifications" based on subscription state
+- Shows "Enabling..." / "Disabling..." while async operation is in progress
+- Flashes "Notifications enabled!" / "Notifications disabled." for 2.5s on success
+- Hidden if browser doesn't support push (`v-if="isSupported"`)
+
+#### `src/views/Logout.vue`
+- Calls `unsubscribeFromNotifications().catch(() => {})` before flushing credentials
+- Fire-and-forget so logout is not blocked if push server is unreachable
+
+### Architecture Notes
+- Multi-tenant: all push endpoints use `store.state.settings.account_url`, same as the rest of the app
+- Backend triggers needed: `wp_insert_comment`, `save_post_inpursuit-members`, `save_post_inpursuit-events`
+- Push payload format: `{ title: "...", body: "..." }`
+
+### Commits
+- `80a0cc9` — feat: add web push notification support
+- `78d95c1` — feat: add loading and success feedback to notification toggle
