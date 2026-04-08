@@ -10,6 +10,9 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     VitePWA({
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.js",
       registerType: "autoUpdate",
       manifest: {
         name: "InPursuit",

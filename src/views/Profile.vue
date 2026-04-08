@@ -72,6 +72,17 @@
           icon_classes="bg-red"
           :route="{ name: 'SpecialEvents' }"
         />
+
+        <div class="cursor-pointer py-4" @click="toggleNotifications" v-if="isSupported">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <Icon type="Bell" class="h-7 w-7 p-1 rounded-md text-white bg-blue-500" />
+              <span class="ml-3 block font-normal truncate text-lg">
+                {{ isSubscribed ? 'Disable Notifications' : 'Enable Notifications' }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div v-if="isAdmin({ user: newTeamMember })">
@@ -108,14 +119,17 @@ import API from "@/api";
 import Util from "@/lib/Util";
 import PhoneUI from "@/components/PhoneUI.vue";
 import SettingItem from "@/components/SettingItem.vue";
+import Icon from "@/components/Icon.vue";
 
 import CategoryHelper from "@/lib/CategoryHelper";
+import { usePushNotifications } from "@/lib/usePushNotifications";
 
 export default {
   name: "Profile",
   components: {
     PhoneUI,
     SettingItem,
+    Icon,
   },
 
   setup() {
@@ -132,10 +146,15 @@ export default {
     const isAdmin = ({ user }) =>
       Util.hasUserRole({ user, searchRole: "administrator" });
 
+    const { isSubscribed, isSupported, toggleNotifications } = usePushNotifications();
+
     return {
       categories,
       isAdmin,
       newTeamMember,
+      isSubscribed,
+      isSupported,
+      toggleNotifications,
     };
   },
 };
