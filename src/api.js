@@ -106,6 +106,7 @@ const api = {
       url: this._getURL("/wp-json/inpursuit/v1/history"),
       method: "get",
       data: params,
+      headers: this.getAuthHeaders(),
     });
   },
 
