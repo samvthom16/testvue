@@ -34,11 +34,18 @@ export async function unsubscribeFromNotifications() {
 
 export function usePushNotifications() {
   const isSubscribed = ref(false)
+  const isProcessing = ref(false)
+  const successMessage = ref('')
 
   onMounted(async () => {
     const sub = await getExistingSubscription()
     isSubscribed.value = !!sub
   })
+
+  const showSuccess = (message) => {
+    successMessage.value = message
+    setTimeout(() => { successMessage.value = '' }, 2500)
+  }
 
   const subscribeToNotifications = async () => {
     const reg = await navigator.serviceWorker.ready
@@ -62,23 +69,32 @@ export function usePushNotifications() {
     })
 
     isSubscribed.value = true
+    showSuccess('Notifications enabled!')
   }
 
   const toggleNotifications = async () => {
-    if (!isSupported) return
+    if (!isSupported || isProcessing.value) return
 
-    if (!isSubscribed.value) {
-      const permission = await Notification.requestPermission()
-      if (permission !== 'granted') return
-      await subscribeToNotifications()
-    } else {
-      await unsubscribeFromNotifications()
-      isSubscribed.value = false
+    isProcessing.value = true
+    try {
+      if (!isSubscribed.value) {
+        const permission = await Notification.requestPermission()
+        if (permission !== 'granted') return
+        await subscribeToNotifications()
+      } else {
+        await unsubscribeFromNotifications()
+        isSubscribed.value = false
+        showSuccess('Notifications disabled.')
+      }
+    } finally {
+      isProcessing.value = false
     }
   }
 
   return {
     isSubscribed,
+    isProcessing,
+    successMessage,
     isSupported,
     toggleNotifications,
   }
