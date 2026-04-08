@@ -150,7 +150,7 @@ export function useLoginFlow() {
       url: getAccountURL() + '/wp-json/inpursuit/v1/authentication/',
       data: {
         email_address: btoa(form.value.email_address.value.trim()),
-        email_otp: btoa(form.value.otp.value),
+        email_otp: btoa(form.value.otp.value.trim()),
       },
       method: 'post',
     }).then(
