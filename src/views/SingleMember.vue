@@ -27,12 +27,12 @@
 
       <div class="pb-6 justify-center items-center mx-auto">
         <div
-          class="pt-20 pb-4 relative bg-lightergray rounded-sm -my-12"
+          class="pt-20 pb-4 relative bg-lightergray rounded-2xl -my-12"
           v-if="post.id"
           :key="post.id"
         >
           <div
-            class="bg-gray absolute -top-10 left-1/2 transform -translate-x-1/2 h-28 w-28 overflow-hidden border-white border-4 rounded-full"
+            class="bg-gray absolute -top-10 left-1/2 transform -translate-x-1/2 h-28 w-28 overflow-hidden border-white border-4 rounded-2xl"
           >
             <img
               class="object-cover w-full h-full"
@@ -74,7 +74,7 @@
                     class="cursor-pointer block p-3 h-12 w-12 rounded-full"
                     :class="{
                       'bg-white text-black': post.status == 'publish',
-                      'bg-orange text-white': post.status == 'draft',
+                      'bg-red text-white': post.status == 'draft',
                     }"
                   />
                   <p

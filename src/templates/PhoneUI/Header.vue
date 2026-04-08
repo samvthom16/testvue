@@ -1,8 +1,8 @@
 <template>
   <div
-    class='opacity-0 h-0 md:hidden'
+    class='phone-sticky-header opacity-0 h-0 md:hidden'
     :class="[`${colors}`, {
-      'border-b border-lightgray': scrolled,
+      'border-b border-lightgray shadow-sm': scrolled,
       'opacity-100 py-4 px-2 sticky top-0 z-10 h-auto' : !move_sticky_up
     }]">
     <ul class='header-list'>

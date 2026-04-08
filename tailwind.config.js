@@ -19,6 +19,7 @@ export default {
       'lightorange' : '#F9AB70',
       'midorange'   : '#E59091',
       'darkorange'  : '#DB6933',
+      'green'       : '#16a34a',
       'lightpurple' : '#9E81A0',
       'lightred'    : '#E16075',
 

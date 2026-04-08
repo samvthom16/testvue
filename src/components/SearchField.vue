@@ -1,13 +1,13 @@
 <template>
 
-    <div class="mt-4 w-full relative">
+    <div class="mt-3 w-full relative">
       <Icon
         type="Search"
-        class="cursor-pointer absolute left-2 top-3 text-gray w-6 h-6"
+        class="pointer-events-none absolute left-3 top-2.5 text-gray w-5 h-5"
       />
       <input
         id="search"
-        class="w-full text-2xl bg-white outline-none focus:none align-middle text-black p-2 px-9 rounded"
+        class="w-full text-sm bg-lightergray outline-none text-black py-2.5 pl-10 pr-9 rounded-full placeholder-gray border border-lightgray focus:border-lightpurple transition-colors"
         type="text"
         placeholder="Search"
         @keyup='returnSearchText'
@@ -15,7 +15,7 @@
       <Icon
         @click='searchFocus == false'
         type="Close"
-        class="cursor-pointer absolute right-2 top-3 text-white bg-black p-1 rounded-full"
+        class="cursor-pointer absolute right-3 top-2.5 text-gray w-5 h-5"
         v-if='searchFocus'
       />
     </div>

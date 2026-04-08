@@ -4,12 +4,12 @@
       <li v-for='item in items' :key='item'>
         <router-link :to="item.route" class="hover:opacity-80">
           <Icon
-            class='text-black h-5 w-5'
+            class='h-5 w-5 text-darkgray'
             :type=item.icon
             :class="{'text-purple' : item.allowedRoutes.includes( $route.name ) }"
           />
           <p
-            class='text-xs pt-1'
+            class='text-xs pt-1 uppercase tracking-widest text-darkgray'
             :class="{'text-purple' : item.allowedRoutes.includes( $route.name ) }"
           >
             {{ item.name }}

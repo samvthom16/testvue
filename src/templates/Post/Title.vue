@@ -1,6 +1,6 @@
 <template>
   <router-link
-    class="text-lg leading-tight"
+    class="text-lg leading-tight font-semibold text-darkblack no-underline"
     v-bind="$attrs"
     :to="getPostLink(post)"
     v-html="post.title.rendered"

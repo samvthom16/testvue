@@ -30,7 +30,13 @@
 
       </OrbitPosts>
 
-
+      <!-- FAB (mobile only) -->
+      <router-link
+        :to="{ name: 'NewMember' }"
+        class='md:hidden fixed bottom-24 right-5 z-20 bg-purple text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg hover:bg-lightpurple transition-colors'
+      >
+        <Icon type='Plus' class='w-6 h-6' />
+      </router-link>
 
     </template>
 

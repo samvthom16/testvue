@@ -73,6 +73,11 @@ const routes = [
     component: Members,
   },
   {
+    path: "/members-new",
+    name: "MembersNew",
+    component: () => import("@/views/MembersNew.vue"),
+  },
+  {
     path: "/members/:id",
     name: "SingleMember",
     component: SingleMember,

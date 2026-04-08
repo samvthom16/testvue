@@ -4,7 +4,7 @@
     :class="[ `${colors}`, `${maintitle_classes}`, {'transform -mt-12': move_sticky_up} ]"
   >
     <div class='flex'>
-      <div class='flex-auto' v-html='title' v-if='!hide_maintitle'></div>
+      <div class='flex-auto font-bold' v-html='title' v-if='!hide_maintitle'></div>
       <slot name="headerright"></slot>
     </div>
     <slot name="mainttitle_footer"></slot>

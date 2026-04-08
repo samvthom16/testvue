@@ -1,18 +1,22 @@
 <template>
   <div class="mb-5" v-if="!isHidden">
-    <label class="block font-semibold text-black">{{ field.label }}</label>
+    <label class="block font-medium text-darkblack text-sm mb-1.5">{{ field.label }}</label>
     <input
       :id="field.id"
       :placeholder="field.placeholder ? field.placeholder : field.label"
       class="
         inline-block
         w-full
-        p-2
-        border-2 border-solid border-black
-        rounded
-        mb-1 mt-2
+        p-3
+        border border-lightgray
+        rounded-xl
+        bg-lightergray
+        mb-1 mt-1
         outline-none
-        focus:border-red
+        text-darkblack
+        placeholder-gray
+        focus:border-purple focus:bg-white
+        transition-colors
       "
       :type="field.type"
       :value="field.value"
