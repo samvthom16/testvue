@@ -13,28 +13,6 @@
 
     <template v-slot:phonebody>
 
-      <!-- Desktop stats bar -->
-      <div class="hidden md:flex items-center justify-between mb-7 pb-6 border-b border-lightgray">
-        <div class="flex items-center gap-8">
-          <div>
-            <p class="text-4xl font-bold text-darkblack tracking-tight">{{ totalItems || '—' }}</p>
-            <p class="text-sm text-darkgray mt-1">Total members</p>
-          </div>
-          <div class="h-10 w-px bg-lightgray"></div>
-          <div>
-            <p class="text-sm font-medium text-darkblack">{{ lastSync }}</p>
-            <p class="text-xs text-gray mt-0.5">Last synced</p>
-          </div>
-        </div>
-        <router-link
-          :to="{ name: 'NewMember' }"
-          class="flex items-center gap-2 bg-purple text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-lightpurple transition-colors"
-        >
-          <Icon type="Plus" class="w-4 h-4" />
-          New Member
-        </router-link>
-      </div>
-
       <!-- Filters -->
       <MembersDropdown :totalItems="totalItems" @selectItem="selectDropdownItem" />
 
@@ -104,9 +82,7 @@ export default {
     PaginationLoaderAnimation,
   },
   setup() {
-    const now = new Date();
-    const lastSync = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    return { ...MembersHelper(), lastSync };
+    return { ...MembersHelper() };
   },
 };
 </script>

@@ -60,10 +60,15 @@
       <PhoneProgressBar />
 
       <!-- Desktop page header (hidden on mobile) -->
-      <div class='desktop-page-header hidden md:flex items-center justify-between px-8 py-5 border-b border-lightgray bg-white'>
-        <h1 class='text-xl font-semibold text-darkblack' v-html='title'></h1>
-        <div class='flex items-center gap-2'>
-          <slot name="headerright"></slot>
+      <div class='desktop-page-header hidden md:block px-8 py-5 border-b border-lightgray bg-white' v-if='!hide_desktop_header'>
+        <div class='flex items-center justify-between'>
+          <h1 class='text-xl font-semibold text-darkblack' v-html='title'></h1>
+          <div class='flex items-center gap-2'>
+            <slot name="headerright"></slot>
+          </div>
+        </div>
+        <div v-if='$slots["mainttitle_footer"]' class='mt-3'>
+          <slot name="mainttitle_footer"></slot>
         </div>
       </div>
 
@@ -137,12 +142,16 @@ export default{
     const hide_footer = ref( null )
     hide_footer.value = props.configUI && props.configUI.hide_footer ? props.configUI.hide_footer : false
 
+    const hide_desktop_header = ref( null )
+    hide_desktop_header.value = props.configUI && props.configUI.hide_desktop_header ? props.configUI.hide_desktop_header : false
+
     return{
       maintitle_classes,
       stickytitle_classes,
       body_classes,
       hide_maintitle,
       hide_footer,
+      hide_desktop_header,
       colors
     }
   },
