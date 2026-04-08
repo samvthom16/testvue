@@ -139,8 +139,8 @@ export function useLoginFlow() {
   }
 
   const verifyOTP = () => {
-    if (!form.value.otp.value || form.value.otp.value !== sent_otp.value) {
-      form.value.otp.error_msg = 'Invalid OTP'
+    if (!form.value.otp.value) {
+      form.value.otp.error_msg = 'Please enter the OTP'
       return false
     }
     form.value.otp.error_msg = ''
@@ -148,7 +148,10 @@ export function useLoginFlow() {
 
     API.makeRequest({
       url: getAccountURL() + '/wp-json/inpursuit/v1/authentication/',
-      data: { email_address: btoa(form.value.email_address.value.trim()) },
+      data: {
+        email_address: btoa(form.value.email_address.value.trim()),
+        email_otp: btoa(form.value.otp.value.trim()),
+      },
       method: 'post',
     }).then(
       (response) => {
