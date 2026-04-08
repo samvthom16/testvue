@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-08 (Session 4)
+> Last updated: 2026-04-08 (Session 5)
 
 ---
 
@@ -94,6 +94,43 @@ src/
 - Audited all API calls for missing auth headers.
 - **Bug fixed:** `requestHistory()` was missing `headers: this.getAuthHeaders()` → 401 on history tab in `SingleMember`. Fixed in `api.js`.
 - Intentionally unauthenticated calls (pre-login): plugin validate, OTP send, authentication, VAPID public key fetch.
+
+### Session 5 — Fresh Design Overhaul (`fresh-design` branch)
+
+#### Shell / Layout
+- **`PhoneUI.vue`**: Desktop sidebar redesigned — light gray (`bg-lightergray`), dark text, "Admin Console" subtitle, active nav pill is white+purple, "New Entry" CTA at bottom. Mobile title default changed from `bg-purple text-white` → `bg-white text-purple`. CSS overrides (`maintitle`, `phone-sticky-header`) recolour `text-white` icons to purple without touching view files.
+- **`Title.vue`**: Page title now `font-bold`.
+- **`Header.vue`**: Added `phone-sticky-header` class + `shadow-sm` on scroll.
+- **`Footer.vue`**: White bg, `text-darkgray` inactive icons, `uppercase tracking-widest` labels.
+
+#### Components
+- **`SearchField.vue`**: Pill shape (`rounded-full`), `bg-lightergray`, `text-sm`, purple focus border.
+- **`ButtonPopupModal.vue`**: Active chip (has badge) gets purple border + text; badge flips to white-on-purple.
+- **`Modal.vue`**: Drag handle pill, white body, softened backdrop (0.5 opacity), upward shadow, `rounded-t-2xl`.
+- **`TextField.vue`**: `border border-lightgray`, `rounded-xl`, `bg-lightergray` rest / `bg-white` focus, `focus:border-purple`.
+
+#### Templates
+- **`FeaturedImage.vue`**: `rounded-full`, `w-14 h-14`, ring removed.
+- **`Post/Title.vue`**: `font-semibold text-darkblack no-underline`.
+- **`Misc/MainTitle.vue`**: "View All" changed from `text-orange` → `text-purple`.
+- **`Misc/SubTitle.vue`**: Unchanged.
+- **`Posts/ListWithImage.vue`**: Mobile list (`md:hidden`) + desktop table (Member Name, Last Seen columns).
+- **`Animation/ListWithImage.vue`**: Skeleton avatar updated to `rounded-full w-14 h-14`.
+- **`Animation/PaginationLoader.vue`**: Replaced orange button with a horizontal divider + centered spinner + "LOADING MORE" label.
+- **`Posts/MembersGrid.vue`** *(new)*: Custom template for `/members-new`. Mobile: contact list with monogram avatar, status dot, extra field chips (gender, profile type, location, profession). Desktop: 8-column table (Member, Status, Gender, Profile Type, Location, Profession, Last Seen, Actions) with `overflow-x-auto`. Monogram uses two-letter initials with name-seeded gradient. Real photo shown if `featured_image` doesn't include `default-profile.png`.
+
+#### Views
+- **`Members.vue`**: Added mobile FAB (fixed, bottom-right, `rounded-2xl`).
+- **`SingleMember.vue`**: Profile avatar `rounded-2xl`, card `rounded-2xl`, archive button `bg-red`.
+- **`MembersNew.vue`** *(new)*: `/members-new` route. Desktop stats bar (total count, last sync). Uses `MembersGrid` template. Improved empty state with icon + "Add First Member" CTA.
+
+#### Config
+- **`tailwind.config.js`**: Added `green: '#16a34a'` for status badges.
+- **`router/index.js`**: Added `/members-new` → `MembersNew` route.
+- **`OrbitPosts.vue`**: Registered `MembersGrid` as a local component.
+
+#### Member post fields (confirmed)
+Direct properties on the post object: `post.gender`, `post.location`, `post.member_status`, `post.profession`, `post.group` (array), `post.phone`, `post.age`. Taxonomy fields may return numeric IDs from the API — use `formatField()` to guard against raw IDs and empty arrays.
 
 ---
 
