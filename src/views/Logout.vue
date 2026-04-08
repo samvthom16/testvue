@@ -1,8 +1,10 @@
 <script>
+import { unsubscribeFromNotifications } from '@/lib/usePushNotifications'
+
 export default {
   name: 'Logout',
   mounted(){
-    //console.log('mounted');
+    unsubscribeFromNotifications().catch(() => {})
 
     // FLUSH LOCAL SETTINGS FROM THE BROWSER
     this.$store.commit( 'flushLocalSettings' );
