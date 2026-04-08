@@ -21,6 +21,20 @@ const post_edit = (
   const route = useRoute();
   const post = ref(defaultPost);
 
+  const withProcessing = (apiCall, onSuccess, onError = (e) => console.log(e)) => {
+    store.commit("setProcessing", true);
+    apiCall().then(
+      (response) => {
+        store.commit("setProcessing", false);
+        onSuccess(response);
+      },
+      (error) => {
+        store.commit("setProcessing", false);
+        onError(error);
+      }
+    );
+  };
+
   for (var slug in textfields) {
     var type = "text";
     var component = "TextField";
@@ -118,41 +132,22 @@ const post_edit = (
   /*
    * CREATE NEW POST
    */
-  const createPost = (newPost) => {
-    // ENABLE LOADING
-    store.commit("setProcessing", true);
-
-    API.createPost(newPost).then(
-      (response) => {
-        // DISABLE LOADING
-        store.commit("setProcessing", false);
-
-        redirectToSinglePost(response.data);
-      },
-      (error) => {
-        console.log(error.response);
-      }
+  const createPost = (newPost) =>
+    withProcessing(
+      () => API.createPost(newPost),
+      (response) => redirectToSinglePost(response.data),
+      (error) => console.log(error.response)
     );
-  };
 
   /*
    * UPDATE EXISTING POST
    */
   const updatePost = (newPost, post_id) => {
-    // ENABLE LOADING
-    store.commit("setProcessing", true);
-
     newPost["method"] = "post";
-    API.requestPost(post_type, post_id, newPost).then(
-      (response) => {
-        // DISABLE LOADING
-        store.commit("setProcessing", false);
-
-        redirectToSinglePost(response.data);
-      },
-      (error) => {
-        console.log(error.response.data.message);
-      }
+    withProcessing(
+      () => API.requestPost(post_type, post_id, newPost),
+      (response) => redirectToSinglePost(response.data),
+      (error) => console.log(error.response.data.message)
     );
   };
 
@@ -209,18 +204,11 @@ const post_edit = (
   /*
    * DELETE POST FROM SERVER
    */
-  const deletePost = (post_id) => {
-    // ENABLE LOADING
-    store.commit("setProcessing", true);
-
-    var params = { method: "delete" };
-    API.requestPost(post_type, post_id, params).then(() => {
-      // DISABLE LOADING
-      store.commit("setProcessing", false);
-
-      redirectToPosts();
-    });
-  };
+  const deletePost = (post_id) =>
+    withProcessing(
+      () => API.requestPost(post_type, post_id, { method: "delete" }),
+      () => redirectToPosts()
+    );
 
   /*
    * REDIRECT TO SINGLE POST AFTER UPDATING OR CREATING NEW POST

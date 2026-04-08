@@ -3,7 +3,7 @@
     <slot name="title" v-if="items.length"></slot>
     <component
       v-bind="$attrs"
-      :is="params.style"
+      :is="resolvedStyle"
       :posts="items"
       :total="total"
       v-if="status == 'success'"
@@ -14,61 +14,76 @@
   </div>
 </template>
 <script>
-
-
 import OrbitQuery from "@/lib/OrbitQuery.js";
-
-import Util from "@/lib/Util.js"
-import Helper from '@/lib/Helper.js'
-
+import Util from "@/lib/Util.js";
+import Helper from "@/lib/Helper.js";
 import { onMounted, onUnmounted, computed, watch } from "vue";
 
-
-import PostImagesSlider from '@/templates/Posts/PostImagesSlider.vue';
-import EventList from '@/templates/Posts/EventList.vue';
-import AvatarsStacked from '@/templates/Posts/AvatarsStacked.vue';
-import EventsCount from '@/templates/Posts/EventsCount.vue';
-import ListWithImage from '@/templates/Posts/ListWithImage.vue';
-import ListWithTermName from '@/templates/Posts/ListWithTermName.vue';
-import MemberListWithSwitch from '@/templates/Posts/MemberListWithSwitch.vue';
-
+import PostImagesSlider from "@/templates/Posts/PostImagesSlider.vue";
+import EventList from "@/templates/Posts/EventList.vue";
+import AvatarsStacked from "@/templates/Posts/AvatarsStacked.vue";
+import EventsCount from "@/templates/Posts/EventsCount.vue";
+import ListWithImage from "@/templates/Posts/ListWithImage.vue";
+import PostsListWithTermName from "@/templates/Posts/ListWithTermName.vue";
+import MemberListWithSwitch from "@/templates/Posts/MemberListWithSwitch.vue";
+import InpursuitListWithTermName from "@/templates/InpursuitPosts/ListWithTermName.vue";
 
 import API from "@/api";
+
 export default {
   props: {
     params: Object,
+    apiType: {
+      type: String,
+      default: "posts",
+    },
   },
   components: {
     EventList,
     PostImagesSlider,
     AvatarsStacked,
     ListWithImage,
-    ListWithTermName,
+    PostsListWithTermName,
     MemberListWithSwitch,
-    EventsCount
+    EventsCount,
+    InpursuitListWithTermName,
   },
-  setup( props, context ) {
+  setup(props, context) {
+    const isInpursuit = computed(() => props.apiType === "inpursuit");
 
-    const params = computed(() => {
+    const cleanedParams = computed(() => {
       var params = Util.removeEmptyParams(
         JSON.parse(JSON.stringify(props.params))
       );
-      if (params.style == "TrendingPosts") {
+      if (!isInpursuit.value && params.style === "TrendingPosts") {
         params.trending = 1;
       }
       delete params["style"];
-      params.post_type = params.post_type ? params.post_type : "posts";
+      params.post_type = params.post_type
+        ? params.post_type
+        : isInpursuit.value ? "" : "posts";
       return params;
     });
 
+    // Resolve ListWithTermName to the correct version based on apiType.
+    // All other style strings pass through to their globally/locally registered names.
+    const resolvedStyle = computed(() => {
+      const style = props.params.style;
+      if (style === "ListWithTermName") {
+        return isInpursuit.value ? "InpursuitListWithTermName" : "PostsListWithTermName";
+      }
+      return style;
+    });
 
-    const requestAPI = ( params ) => API.requestPosts(params.post_type, params);
-    const { items, total, watchScroll, scrollComponent, status, isFetchingNextPage } = OrbitQuery(
-      params.value,
-      requestAPI
-    );
+    const requestAPI = (params) =>
+      isInpursuit.value
+        ? API.requestInpursuitPosts(params.post_type, params)
+        : API.requestPosts(params.post_type, params);
 
-    const {debounceEvent} = Helper()
+    const { items, total, watchScroll, scrollComponent, status, isFetchingNextPage } =
+      OrbitQuery(cleanedParams.value, requestAPI);
+
+    const { debounceEvent } = Helper();
 
     const handleScroll = () => {
       debounceEvent(function () {
@@ -76,8 +91,8 @@ export default {
       }, 50);
     };
 
-    onMounted( () => {
-      if ( props.params.pagination ) {
+    onMounted(() => {
+      if (props.params.pagination) {
         window.addEventListener("scroll", handleScroll);
       }
     });
@@ -85,19 +100,18 @@ export default {
       if (props.params.pagination) {
         window.removeEventListener("scroll", handleScroll);
       }
-    } );
+    });
 
-    watch( total, () => context.emit( 'totalChanged', total.value ) )
-
-    // FOR THE FIRST API CALL
-    context.emit( 'totalChanged', total.value )
+    watch(total, () => context.emit("totalChanged", total.value));
+    context.emit("totalChanged", total.value);
 
     return {
       items,
       total,
       status,
       scrollComponent,
-      isFetchingNextPage
+      isFetchingNextPage,
+      resolvedStyle,
     };
   },
 };

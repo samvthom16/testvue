@@ -39,8 +39,6 @@ src/
 ├── assets/                     # CSS, images, logos
 │
 ├── components/                 # Reusable UI components (50+ files)
-│   ├── LoginForm.vue           # (appears unused)
-│   ├── LoginFormWithSteps.vue  # Actual login form (3-step)
 │   ├── PhoneUI.vue             # Mobile-first phone wrapper layout
 │   ├── Modal.vue               # Generic modal
 │   ├── TextField.vue           # Form field components
@@ -50,12 +48,12 @@ src/
 │
 ├── lib/                        # Data fetching + helpers
 │   ├── OrbitQuery.js           # Core infinite scroll query handler (vue-query)
-│   ├── OrbitPosts.vue          # Data fetcher for WP REST posts
-│   ├── OrbitInpursuitPosts.vue # Data fetcher for custom InPursuit post types
+│   ├── OrbitPosts.vue          # Data fetcher — handles both WP REST and InPursuit post types (apiType prop)
 │   ├── OrbitComments.vue       # Comments data fetcher
 │   ├── OrbitDates.vue          # Special dates fetcher
-│   ├── PostEdit.js             # Create/update/delete post logic (DOM-coupled)
-│   ├── FormEdit.js             # Generic create/update/delete (cleaner pattern)
+│   ├── useLoginFlow.js         # Composable — all login logic (URL validation, OTP, steps, focus)
+│   ├── PostEdit.js             # Create/update/delete post logic (DOM-coupled, WP post types)
+│   ├── FormEdit.js             # Generic create/update/delete (requestAPI injection pattern)
 │   ├── MembersHelper.js        # Members page composable (params, filters, search)
 │   ├── Helper.js               # Only contains debounceEvent() — 17 lines
 │   ├── Util.js                 # General utilities (112 lines)
@@ -295,22 +293,39 @@ The WordPress backend has a custom plugin that exposes:
 
 ---
 
-## Refactoring Opportunities Identified
+## Refactoring Log
 
-### High Priority
-1. **Login triplication** — `LoginForm.vue` (unused), `LoginFormWithSteps.vue`, and `Login.vue` all contain identical `validateURL`, `generateOTP`, `testAccountURL`, `sendEmailOTP`, `verifyOTP`, `focusInput`. Should be one `useLoginFlow.js` composable.
-2. **OrbitPosts vs OrbitInpursuitPosts** — 95% identical, only differ in which API method they call. Should be one generic `OrbitList.vue` accepting an API function as a prop.
-3. **PostEdit.js vs FormEdit.js** — overlapping CRUD logic. `FormEdit.js` is the cleaner pattern and should be consolidated.
+### Completed (branch: refactor/code-cleanup)
+
+#### 1. Login composable — `src/lib/useLoginFlow.js`
+- Extracted all shared login logic into a single composable: URL validation, OTP generation, step navigation, API calls, focus management
+- `Login.vue` script reduced from 278 lines → 14 lines (template unchanged)
+- Deleted `LoginForm.vue` and `LoginFormWithSteps.vue` — both were unused dead files
+
+#### 2. OrbitPosts / OrbitInpursuitPosts merge
+- `OrbitPosts.vue` now accepts an `apiType` prop (`"posts"` default, `"inpursuit"` for custom endpoints)
+- `ListWithTermName` naming collision resolved via `resolvedStyle` computed: maps to `PostsListWithTermName` or `InpursuitListWithTermName` based on `apiType`
+- `CommentsCategory.vue` updated: `<OrbitInpursuitPosts>` → `<OrbitPosts apiType="inpursuit">`
+- `OrbitInpursuitPosts.vue` deleted, removed from `main.js`
+
+#### 3. withProcessing helper — PostEdit.js + FormEdit.js
+- Both files now have a local `withProcessing(apiCall, onSuccess, onError)` helper
+- Eliminated repeated `setProcessing(true/false)` + `.then()` boilerplate from every CRUD function
+- Fixed subtle mutation bug in `FormEdit.js`: was mutating `data.value` directly with `method = "post"` — now uses `{ ...data.value, method: "post" }`
+
+---
+
+## Remaining Refactoring Opportunities
 
 ### Medium Priority
-4. **Async inside Vuex mutation** — `getAccountSettings` in `store/index.js` makes an API call inside a mutation, which is an anti-pattern. Must move to an action.
-5. **Duplicate auth header generation** — `btoa(username + ":" + password)` exists in both `api.js` and `store/index.js`. Single source of truth should be in `api.js`.
-6. **Repeated filter logic** — `selectDropdownItem()` is nearly identical in `Members.vue`, `Events.vue`, and `Comments.vue`. Should be a shared composable.
-7. **btoa() double-encoding confusion** — credentials are `btoa()`-encoded before being sent AND the API wraps them in Basic Auth (`btoa()` again). Only the Basic Auth header should use `btoa()`.
+1. **Async inside Vuex mutation** — `getAccountSettings` in `store/index.js` makes an API call inside a mutation (anti-pattern). Should move to an action.
+2. **Duplicate auth header generation** — `btoa(username + ":" + password)` exists in both `api.js` and `store/index.js`. Should have a single source of truth in `api.js`.
+3. **Repeated filter logic** — `selectDropdownItem()` is nearly identical in `Members.vue`, `Events.vue`, and `Comments.vue`. Should be a shared composable.
+4. **btoa() confusion** — credentials are `btoa()`-encoded before sending AND the API wraps them in Basic Auth again. Only the Basic Auth header should use `btoa()`.
 
 ### Low Priority
-8. **Mixed Options API + Composition API** — `SingleMember.vue` uses both `data()` and `setup()`. Should standardize to Composition API.
-9. **Helper.js should merge into Util.js** — `Helper.js` is 17 lines with one function (`debounceEvent`). `Util.js` even has it commented out.
-10. **Dead code** — Commented-out functions in `Util.js` and `Home.vue`. `LoginForm.vue` appears entirely unused.
-11. **Loose equality** — `==` used instead of `===` throughout 10+ files. Should enable ESLint `eqeqeq` rule.
-12. **Bad v-for key** — `NewMember.vue` uses `:key="field"` (object reference) instead of `:key="field.id"`.
+5. **Mixed Options API + Composition API** — `SingleMember.vue` uses both `data()` and `setup()`. Should standardize to Composition API.
+6. **Helper.js should merge into Util.js** — `Helper.js` is 17 lines containing only `debounceEvent()`. `Util.js` even has it commented out.
+7. **Dead code** — Commented-out functions in `Util.js` and `Home.vue`.
+8. **Loose equality** — `==` used instead of `===` throughout 10+ files. Enable ESLint `eqeqeq` rule.
+9. **Bad v-for key** — `NewMember.vue` uses `:key="field"` (object reference) instead of `:key="field.id"`.

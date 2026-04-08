@@ -22,7 +22,7 @@
       </router-link>
     </template>
     <template v-slot:phonebody>
-      <OrbitInpursuitPosts :params="params" :key="params.unique_id">
+      <OrbitPosts apiType="inpursuit" :params="params" :key="params.unique_id">
         <template v-slot:loadingAnimation>
           <SimpleList :total="10" />
         </template>
@@ -34,7 +34,7 @@
             No comment categories found
           </div>
         </template>
-      </OrbitInpursuitPosts>
+      </OrbitPosts>
     </template>
   </PhoneUI>
 </template>
