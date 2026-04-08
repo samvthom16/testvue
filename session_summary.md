@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-08 (Session 2)
+> Last updated: 2026-04-08 (Session 4)
 
 ---
 
@@ -424,3 +424,31 @@ Integrate web push notifications into the frontend, connected to the WordPress b
 ### Commits
 - `80a0cc9` — feat: add web push notification support
 - `78d95c1` — feat: add loading and success feedback to notification toggle
+
+---
+
+## Session 4 — Auth Audit + History Fix (2026-04-08)
+
+### Goal
+Audit all API requests for missing authentication headers and fix any bugs found.
+
+### Findings
+
+All API calls in `api.js` pass `headers: this.getAuthHeaders()` — except `requestHistory()`, which was missing it entirely, causing a 401 on the history tab in `SingleMember`.
+
+**Unauthenticated requests — by design (pre-login):**
+| Call | File | Endpoint |
+|---|---|---|
+| Plugin validation | `useLoginFlow.js:97` | `GET /wp-json/inpursuit/v1` |
+| OTP send | `useLoginFlow.js:117` | `POST /wp-json/inpursuit/v1/verify/` |
+| Authentication | `useLoginFlow.js:149` | `POST /wp-json/inpursuit/v1/authentication/` |
+| VAPID public key | `usePushNotifications.js:54` | `GET /push/vapid-public-key` |
+
+**Unauthenticated request — bug (fixed):**
+- `requestHistory()` in `api.js` — missing `headers: this.getAuthHeaders()`
+
+### Fix
+
+#### `src/api.js`
+- Added `headers: this.getAuthHeaders()` to `requestHistory()` — now consistent with every other method in the file
+- Root cause: `HistoryList.vue` calls `API.requestHistory()` via `OrbitQuery`, which hits `/wp-json/inpursuit/v1/history` without an `Authorization` header → WordPress returns 401
