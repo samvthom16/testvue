@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Date: 2026-04-08
+> Last updated: 2026-04-08 (Session 2)
 
 ---
 
@@ -329,3 +329,50 @@ The WordPress backend has a custom plugin that exposes:
 7. **Dead code** — Commented-out functions in `Util.js` and `Home.vue`.
 8. **Loose equality** — `==` used instead of `===` throughout 10+ files. Enable ESLint `eqeqeq` rule.
 9. **Bad v-for key** — `NewMember.vue` uses `:key="field"` (object reference) instead of `:key="field.id"`.
+
+---
+
+## Session 2 — Desktop Layout (2026-04-08)
+
+### Goal
+Make the app look good on desktop without touching any page or feature logic. All changes are isolated to the `PhoneUI` layout shell and its sub-templates.
+
+### Responsive Breakpoints
+
+| Breakpoint | Layout |
+|---|---|
+| Mobile `< 768px` | Unchanged — sticky header + purple title banner + content + bottom nav |
+| Desktop `≥ 768px` | Fixed left sidebar + clean white page header bar + full-width content |
+
+### Files Changed
+
+#### `src/components/PhoneUI.vue`
+- Root div: `md:flex md:min-h-screen`
+- Added `hidden md:flex` **left sidebar**: sticky, 224px wide, purple bg (`#89558d`), "InPursuit" wordmark, vertical nav links (Home / Members / Events / Comments / Profile) with active-route highlight (`bg-white/15 text-white`); inactive links `text-white/60` with hover lift
+- Added `hidden md:flex` **desktop page header bar**: white bg, `border-b border-lightgray`, page `title` on the left, `headerright` slot content on the right — this preserves all action buttons (+ add, save, logout, edit) on desktop
+- CSS override: `.desktop-page-header .text-white { color: #89558d }` — all views pass `text-white` on their action icons (designed for the purple mobile header); this makes them visible on the white desktop bar without touching any view files
+- Content body padding: `p-4` mobile → `md:p-8` desktop
+- Added `Icon` component import + `navItems` data array for the sidebar links
+
+#### `src/templates/PhoneUI/Footer.vue`
+- Added `md:hidden` to root `div` — bottom nav hidden on desktop (sidebar replaces it)
+
+#### `src/templates/PhoneUI/Header.vue`
+- Added `md:hidden` to root `div` — mobile sticky scroll-in header hidden on desktop (desktop page header bar replaces it)
+
+#### `src/templates/PhoneUI/Title.vue`
+- Added `md:hidden` to root `div` — big purple title banner hidden on desktop (desktop page header bar replaces it)
+
+### PhoneUI Slot Reference (updated)
+
+| Slot | Mobile | Desktop |
+|---|---|---|
+| `headericon` | Left icon in sticky header (back button) | Hidden (`header` is `md:hidden`) |
+| `headerright` | Right action in sticky header (+ / save / logout) | Shown in desktop page header bar (right side) |
+| `mainttitle_footer` | Below title in purple banner (search field) | Hidden (`title` is `md:hidden`) |
+| `phonebody` | Main page content | Main page content (same) |
+
+### Commit
+- Branch: `refactor/code-cleanup`
+- Commit: `eb07105`
+- Remote: `https://github.com/samvthom16/testvue`
