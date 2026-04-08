@@ -1,42 +1,75 @@
 <template>
 
-  <div class='phone-ui'>
-    <PhoneHeader
-      :title='title'
-      :colors='colors'
-      :scrolled='scrolled'
-      :move_sticky_up='move_sticky_up'
-      :stickytitle_classes='stickytitle_classes'
-    >
-      <template v-for="(index, name) in $slots" v-slot:[name]>
-        <slot :name="name" />
-      </template>
-    </PhoneHeader>
+  <div class='phone-ui md:flex md:min-h-screen'>
 
-    <PhoneTitle
-      :hide_maintitle='hide_maintitle'
-      :maintitle_classes='maintitle_classes'
-      :title='title'
-      :colors='colors'
-      :scrolled='scrolled'
-      :move_sticky_up='move_sticky_up'
-      :stickytitle_classes='stickytitle_classes'
-    >
-      <template v-for="(index, name) in $slots" v-slot:[name]>
-        <slot :name="name" />
-      </template>
-    </PhoneTitle>
+    <!-- Desktop sidebar (hidden on mobile) -->
+    <aside class='hidden md:flex md:flex-col md:w-56 md:min-h-screen sticky top-0 h-screen shrink-0 bg-purple text-white'>
+      <div class='px-5 py-6 border-b border-lightpurple'>
+        <p class='text-white font-bold text-xl tracking-wide'>InPursuit</p>
+      </div>
+      <nav class='flex-1 p-3 flex flex-col gap-1 overflow-y-auto'>
+        <router-link
+          v-for='item in navItems'
+          :key='item.route.name'
+          :to='item.route'
+          class='flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors'
+          :class="item.allowedRoutes.includes($route.name)
+            ? 'bg-white/15 text-white'
+            : 'text-white/60 hover:text-white hover:bg-white/10'"
+        >
+          <Icon class='h-5 w-5 shrink-0' :type='item.icon' />
+          <span class='text-sm font-medium'>{{ item.name }}</span>
+        </router-link>
+      </nav>
+    </aside>
 
-    <PhoneProgressBar />
+    <!-- Main content column -->
+    <div class='flex-1 flex flex-col min-w-0'>
+      <PhoneHeader
+        :title='title'
+        :colors='colors'
+        :scrolled='scrolled'
+        :move_sticky_up='move_sticky_up'
+        :stickytitle_classes='stickytitle_classes'
+      >
+        <template v-for="(index, name) in $slots" v-slot:[name]>
+          <slot :name="name" />
+        </template>
+      </PhoneHeader>
 
-    <div
-      class='p-4 bg-white min-h-screen'
-      :class='`${body_classes}`'
-    >
-      <slot name="phonebody"></slot>
+      <PhoneTitle
+        :hide_maintitle='hide_maintitle'
+        :maintitle_classes='maintitle_classes'
+        :title='title'
+        :colors='colors'
+        :scrolled='scrolled'
+        :move_sticky_up='move_sticky_up'
+        :stickytitle_classes='stickytitle_classes'
+      >
+        <template v-for="(index, name) in $slots" v-slot:[name]>
+          <slot :name="name" />
+        </template>
+      </PhoneTitle>
+
+      <PhoneProgressBar />
+
+      <!-- Desktop page header (hidden on mobile) -->
+      <div class='desktop-page-header hidden md:flex items-center justify-between px-8 py-5 border-b border-lightgray bg-white'>
+        <h1 class='text-xl font-semibold text-darkblack' v-html='title'></h1>
+        <div class='flex items-center gap-2'>
+          <slot name="headerright"></slot>
+        </div>
+      </div>
+
+      <div
+        class='p-4 md:p-8 bg-white min-h-screen'
+        :class='`${body_classes}`'
+      >
+        <slot name="phonebody"></slot>
+      </div>
+
+      <PhoneFooter :hide_footer='hide_footer' />
     </div>
-
-    <PhoneFooter :hide_footer='hide_footer' />
 
   </div>
 
@@ -47,6 +80,7 @@ import PhoneHeader from '@/templates/PhoneUI/Header.vue'
 import PhoneTitle from '@/templates/PhoneUI/Title.vue'
 import PhoneFooter from '@/templates/PhoneUI/Footer.vue'
 import PhoneProgressBar from '@/templates/PhoneUI/ProgressBar.vue'
+import Icon from '@/components/Icon.vue'
 
 import Helper from '@/lib/Helper.js'
 
@@ -61,12 +95,20 @@ export default{
     PhoneHeader,
     PhoneTitle,
     PhoneProgressBar,
-    PhoneFooter
+    PhoneFooter,
+    Icon,
   },
   data(){
     return {
       scrolled  : false,
       move_sticky_up : false,
+      navItems: [
+        { route: { name: 'Home' },     icon: 'Home',    name: 'Home',    allowedRoutes: ['Home'] },
+        { route: { name: 'Members' },  icon: 'Members', name: 'Members', allowedRoutes: ['Members', 'SingleMember'] },
+        { route: { name: 'Events' },   icon: 'Event',   name: 'Events',  allowedRoutes: ['Events', 'SingleEvent'] },
+        { route: { name: 'Comments' }, icon: 'Comment', name: 'Comments',allowedRoutes: ['Comments'] },
+        { route: { name: 'Profile' },  icon: 'Profile', name: 'Profile', allowedRoutes: ['Profile'] },
+      ],
     }
   },
   setup( props ){
@@ -175,6 +217,15 @@ export default{
 
 .maintitle{
   @apply text-2xl p-4 pt-4 bg-purple text-white border-b border-lightgray;
+}
+
+@media (min-width: 768px) {
+  .desktop-page-header .text-white {
+    color: #89558d;
+  }
+  .desktop-page-header .text-white svg {
+    color: #89558d;
+  }
 }
 
 

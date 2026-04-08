@@ -1,6 +1,6 @@
 <template>
   <div
-    class='opacity-0 h-0'
+    class='opacity-0 h-0 md:hidden'
     :class="[`${colors}`, {
       'border-b border-lightgray': scrolled,
       'opacity-100 py-4 px-2 sticky top-0 z-10 h-auto' : !move_sticky_up

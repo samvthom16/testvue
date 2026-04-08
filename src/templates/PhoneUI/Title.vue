@@ -1,6 +1,6 @@
 <template>
   <div
-    class='maintitle mt-0 transition-all duration-200 delay-50 relative'
+    class='maintitle mt-0 transition-all duration-200 delay-50 relative md:hidden'
     :class="[ `${colors}`, `${maintitle_classes}`, {'transform -mt-12': move_sticky_up} ]"
   >
     <div class='flex'>

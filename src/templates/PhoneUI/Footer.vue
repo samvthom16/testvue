@@ -1,5 +1,5 @@
 <template>
-  <div id='phone-footer' class='' v-if='!hide_footer'>
+  <div id='phone-footer' class='md:hidden' v-if='!hide_footer'>
     <ul class='footer-list'>
       <li v-for='item in items' :key='item'>
         <router-link :to="item.route" class="hover:opacity-80">
