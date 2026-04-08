@@ -77,8 +77,16 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <Icon type="Bell" class="h-7 w-7 p-1 rounded-md text-white bg-blue-500" />
-              <span class="ml-3 block font-normal truncate text-lg">
-                {{ isSubscribed ? 'Disable Notifications' : 'Enable Notifications' }}
+              <span class="ml-3 block font-normal truncate text-lg" :class="{ 'opacity-50': isProcessing }">
+                <template v-if="isProcessing">
+                  {{ isSubscribed ? 'Disabling...' : 'Enabling...' }}
+                </template>
+                <template v-else-if="successMessage">
+                  {{ successMessage }}
+                </template>
+                <template v-else>
+                  {{ isSubscribed ? 'Disable Notifications' : 'Enable Notifications' }}
+                </template>
               </span>
             </div>
           </div>
@@ -146,13 +154,15 @@ export default {
     const isAdmin = ({ user }) =>
       Util.hasUserRole({ user, searchRole: "administrator" });
 
-    const { isSubscribed, isSupported, toggleNotifications } = usePushNotifications();
+    const { isSubscribed, isProcessing, successMessage, isSupported, toggleNotifications } = usePushNotifications();
 
     return {
       categories,
       isAdmin,
       newTeamMember,
       isSubscribed,
+      isProcessing,
+      successMessage,
       isSupported,
       toggleNotifications,
     };
