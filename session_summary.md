@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-08 (Session 7)
+> Last updated: 2026-04-09 (Session 8)
 
 ---
 
@@ -95,6 +95,38 @@ src/
 - **Bug fixed:** `requestHistory()` was missing `headers: this.getAuthHeaders()` → 401 on history tab in `SingleMember`. Fixed in `api.js`.
 - Intentionally unauthenticated calls (pre-login): plugin validate, OTP send, authentication, VAPID public key fetch.
 
+### Session 8 — Dashboard + Comments UI Overhaul (`fresh-design` branch)
+
+#### Summary
+Redesigned the Home page into a proper Dashboard. Overhauled the Comments page and homepage comment sections for visual consistency. Added Special Events to the left nav.
+
+#### Dashboard (`Home.vue`)
+- Page renamed "Dashboard" — heading + meta subtitle in phonebody; sticky header title removed (was always-visible "Home").
+- **StatsBar** *(new — `src/templates/Misc/StatsBar.vue`)*: 2-col mobile / 4-col desktop grid of clickable stat cards. Fetches live totals (Members, Events, Comments, Special Events) via `x-wp-total` response headers with skeleton loading.
+- **Coming Up section**: `OrbitDates` (3 items) with `SpecialDates` style. Conditionally shown — hidden when `x-wp-total = 0` for special dates.
+- **Comments grouped by member** *(new — `UsersListGrouped.vue`)*: Groups incoming comments by `member.id`, shows count badge when a member has multiple, latest comment capped at 2 lines (`line-clamp-2`).
+- **Recent Activity timeline** *(new — `ActivityTimeline.vue`)*: Fetches last 8 events; each item shows a gradient monogram square (first letter, `rounded-xl`, gradient seeded from name), bold event title, relative date below. No icons.
+- All sections white with `border-t border-lightgray` dividers (gray panel backgrounds removed).
+
+#### Comments Page (`UsersListWithComment.vue`, `UsersList.vue`)
+- Both templates fully redesigned to match member list style.
+- **Round avatars** (`rounded-full`) replacing square thumbnails.
+- **Double-letter monogram** fallback with name-seeded gradient (8-colour palette) when `featured_image` is default.
+- **Layout**: avatar + right column (name · time ago by COMMENTER, comment text as focal point with `font-medium text-darkblack`).
+- Dividers removed from list.
+
+#### SpecialDates.vue
+- Single-letter monogram replaced with **double-letter initials** + gradient background (consistent with rest of app).
+
+#### MainTitle.vue
+- "View All" link redesigned as a small **outlined button** (`border border-purple rounded-md px-2.5 py-1`) with hover fill.
+
+#### Navigation
+- **Special Events** added to left nav (between Comments and Profile) using existing `SpecialEvent` icon.
+- Nav item "Home" renamed to **"Dashboard"**.
+
+---
+
 ### Session 7 — Events Redesign + Nav Shell + HistoryList Polish (`fresh-design` branch)
 
 #### Summary
@@ -121,11 +153,18 @@ Continued design work on `fresh-design`. `SingleMember` gained the app-level nav
 
 #### SingleEvent.vue — Full Redesign
 No longer uses `PhoneUI`. Custom layout matching `SingleMember`:
-- **Hero**: purple band, calendar icon badge, event name, status pill + event type + relative date.
-- **Left panel** (sticky desktop): inline SVG donut ring showing `attendants_percentage` + member count; meta rows for Event Type (purple), Date (blue), Description (orange) — same soft-badge icon style as `SingleMember`.
-- **Right panel**: "Attendees" heading, `SearchField`, `MembersDropdown` filters, `OrbitPosts` with `MemberListWithSwitch` (attendance toggle preserved). Polished empty state.
+- **Hero**: purple band, event initial letter badge (first letter of event name, replacing generic calendar icon), event name, status pill + event type + relative date.
+- **Left panel removed**: attendance donut ring and meta rows replaced with compact inline pill chips (Event Type, Date, attendance %) below the hero.
+- **Attendees section**: full-width, `SearchField`, `MembersDropdown` filters, `OrbitPosts` with `MemberListWithSwitch`. `per_page` set to 20 (overrides `MembersHelper` default of 10) to ensure enough content for scroll-based pagination to trigger.
+- **Attendance %**: pill shows `post.attendants_percentage` (confirmed field from event API) — not `totalItems` which reflects total members, not attendees.
 - **3-dot bottom sheet**: Edit Event only.
 - Removed `CircularProgressBar`, `defaultMixin`, `paginationMixin` dependencies.
+
+#### MemberListWithSwitch.vue — Redesign
+- **Avatar**: real photo (`rounded-full`) or name-seeded gradient monogram (2-letter initials) — same design as `MembersGrid`. Replaced old `PostFeaturedImage` + `PostTitle` components.
+- **Layout**: compact `ul` list with `border-b` row separators. Desktop: `md:grid-cols-2` two-column grid with `gap-x-8`. Switch wrapped in `shrink-0` div to prevent flex crowding.
+- **Name**: rendered via `v-html="user.title.rendered"` inside a `div` (not `p`) to avoid browser auto-closing block-level nesting which broke desktop display.
+- **`getName()` method**: safe fallback — checks `title.rendered` first, then plain `title` string, then empty string.
 
 #### Router
 - **`/members`** now loads `MembersNew.vue` (import alias changed). Route name stays `'Members'` — all nav links unchanged.

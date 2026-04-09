@@ -1,8 +1,11 @@
 <template>
-  <h4 class='font-semibold text-xl mb-3 relative'>
-    {{ title }}
-    <router-link class='absolute right-0 top-1.5 text-sm text-purple font-medium hover:text-lightpurple transition-colors' :to="route">View All</router-link>
-  </h4>
+  <div class="flex items-center justify-between mb-3">
+    <h4 class="font-semibold text-xl">{{ title }}</h4>
+    <router-link
+      :to="route"
+      class="text-xs font-medium text-purple border border-purple rounded-md px-2.5 py-1 hover:bg-purple hover:text-white transition-colors"
+    >View All</router-link>
+  </div>
 </template>
 
 <script>

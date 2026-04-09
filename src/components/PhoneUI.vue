@@ -114,11 +114,12 @@ export default{
       scrolled  : false,
       move_sticky_up : false,
       navItems: [
-        { route: { name: 'Home' },     icon: 'Home',    name: 'Home',    allowedRoutes: ['Home'] },
+        { route: { name: 'Home' },     icon: 'Home',    name: 'Dashboard', allowedRoutes: ['Home'] },
         { route: { name: 'Members' },  icon: 'Members', name: 'Members', allowedRoutes: ['Members', 'SingleMember'] },
         { route: { name: 'Events' },   icon: 'Event',   name: 'Events',  allowedRoutes: ['Events', 'SingleEvent'] },
-        { route: { name: 'Comments' }, icon: 'Comment', name: 'Comments',allowedRoutes: ['Comments'] },
-        { route: { name: 'Profile' },  icon: 'Profile', name: 'Profile', allowedRoutes: ['Profile'] },
+        { route: { name: 'Comments' },      icon: 'Comment',       name: 'Comments',       allowedRoutes: ['Comments'] },
+        { route: { name: 'SpecialEvents' }, icon: 'SpecialEvent',  name: 'Special Events', allowedRoutes: ['SpecialEvents'] },
+        { route: { name: 'Profile' },       icon: 'Profile',       name: 'Profile',        allowedRoutes: ['Profile'] },
       ],
     }
   },

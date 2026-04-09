@@ -22,6 +22,7 @@ import { onMounted, onUnmounted, computed } from "vue";
 
 import UsersList from "@/templates/Comments/UsersList.vue";
 import UsersListWithComment from "@/templates/Comments/UsersListWithComment.vue";
+import UsersListGrouped from "@/templates/Comments/UsersListGrouped.vue";
 import CommentsCount from "@/templates/Comments/CommentsCount.vue";
 
 import API from "@/api";
@@ -34,6 +35,7 @@ export default {
     UsersList,
     CommentsCount,
     UsersListWithComment,
+    UsersListGrouped,
   },
   setup(props) {
     const params = computed(() => {
