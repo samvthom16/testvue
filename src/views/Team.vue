@@ -17,6 +17,9 @@
         </router-link>
       </div>
 
+      <!-- Loading skeleton -->
+      <TeamList v-if="loading && !users.length" />
+
       <!-- Team list -->
       <div v-if="users.length" class="divide-y divide-lightgray">
         <div
@@ -60,7 +63,7 @@
       </div>
 
       <!-- Empty state -->
-      <div v-else class="flex flex-col items-center justify-center py-24 text-center">
+      <div v-else-if="!loading" class="flex flex-col items-center justify-center py-24 text-center">
         <div class="w-20 h-20 rounded-3xl bg-lightergray flex items-center justify-center mb-5">
           <Icon type="Members" class="w-9 h-9 text-lightgray" />
         </div>
@@ -88,12 +91,14 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed } from "vue";
+import { useQuery } from "vue-query";
 import API from "@/api";
 import Util from "@/lib/Util";
 import Icon from "@/components/Icon.vue";
 import PhoneUI from "@/components/PhoneUI.vue";
 import TeamMemberProfileActions from "@/components/TeamMemberProfileActions.vue";
+import TeamList from "@/templates/Animation/TeamList.vue";
 import { getGradient, getInitials } from "@/lib/Gradients";
 
 export default {
@@ -101,22 +106,27 @@ export default {
     Icon,
     PhoneUI,
     TeamMemberProfileActions,
+    TeamList,
   },
 
   setup() {
-    const users = ref([]);
+    const { data, status, refetch } = useQuery(
+      "teamMembers",
+      () => API.requestUsers().then((r) => r.data),
+    );
 
-    const fetchTeamMembers = () =>
-      API.requestUsers().then((response) => (users.value = response.data));
+    const users   = computed(() => data.value ?? []);
+    const loading = computed(() => status.value === "loading");
 
-    fetchTeamMembers();
+    const fetchTeamMembers = () => refetch.value();
 
-    const joinedText = (datestring) => "Joined " + Util.timeAgo(datestring);
-    const getUserEditLink = (user) => Util.getUserLink(user);
-    const isAccountActive = ({ user }) => user.roles && user.roles.length;
+    const joinedText     = (datestring) => "Joined " + Util.timeAgo(datestring);
+    const getUserEditLink = (user)      => Util.getUserLink(user);
+    const isAccountActive = ({ user })  => user.roles && user.roles.length;
 
     return {
       users,
+      loading,
       joinedText,
       getUserEditLink,
       isAccountActive,

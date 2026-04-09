@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-09 (Session 13)
+> Last updated: 2026-04-09 (Session 14)
 
 ---
 
@@ -110,6 +110,12 @@ src/
 - Mobile bottom nav overhauled: 4 primary items + **More** drawer (bottom sheet with overflow items).
 - `Profile` icon fixed (was showing gear/Settings icon).
 - `← Settings` back links added to `Categories` and `CommentsCategory`.
+
+### Session 14 — Dead Code Removal + Team Page Polish
+
+- **Dead code sweep:** removed 14 stale files — Vite scaffold cluster (`HelloWorld`, `TheWelcome`, `WelcomeItem`, `AboutView`, `HomeView`), superseded PhoneUI templates (`Header.vue`, `Title.vue`), orphaned animation template (`MemberAvatars.vue`), and unused components (`HeaderMenu`, `EventTags`, `FilterTags`, `UserTags`, `ProgressBarItem`, `SettingItem`).
+- **`Team.vue` loading skeleton:** new `templates/Animation/TeamList.vue` skeleton matches the actual row layout exactly — circular monogram placeholder, name + email lines at varied widths, status pill stub, action button placeholder.
+- **`Team.vue` caching:** migrated from manual `ref + API.requestUsers()` to `useQuery("teamMembers", ...)` (vue-query), consistent with the rest of the app. Cached data returns instantly on revisit; skeleton only shows on first load.
 
 ### Session 13 — Settings Modals + Skeleton Loader
 - Add/edit for all category types (groups, genders, locations, professions, event-types, status) and comment types now happens in an inline modal on the listing page — no separate route navigation.
