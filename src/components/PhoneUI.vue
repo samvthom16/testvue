@@ -3,7 +3,7 @@
   <div class='phone-ui md:flex md:min-h-screen'>
 
     <!-- Desktop sidebar (hidden on mobile) -->
-    <aside class='hidden md:flex md:flex-col md:w-56 md:min-h-screen sticky top-0 h-screen shrink-0 bg-lightergray border-r border-lightgray'>
+    <aside v-if='!hide_sidebar' class='hidden md:flex md:flex-col md:w-56 md:min-h-screen sticky top-0 h-screen shrink-0 bg-lightergray border-r border-lightgray'>
       <div class='px-5 py-6 border-b border-lightgray'>
         <p class='text-darkblack font-bold text-xl tracking-wide'>InPursuit</p>
         <p class='text-gray text-xs uppercase tracking-widest mt-0.5'>Admin Console</p>
@@ -105,10 +105,14 @@ export default{
     const hide_desktop_header = ref( null )
     hide_desktop_header.value = props.configUI && props.configUI.hide_desktop_header ? props.configUI.hide_desktop_header : false
 
+    const hide_sidebar = ref( null )
+    hide_sidebar.value = props.configUI && props.configUI.hide_sidebar ? props.configUI.hide_sidebar : false
+
     return{
       body_classes,
       hide_footer,
       hide_desktop_header,
+      hide_sidebar,
     }
   }
 }
