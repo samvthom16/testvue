@@ -1,17 +1,23 @@
 <template>
-  <PhoneUI title="Members">
-
-    <template v-slot:headerright>
-      <router-link :to="{ name: 'NewMember' }">
-        <Icon type="Plus" class="inline text-white" />
-      </router-link>
-    </template>
-
-    <template v-slot:mainttitle_footer>
-      <SearchField @searching="onSearch" />
-    </template>
-
+  <PhoneUI title="Members" :configUI="{ hide_desktop_header: true }">
     <template v-slot:phonebody>
+
+      <!-- Page header -->
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h1 class="text-2xl font-bold text-darkblack">Members</h1>
+          <p class="text-sm text-darkgray mt-0.5">Manage and review your community members.</p>
+        </div>
+        <router-link
+          :to="{ name: 'NewMember' }"
+          class="hidden md:inline-flex items-center gap-2 bg-purple text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-lightpurple transition-colors"
+        >
+          <Icon type="Plus" class="w-4 h-4" />
+          New Member
+        </router-link>
+      </div>
+
+      <SearchField @searching="onSearch" class="mb-4" />
 
       <!-- Filters -->
       <MembersDropdown :totalItems="totalItems" @selectItem="selectDropdownItem" />

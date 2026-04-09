@@ -1,56 +1,24 @@
 <template>
-  <div class="min-h-screen bg-white md:flex">
-
-    <!-- ── DESKTOP SIDEBAR ──────────────────────────────── -->
-    <aside class="hidden md:flex md:flex-col md:w-56 sticky top-0 h-screen shrink-0 bg-lightergray border-r border-lightgray">
-      <div class="px-5 py-6 border-b border-lightgray">
-        <p class="text-darkblack font-bold text-xl tracking-wide">InPursuit</p>
-        <p class="text-gray text-xs uppercase tracking-widest mt-0.5">Admin Console</p>
-      </div>
-      <nav class="flex-1 p-3 flex flex-col gap-1 overflow-y-auto">
-        <router-link
-          v-for="item in navItems"
-          :key="item.route.name"
-          :to="item.route"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors"
-          :class="item.allowedRoutes.includes($route.name)
-            ? 'bg-white text-purple font-semibold shadow-sm'
-            : 'text-black hover:bg-white hover:text-darkblack'"
-        >
-          <Icon class="h-5 w-5 shrink-0" :type="item.icon" />
-          <span class="text-sm font-medium">{{ item.name }}</span>
-        </router-link>
-      </nav>
-      <div class="p-3 border-t border-lightgray">
-        <router-link
-          :to="{ name: 'NewEvent' }"
-          class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-purple text-white rounded-lg text-sm font-medium hover:bg-lightpurple transition-colors"
-        >
-          + New Event
-        </router-link>
-      </div>
-    </aside>
-
-    <!-- ── MAIN CONTENT ─────────────────────────────────── -->
-    <div class="flex-1 flex flex-col min-w-0">
+  <PhoneUI :configUI="{ hide_desktop_header: true, body_classes: '!p-0' }">
+    <template v-slot:phonebody>
 
       <div v-if="post.id">
 
         <!-- ── HERO ──────────────────────────────────────── -->
-        <div class="bg-purple px-5 md:px-8 pt-5 pb-10">
+        <div class="bg-white px-5 md:px-8 pt-5 pb-10 border-b border-lightgray">
 
           <!-- Top row: back + 3-dot -->
           <div class="flex items-center justify-between mb-6">
             <button
               @click="$router.back()"
-              class="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors"
+              class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors"
             >
               <Icon type="Back" class="w-5 h-5" />
               <span class="text-sm font-medium">Back</span>
             </button>
             <button
               @click="showActionsMenu = true"
-              class="p-2 rounded-full hover:bg-white/10 transition-colors text-white/80 hover:text-white"
+              class="p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
             >
               <Icon type="Ellipsis" class="w-5 h-5 rotate-90" />
             </button>
@@ -59,24 +27,24 @@
           <!-- Event identity -->
           <div class="flex items-start gap-5">
             <div
-              class="shrink-0 w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center"
+              class="shrink-0 w-16 h-16 rounded-2xl bg-lightergray flex items-center justify-center"
             >
-              <span class="text-white font-bold text-2xl select-none tracking-wide">
+              <span class="text-darkblack font-bold text-2xl select-none tracking-wide">
                 {{ getEventInitial(post) }}
               </span>
             </div>
             <div>
               <h1
-                class="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight"
+                class="text-2xl md:text-3xl font-bold text-darkblack tracking-tight leading-tight"
                 v-html="post.title?.rendered"
               ></h1>
               <div class="flex flex-wrap items-center gap-2 mt-2">
-                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-white/20 text-white">
-                  <span class="w-1.5 h-1.5 rounded-full bg-white/80"></span>
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-lightergray text-darkblack">
+                  <span class="w-1.5 h-1.5 rounded-full" :class="post.status === 'publish' ? 'bg-green' : 'bg-gray'"></span>
                   {{ post.status === 'publish' ? 'Active' : 'Archived' }}
                 </span>
-                <span v-if="getEventType(post)" class="text-white/70 text-xs font-medium">{{ getEventType(post) }}</span>
-                <span class="text-white/40 text-xs">{{ getDate(post) }}</span>
+                <span v-if="getEventType(post)" class="text-darkgray text-xs font-medium">{{ getEventType(post) }}</span>
+                <span class="text-gray text-xs">{{ getDate(post) }}</span>
               </div>
             </div>
           </div>
@@ -140,55 +108,36 @@
         <Icon type="CircularLoader" class="w-8 h-8 text-purple" />
       </div>
 
-      <!-- ── MOBILE BOTTOM NAV ────────────────────────────── -->
-      <nav class="md:hidden sticky bottom-0 z-20 bg-white border-t border-lightgray">
-        <ul class="flex items-center">
-          <li v-for="item in navItems" :key="item.route.name" class="flex-1">
-            <router-link :to="item.route" class="flex flex-col items-center gap-1 p-2 pb-6 hover:opacity-80">
-              <Icon
-                class="h-5 w-5"
-                :type="item.icon"
-                :class="item.allowedRoutes.includes($route.name) ? 'text-purple' : 'text-darkgray'"
-              />
-              <p
-                class="text-xs uppercase tracking-widest"
-                :class="item.allowedRoutes.includes($route.name) ? 'text-purple' : 'text-darkgray'"
-              >{{ item.name }}</p>
-            </router-link>
-          </li>
-        </ul>
-      </nav>
-
-    </div>
-
-    <!-- ── ACTIONS BOTTOM SHEET ─────────────────────────── -->
-    <Teleport to="body">
-      <Transition name="sheet">
-        <div v-if="showActionsMenu" class="fixed inset-0 z-50 flex flex-col justify-end">
-          <div class="absolute inset-0 bg-black/40" @click="showActionsMenu = false"></div>
-          <div class="relative bg-white rounded-t-3xl pb-10 shadow-2xl w-full max-w-lg mx-auto">
-            <div class="flex justify-center pt-3 pb-1">
-              <div class="w-10 h-1 rounded-full bg-lightgray"></div>
-            </div>
-            <div class="px-4 pt-2 pb-1">
-              <router-link
-                :to="getEditLink()"
-                @click="showActionsMenu = false"
-                class="flex items-center gap-4 px-2 py-4 text-sm font-medium text-darkblack border-b border-lightgray"
-              >
-                <Icon type="Edit" class="w-5 h-5 shrink-0 text-darkgray" />
-                Edit Event
-              </router-link>
+      <!-- ── ACTIONS BOTTOM SHEET ─────────────────────────── -->
+      <Teleport to="body">
+        <Transition name="sheet">
+          <div v-if="showActionsMenu" class="fixed inset-0 z-50 flex flex-col justify-end">
+            <div class="absolute inset-0 bg-black/40" @click="showActionsMenu = false"></div>
+            <div class="relative bg-white rounded-t-3xl pb-10 shadow-2xl w-full max-w-lg mx-auto">
+              <div class="flex justify-center pt-3 pb-1">
+                <div class="w-10 h-1 rounded-full bg-lightgray"></div>
+              </div>
+              <div class="px-4 pt-2 pb-1">
+                <router-link
+                  :to="getEditLink()"
+                  @click="showActionsMenu = false"
+                  class="flex items-center gap-4 px-2 py-4 text-sm font-medium text-darkblack border-b border-lightgray"
+                >
+                  <Icon type="Edit" class="w-5 h-5 shrink-0 text-darkgray" />
+                  Edit Event
+                </router-link>
+              </div>
             </div>
           </div>
-        </div>
-      </Transition>
-    </Teleport>
+        </Transition>
+      </Teleport>
 
-  </div>
+    </template>
+  </PhoneUI>
 </template>
 
 <script>
+import PhoneUI from "@/components/PhoneUI.vue";
 import Util from "@/lib/Util";
 import API from "@/api";
 import store from "@/store";
@@ -209,6 +158,7 @@ import { useRoute } from "vue-router";
 export default {
   name: "SingleEvent",
   components: {
+    PhoneUI,
     Icon,
     SearchField,
     MembersDropdown,
@@ -221,13 +171,6 @@ export default {
     return {
       post: {},
       showActionsMenu: false,
-      navItems: [
-        { route: { name: "Home" },     icon: "Home",    name: "Home",     allowedRoutes: ["Home"] },
-        { route: { name: "Members" },  icon: "Members", name: "Members",  allowedRoutes: ["Members", "SingleMember"] },
-        { route: { name: "Events" },   icon: "Event",   name: "Events",   allowedRoutes: ["Events", "SingleEvent"] },
-        { route: { name: "Comments" }, icon: "Comment", name: "Comments", allowedRoutes: ["Comments"] },
-        { route: { name: "Profile" },  icon: "Profile", name: "Profile",  allowedRoutes: ["Profile"] },
-      ],
     };
   },
 

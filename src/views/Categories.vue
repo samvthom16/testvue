@@ -2,18 +2,8 @@
 
   <PhoneUI
     :title="getCategoryName()"
-    :configUI="{
-      hide_footer: true,
-      maintitle_classes: 'hidden',
-      stickytitle_classes: 'opacity-100',
-    }"
+    :configUI="{ hide_footer: true }"
   >
-
-    <template v-slot:headericon>
-      <router-link :to="{ name: 'Profile' }">
-        <Icon type='Back' class='inline mt-1' />
-      </router-link>
-    </template>
 
     <template v-slot:headerright>
 
@@ -36,7 +26,7 @@
         </template>
 
         <template v-slot:whenempty>
-          <div class='text-xs text-red border border-red p-2 mt-4'>No members found for this query</div>
+          <div class="text-xs text-darkgray py-4">No items found for this query.</div>
         </template>
 
       </OrbitPosts>
@@ -58,10 +48,6 @@
 <script>
 import PhoneUI from '@/components/PhoneUI.vue'
 import Icon from '@/components/Icon.vue'
-import SearchField from '@/components/SearchField.vue'
-import MembersDropdown from '@/components/MembersDropdown.vue'
-
-import BackButton from "@/templates/PhoneUI/BackButton.vue";
 
 import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
 import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
@@ -74,11 +60,8 @@ export default {
   components: {
     PhoneUI,
     Icon,
-    SearchField,
-    MembersDropdown,
     ListWithImageAnimation,
     PaginationLoaderAnimation,
-    BackButton
   },
 
   setup(){

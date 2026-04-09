@@ -27,17 +27,7 @@
 
 <script>
 import Util from "@/lib/Util";
-
-const GRADIENTS = [
-  ["#89558d", "#6d3f71"],
-  ["#006491", "#004f73"],
-  ["#DB6933", "#b85229"],
-  ["#16a34a", "#0e7a38"],
-  ["#9E81A0", "#7a617c"],
-  ["#c2410c", "#9a3309"],
-  ["#0369a1", "#025e8f"],
-  ["#7c3aed", "#6427c4"],
-];
+import { getGradient } from "@/lib/Gradients";
 
 export default {
   props: {
@@ -54,10 +44,7 @@ export default {
     },
     getBackground(item) {
       const title = this.getTitle(item).replace(/<[^>]+>/g, "").trim();
-      if (!title) return `linear-gradient(135deg, ${GRADIENTS[0][0]}, ${GRADIENTS[0][1]})`;
-      const index = (title.charCodeAt(0) + (title.charCodeAt(1) || 0)) % GRADIENTS.length;
-      const [from, to] = GRADIENTS[index];
-      return `linear-gradient(135deg, ${from}, ${to})`;
+      return getGradient(title || null);
     },
     timeAgo: (d) => Util.timeAgo(d),
   },

@@ -8,7 +8,7 @@
         <!-- Thumbnail -->
         <div
           class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-sm"
-          :style="item.featured_image ? '' : getGradient(item.member_name)"
+          :style="item.featured_image ? {} : { background: getGradient(item.member_name) }"
         >
           <img
             v-if="item.featured_image"
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { getGradient, getInitials } from "@/lib/Gradients";
+
 export default {
   props: {
     items: {
@@ -45,25 +47,10 @@ export default {
   },
   methods: {
     getInitials(name) {
-      if (!name) return "?";
-      const parts = name.trim().split(/\s+/);
-      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-      return parts[0].substring(0, 2).toUpperCase();
+      return getInitials(name);
     },
     getGradient(name) {
-      const GRADIENTS = [
-        ["#89558d", "#6d3f71"],
-        ["#006491", "#004f73"],
-        ["#DB6933", "#b85229"],
-        ["#16a34a", "#0e7a38"],
-        ["#9E81A0", "#7a617c"],
-        ["#c2410c", "#9a3309"],
-        ["#0369a1", "#025e8f"],
-        ["#7c3aed", "#6427c4"],
-      ];
-      if (!name) return `background: linear-gradient(135deg, ${GRADIENTS[0][0]}, ${GRADIENTS[0][1]})`;
-      const index = (name.charCodeAt(0) + (name.charCodeAt(1) || 0)) % GRADIENTS.length;
-      return `background: linear-gradient(135deg, ${GRADIENTS[index][0]}, ${GRADIENTS[index][1]})`;
+      return getGradient(name);
     },
     getSubTitle: (event) => {
       let dateStr = "";

@@ -1,10 +1,7 @@
 <template>
   <PhoneUI
     title="Profile"
-    :configUI="{
-      maintitle_classes: 'hidden',
-      stickytitle_classes: 'opacity-100',
-    }"
+    :configUI="{}"
   >
     <template v-slot:headerright>
       <router-link :to="{ name: 'Logout' }" class="text-xs text-white">
@@ -76,7 +73,7 @@
         <div class="cursor-pointer py-4" @click="toggleNotifications" v-if="isSupported">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <Icon type="Bell" class="h-7 w-7 p-1 rounded-md text-white bg-blue-500" />
+              <Icon type="Bell" class="h-7 w-7 p-1 rounded-md text-white bg-lightblue" />
               <span class="ml-3 block font-normal truncate text-lg" :class="{ 'opacity-50': isProcessing }">
                 <template v-if="isProcessing">
                   {{ isSubscribed ? 'Disabling...' : 'Enabling...' }}

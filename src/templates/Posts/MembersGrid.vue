@@ -77,11 +77,11 @@
                 <img
                   v-if="!isDefaultImage(post)"
                   :src="post.featured_image"
-                  class="shrink-0 w-9 h-9 rounded-full object-cover"
+                  class="shrink-0 w-8 h-8 rounded-full object-cover"
                 />
                 <div
                   v-else
-                  class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center"
+                  class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
                   :style="{ background: getGradient(post) }"
                 >
                   <span class="text-white font-bold text-xs select-none tracking-wide">
@@ -155,17 +155,7 @@
 import Util from "@/lib/Util.js";
 import store from "@/store";
 import { ref } from "vue";
-
-const GRADIENTS = [
-  ["#89558d", "#6d3f71"],
-  ["#006491", "#004f73"],
-  ["#DB6933", "#b85229"],
-  ["#16a34a", "#0e7a38"],
-  ["#9E81A0", "#7a617c"],
-  ["#c2410c", "#9a3309"],
-  ["#0369a1", "#025e8f"],
-  ["#7c3aed", "#6427c4"],
-];
+import { getGradient, getInitials } from "@/lib/Gradients";
 
 export default {
   name: "MembersGrid",
@@ -186,21 +176,13 @@ export default {
     },
 
     getInitials(post) {
-      if (!post.title || !post.title.rendered) return "?";
-      const name = post.title.rendered.replace(/<[^>]+>/g, "").trim();
-      const parts = name.split(/\s+/);
-      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-      return parts[0].substring(0, 2).toUpperCase();
+      if (!post.title?.rendered) return "?";
+      return getInitials(post.title.rendered.replace(/<[^>]+>/g, "").trim());
     },
 
     getGradient(post) {
-      if (!post.title || !post.title.rendered) {
-        return `linear-gradient(135deg, ${GRADIENTS[0][0]}, ${GRADIENTS[0][1]})`;
-      }
-      const name = post.title.rendered.replace(/<[^>]+>/g, "").trim();
-      const index = (name.charCodeAt(0) + (name.charCodeAt(1) || 0)) % GRADIENTS.length;
-      const [from, to] = GRADIENTS[index];
-      return `linear-gradient(135deg, ${from}, ${to})`;
+      if (!post.title?.rendered) return getGradient(null);
+      return getGradient(post.title.rendered.replace(/<[^>]+>/g, "").trim());
     },
 
     hasExtra(post) {

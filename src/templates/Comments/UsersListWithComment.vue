@@ -1,6 +1,6 @@
 <template>
   <ul role="list">
-    <li class="py-4" v-for="comment in items" :key="comment.id">
+    <li class="py-3" v-for="comment in items" :key="comment.id">
       <div class="flex gap-3">
         <!-- Avatar -->
         <div class="shrink-0">
@@ -25,12 +25,12 @@
           <!-- Name + Meta -->
           <div class="flex items-center gap-1.5 flex-wrap">
             <span
-              class="text-xs text-gray-500"
+              class="text-xs text-gray"
               v-html="comment.member.title ? comment.member.title.rendered : ''"
             ></span>
-            <span class="text-xs text-gray-400">
+            <span class="text-xs text-gray">
               · {{ formatDate(comment.post_date) }} by
-              <span class="uppercase tracking-wide text-gray-400/70">{{ comment.user.name }}</span>
+              <span class="uppercase tracking-wide text-gray">{{ comment.user.name }}</span>
             </span>
           </div>
           <!-- Comment -->
@@ -45,17 +45,7 @@
 
 <script>
 import Util from '@/lib/Util'
-
-const GRADIENTS = [
-  ["#89558d", "#6d3f71"],
-  ["#006491", "#004f73"],
-  ["#DB6933", "#b85229"],
-  ["#16a34a", "#0e7a38"],
-  ["#9E81A0", "#7a617c"],
-  ["#c2410c", "#9a3309"],
-  ["#0369a1", "#025e8f"],
-  ["#7c3aed", "#6427c4"],
-];
+import { getGradient, getInitials } from '@/lib/Gradients'
 
 export default {
   props: {
@@ -68,21 +58,13 @@ export default {
     },
 
     getInitials(member) {
-      if (!member || !member.title || !member.title.rendered) return "?";
-      const name = member.title.rendered.replace(/<[^>]+>/g, "").trim();
-      const parts = name.split(/\s+/);
-      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-      return parts[0].substring(0, 2).toUpperCase();
+      if (!member?.title?.rendered) return "?";
+      return getInitials(member.title.rendered.replace(/<[^>]+>/g, "").trim());
     },
 
     getGradient(member) {
-      if (!member || !member.title || !member.title.rendered) {
-        return `linear-gradient(135deg, ${GRADIENTS[0][0]}, ${GRADIENTS[0][1]})`;
-      }
-      const name = member.title.rendered.replace(/<[^>]+>/g, "").trim();
-      const index = (name.charCodeAt(0) + (name.charCodeAt(1) || 0)) % GRADIENTS.length;
-      const [from, to] = GRADIENTS[index];
-      return `linear-gradient(135deg, ${from}, ${to})`;
+      if (!member?.title?.rendered) return getGradient(null);
+      return getGradient(member.title.rendered.replace(/<[^>]+>/g, "").trim());
     },
 
     formatDate: (dateParam) => Util.timeAgo(dateParam),

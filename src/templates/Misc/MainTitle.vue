@@ -3,7 +3,7 @@
     <h4 class="font-semibold text-base">{{ title }}</h4>
     <router-link
       :to="route"
-      class="text-xs font-medium text-purple border border-purple rounded-md px-2.5 py-1 hover:bg-purple hover:text-white transition-colors"
+      class="text-xs font-medium text-purple border border-purple rounded-lg px-2.5 py-1 hover:bg-purple hover:text-white transition-colors"
     >View All</router-link>
   </div>
 </template>

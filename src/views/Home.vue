@@ -1,7 +1,7 @@
 <template>
   <PhoneUI
     title="Dashboard"
-    :configUI="{ maintitle_classes: 'hidden', hide_desktop_header: true }"
+    :configUI="{ hide_desktop_header: true }"
   >
     <template v-slot:phonebody>
 
