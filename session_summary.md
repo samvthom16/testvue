@@ -111,6 +111,14 @@ src/
 - `Profile` icon fixed (was showing gear/Settings icon).
 - `← Settings` back links added to `Categories` and `CommentsCategory`.
 
+### Session 15 — NewTeamMember Redesign
+
+- **`NewTeamMember.vue` fully redesigned** to match the `NewEvent`/`NewMember` form pattern: `PhoneUI` with `hide_desktop_header`, non-sticky page header (back button + h1 + subtitle), sectioned form with uppercase tracking-wider labels, 2-col desktop grid.
+- Replaced old-style raw inputs + `BackButton` header slot with `TextField`-styled inputs bound directly to `data[slug]` via `FormEdit` (WP users, not posts — `PostEdit` not applicable here).
+- Group checkboxes replaced with pill-toggle buttons matching `CheckboxGroupField` pattern; loaded from `API.requestSettings()` on mount.
+- Validation errors moved to a reactive `errors` ref; inline red error text per field.
+- Full-width purple submit + Danger Zone (editor-only, edit mode only) consistent with all other form views.
+
 ### Session 14 — Dead Code Removal + Team Page Polish
 
 - **Dead code sweep:** removed 14 stale files — Vite scaffold cluster (`HelloWorld`, `TheWelcome`, `WelcomeItem`, `AboutView`, `HomeView`), superseded PhoneUI templates (`Header.vue`, `Title.vue`), orphaned animation template (`MemberAvatars.vue`), and unused components (`HeaderMenu`, `EventTags`, `FilterTags`, `UserTags`, `ProgressBarItem`, `SettingItem`).
