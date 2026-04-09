@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-09 (Session 12)
+> Last updated: 2026-04-09 (Session 13)
 
 ---
 
@@ -110,6 +110,12 @@ src/
 - Mobile bottom nav overhauled: 4 primary items + **More** drawer (bottom sheet with overflow items).
 - `Profile` icon fixed (was showing gear/Settings icon).
 - `← Settings` back links added to `Categories` and `CommentsCategory`.
+
+### Session 13 — Settings Modals + Skeleton Loader
+- Add/edit for all category types (groups, genders, locations, professions, event-types, status) and comment types now happens in an inline modal on the listing page — no separate route navigation.
+- `Posts/ListWithTermName.vue` + `InpursuitPosts/ListWithTermName.vue`: edit pencil button changed from `router-link` to `$emit('edit-item', post)`; `@edit-item` handler on `<OrbitPosts>` propagates via `v-bind="$attrs"` to the template.
+- `Categories.vue` + `CommentsCategory.vue`: all three "new" entry points (header button, empty-state CTA, FAB) now open a `<Teleport>`-based modal; modal handles create, update, and Danger Zone delete; list refreshes by bumping `params.unique_id`.
+- New `CategoryList.vue` skeleton animation matches the actual `ListWithTermName` row exactly (icon badge, varied-width name line, count stub, edit button placeholder); replaces the old generic `ListWithImage` / `SimpleList` skeletons in both views.
 
 ---
 

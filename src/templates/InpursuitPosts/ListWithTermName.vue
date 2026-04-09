@@ -26,12 +26,12 @@
       </div>
 
       <!-- Edit button -->
-      <router-link
-        :to="getEditLink(post)"
+      <button
+        @click="$emit('edit-item', post)"
         class="shrink-0 p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
       >
         <Icon type="Edit" class="w-4 h-4" />
-      </router-link>
+      </button>
     </li>
   </ul>
 </template>
@@ -44,16 +44,12 @@ export default {
   props: {
     posts: Array,
   },
+  emits: ['edit-item'],
   components: {
     Icon,
     OrbitComments,
   },
   setup() {
-    const getEditLink = (post) => ({
-      name: "NewCommentsCategory",
-      query: { id: post?.term_id },
-    });
-
     const getUserRedirectionLink = (post) => ({
       name: "Comments",
       query: { comment_type: post?.term_id },
@@ -67,7 +63,6 @@ export default {
 
     return {
       getParams,
-      getEditLink,
       getUserRedirectionLink,
     };
   },

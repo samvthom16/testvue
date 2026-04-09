@@ -26,12 +26,12 @@
       </div>
 
       <!-- Edit button -->
-      <router-link
-        :to="getEditLink(post)"
+      <button
+        @click="$emit('edit-item', post)"
         class="shrink-0 p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
       >
         <Icon type="Edit" class="w-4 h-4" />
-      </router-link>
+      </button>
     </li>
   </ul>
 </template>
@@ -44,6 +44,7 @@ export default {
   props: {
     posts: Array,
   },
+  emits: ['edit-item'],
   components: {
     Icon,
   },
@@ -75,11 +76,6 @@ export default {
       return { name: "NewCategory", query: { id: post.id } };
     };
 
-    const getEditLink = (post) => ({
-      name: "NewCategory",
-      query: { id: post.id },
-    });
-
     const getParams = (post) => {
       const params = {
         per_page:  1,
@@ -100,7 +96,6 @@ export default {
 
     return {
       getTaxonomyIcon,
-      getEditLink,
       getParams,
       getRedirectionLink,
     };
