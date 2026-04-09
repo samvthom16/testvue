@@ -1,35 +1,43 @@
 <template>
   <ul role="list" class="divide-y divide-lightgray">
     <li
-      class="py-3 sm:py-4 flex items-center justify-between"
       v-for="post in posts"
-      :key="post"
+      :key="post.id"
+      class="flex items-center gap-4 py-3"
     >
-      <div>
-        <router-link class="font-bold text-xl" :to="getRedirectionLink(post)">
+      <!-- Icon badge -->
+      <div class="shrink-0 w-10 h-10 rounded-2xl bg-lightergray flex items-center justify-center">
+        <Icon :type="getTaxonomyIcon(post.taxonomy)" class="w-5 h-5 text-purple" />
+      </div>
+
+      <!-- Name + count -->
+      <div class="flex-1 min-w-0">
+        <router-link
+          :to="getRedirectionLink(post)"
+          class="font-semibold text-sm text-darkblack hover:text-purple transition-colors"
+        >
           {{ post.name }}
         </router-link>
-
         <OrbitPosts :params="getParams(post)">
           <template v-slot:loadingAnimation>
-            <AvatarsStackedAnimation />
+            <div class="h-3 w-16 bg-lightergray rounded animate-pulse mt-1"></div>
           </template>
         </OrbitPosts>
       </div>
-      <router-link :to="getEditLink(post)">
-        <Icon type="Edit" class="inline" />
+
+      <!-- Edit button -->
+      <router-link
+        :to="getEditLink(post)"
+        class="shrink-0 p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
+      >
+        <Icon type="Edit" class="w-4 h-4" />
       </router-link>
     </li>
   </ul>
 </template>
 
 <script>
-import Util from "@/lib/Util.js";
-
 import Icon from "@/components/Icon.vue";
-
-import AvatarsStackedAnimation from "@/templates/Animation/AvatarsStacked.vue";
-
 import CategoryHelper from "@/lib/CategoryHelper";
 
 export default {
@@ -38,61 +46,60 @@ export default {
   },
   components: {
     Icon,
-    AvatarsStackedAnimation,
   },
   setup() {
+    const taxonomyIconMap = {
+      'inpursuit-group':      'Group',
+      'inpursuit-event-type': 'Event',
+      'inpursuit-profession': 'Profession',
+      'inpursuit-gender':     'Gender',
+      'inpursuit-location':   'Location',
+      'inpursuit-status':     'Status',
+    };
+    const getTaxonomyIcon = (taxonomy) => taxonomyIconMap[taxonomy] ?? 'Group';
+
     const getRedirectionLink = (post) => {
       const taxonomyToQueryMap = {
-        "inpursuit-event-type": { name: "Events", queryKey: "event_type" },
-        "inpursuit-group": { name: "Members", queryKey: "group" },
-        "inpursuit-profession": { name: "Members", queryKey: "profession" },
-        "inpursuit-gender": { name: "Members", queryKey: "gender" },
-        "inpursuit-location": { name: "Members", queryKey: "location" },
-        "inpursuit-status": { name: "Members", queryKey: "member_status" },
+        "inpursuit-event-type": { name: "Events",  queryKey: "event_type"    },
+        "inpursuit-group":      { name: "Members", queryKey: "group"         },
+        "inpursuit-profession": { name: "Members", queryKey: "profession"    },
+        "inpursuit-gender":     { name: "Members", queryKey: "gender"        },
+        "inpursuit-location":   { name: "Members", queryKey: "location"      },
+        "inpursuit-status":     { name: "Members", queryKey: "member_status" },
       };
 
       const match = taxonomyToQueryMap[post.taxonomy];
-
       if (match) {
-        return {
-          name: match.name,
-          query: { [match.queryKey]: post.id },
-        };
+        return { name: match.name, query: { [match.queryKey]: post.id } };
       }
-
-      return {
-        name: "NewCategory",
-        query: { id: post.id },
-      };
+      return { name: "NewCategory", query: { id: post.id } };
     };
 
-    const getEditLink = (post) => {
-      return {
-        name: "NewCategory",
-        query: { id: post.id },
-      };
-    };
+    const getEditLink = (post) => ({
+      name: "NewCategory",
+      query: { id: post.id },
+    });
 
     const getParams = (post) => {
-      var params = {
-        per_page: 5,
-        post_type: "inpursuit-members",
-        style: "AvatarsStacked",
+      const params = {
+        per_page:  1,
+        post_type: 'inpursuit-members',
+        style:     'MembersCount',
       };
 
-      if (post.taxonomy == "inpursuit-event-type") {
-        params.post_type = "inpursuit-events";
-        params.style = "EventsCount";
+      if (post.taxonomy === 'inpursuit-event-type') {
+        params.post_type = 'inpursuit-events';
+        params.style     = 'EventsCount';
       }
 
       const { getWPJsonType } = CategoryHelper();
-
       params[getWPJsonType(post.taxonomy)] = post.id;
 
       return params;
     };
 
     return {
+      getTaxonomyIcon,
       getEditLink,
       getParams,
       getRedirectionLink,

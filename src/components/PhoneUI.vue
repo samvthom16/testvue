@@ -77,17 +77,22 @@ export default{
     PhoneFooter,
     Icon,
   },
-  data(){
-    return {
-      navItems: [
-        { route: { name: 'Home' },     icon: 'Home',    name: 'Dashboard', allowedRoutes: ['Home'] },
-        { route: { name: 'Members' },  icon: 'Members', name: 'Members', allowedRoutes: ['Members', 'SingleMember'] },
-        { route: { name: 'Events' },   icon: 'Event',   name: 'Events',  allowedRoutes: ['Events', 'SingleEvent'] },
-        { route: { name: 'Comments' },      icon: 'Comment',       name: 'Comments',       allowedRoutes: ['Comments'] },
-        { route: { name: 'SpecialEvents' }, icon: 'SpecialEvent',  name: 'Special Events', allowedRoutes: ['SpecialEvents'] },
-        { route: { name: 'Profile' },       icon: 'Profile',       name: 'Profile',        allowedRoutes: ['Profile'] },
-      ],
-    }
+  computed: {
+    navItems() {
+      const userId = this.$store.state.settings.id;
+      return [
+        { route: { name: 'Home' },         icon: 'Home',        name: 'Dashboard',     allowedRoutes: ['Home'] },
+        { route: { name: 'Members' },       icon: 'Members',     name: 'Members',       allowedRoutes: ['Members', 'SingleMember'] },
+        { route: { name: 'Events' },        icon: 'Event',       name: 'Events',        allowedRoutes: ['Events', 'SingleEvent'] },
+        { route: { name: 'Comments' },      icon: 'Comment',     name: 'Comments',      allowedRoutes: ['Comments'] },
+        { route: { name: 'SpecialEvents' }, icon: 'SpecialEvent', name: 'Special Events', allowedRoutes: ['SpecialEvents'] },
+        { route: { name: 'Team' },          icon: 'Team',        name: 'Team',          allowedRoutes: ['Team'] },
+        { route: { name: 'Analytics' },     icon: 'Chart',       name: 'Analytics',     allowedRoutes: ['Analytics'] },
+        ...(userId ? [{ route: { name: 'SingleTeamMember', params: { id: userId } }, icon: 'History', name: 'History', allowedRoutes: ['SingleTeamMember'] }] : []),
+        { route: { name: 'Settings' },      icon: 'Settings',    name: 'Settings',      allowedRoutes: ['Settings', 'Categories', 'NewCategory', 'CommentsCategory', 'NewCommentsCategory'] },
+        { route: { name: 'Profile' },       icon: 'Profile',     name: 'Profile',       allowedRoutes: ['Profile'] },
+      ];
+    },
   },
   setup( props ){
 

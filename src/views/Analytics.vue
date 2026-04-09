@@ -1,34 +1,33 @@
 <template>
-  <PhoneUI
-    title="Analytics"
-    :configUI="{
-      hide_footer: true,
-      maintitle_classes: 'hidden',
-      stickytitle_classes: 'opacity-100',
-    }"
-  >
-    <template v-slot:headericon>
-      <BackButton :defaultRoute="{ name: 'Profile' }" />
-    </template>
-
+  <PhoneUI title="Analytics" :configUI="{ hide_desktop_header: true }">
     <template v-slot:phonebody>
-      <ul
-        class="whitespace-nowrap border-b border-lightgray pb-4 mb-4 overflow-auto"
-      >
-        <li
-          class="inline-block mr-2"
-          v-for="(dropdownButton, field_name) in dropdownButtons"
-          :key="dropdownButton"
-        >
-          <ButtonPopupModal
-            :field_name="field_name"
-            :field="dropdownButton"
-            @selectItem="selectItem"
-          />
-        </li>
-      </ul>
 
+      <!-- Page header -->
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h1 class="text-2xl font-bold text-darkblack">Analytics</h1>
+          <p class="text-sm text-darkgray mt-0.5">Track growth and activity across your community.</p>
+        </div>
+      </div>
+
+      <!-- Period chips -->
+      <div class="flex gap-2 mb-6">
+        <button
+          v-for="(label, value) in periods"
+          :key="value"
+          @click="selectPeriod(value)"
+          class="px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors"
+          :class="period === value
+            ? 'bg-purple text-white'
+            : 'bg-lightergray text-darkgray hover:bg-lightgray'"
+        >
+          {{ label }}
+        </button>
+      </div>
+
+      <!-- Stats -->
       <Stats :period="period" :key="period" />
+
     </template>
   </PhoneUI>
 </template>
@@ -37,41 +36,30 @@
 import { ref } from "vue";
 import Stats from "@/components/Stats.vue";
 import PhoneUI from "@/components/PhoneUI.vue";
-import BackButton from "@/templates/PhoneUI/BackButton.vue";
-import ButtonPopupModal from "@/components/ButtonPopupModal.vue";
 
 export default {
   components: {
     PhoneUI,
-    BackButton,
-    ButtonPopupModal,
     Stats,
   },
   setup() {
     const period = ref(30);
 
-    const dropdownButtons = ref({
-      period: {
-        popupTitle: "Select Period",
-        items: {
-          30: "Month",
-          90: "Quarter",
-          180: "6 Months",
-          365: "Year",
-        },
-        selected: "30",
-      },
-    });
+    const periods = {
+      30: "Month",
+      90: "Quarter",
+      180: "6 Months",
+      365: "Year",
+    };
 
-    const selectItem = (data) => {
-      dropdownButtons.value[data.name].selected = data.value;
-      period.value = parseInt(data.value);
+    const selectPeriod = (value) => {
+      period.value = parseInt(value);
     };
 
     return {
-      dropdownButtons,
-      selectItem,
       period,
+      periods,
+      selectPeriod,
     };
   },
 };

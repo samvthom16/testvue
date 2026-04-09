@@ -1,22 +1,12 @@
 <template>
   <div class="mb-5" v-if="!isHidden">
-    <label class="block font-semibold text-black">{{ field.label }}</label>
+    <label class="block font-medium text-darkblack text-sm mb-1.5">{{ field.label }}</label>
     <textarea
       :id="field.id"
       :placeholder="field.placeholder ? field.placeholder : field.label"
-      class="
-        inline-block
-        w-full
-        p-2
-        border-2 border-solid border-black
-        rounded
-        mb-1 mt-2
-        outline-none
-        focus:border-red
-        h-32
-      "
+      class="inline-block w-full p-3 border border-lightgray rounded-xl bg-lightergray mb-1 mt-1 outline-none text-darkblack placeholder-gray focus:border-purple focus:bg-white transition-colors h-32 resize-none"
       :value="field.value"
-      :name='field.id'
+      :name="field.id"
       @input="$emit('update:modelValue', $event.target.value)"
     ></textarea>
     <div class="text-red text-xs">{{ field.error_msg }}</div>
@@ -28,11 +18,6 @@ export default {
   props: {
     field: Object,
     isHidden: Boolean,
-  },
-  data() {
-    return {
-      value: "",
-    };
   },
 };
 </script>

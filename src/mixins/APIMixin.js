@@ -140,7 +140,7 @@ export default {
         data: {
           comment: comment,
           post: post_id,
-          ...(comments_category && comments_category !== "0" ? { comments_category } : {}),
+          ...(comments_category ? { comments_category } : {}),
         },
         headers: headers,
       });

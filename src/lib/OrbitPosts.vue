@@ -23,6 +23,7 @@ import PostImagesSlider from "@/templates/Posts/PostImagesSlider.vue";
 import EventList from "@/templates/Posts/EventList.vue";
 import AvatarsStacked from "@/templates/Posts/AvatarsStacked.vue";
 import EventsCount from "@/templates/Posts/EventsCount.vue";
+import MembersCount from "@/templates/Posts/MembersCount.vue";
 import ListWithImage from "@/templates/Posts/ListWithImage.vue";
 import PostsListWithTermName from "@/templates/Posts/ListWithTermName.vue";
 import MemberListWithSwitch from "@/templates/Posts/MemberListWithSwitch.vue";
@@ -50,6 +51,7 @@ export default {
     MembersGrid,
     EventsGrid,
     EventsCount,
+    MembersCount,
     InpursuitListWithTermName,
   },
   setup(props, context) {

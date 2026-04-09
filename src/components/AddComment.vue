@@ -10,18 +10,20 @@
         class="inline-block p-2 w-full border-black outline-none focus:border-red rounded"
       ></textarea>
       <div class="mt-2 mb-5">
-        <label class="block font-semibold text-black">Category</label>
+        <label class="block font-semibold text-black">{{
+          comments_category.label
+        }}</label>
         <select
-          name="comments_category"
-          v-model="selectedCategory"
+          :name="comments_category.id"
+          v-model="comments_category.value"
           class="border-2 border-solid border-black p-2 w-full rounded mb-1 mt-2 bg-white"
         >
-          <option value="">Select</option>
           <option
-            v-for="(termName, termId) in categoryOptions"
+            v-for="(termName, termId) in commentsCategoryOptions"
             :key="termId"
+            v-html="termName"
             :value="termId"
-          >{{ termName }}</option>
+          ></option>
         </select>
       </div>
       <div class="h-8 relative mt-4 mb-2">
@@ -58,12 +60,19 @@ export default {
       openComment: false,
       newComment: "",
       error_msg: "",
-      selectedCategory: "",
+      comments_category: {
+        id: "comments_category",
+        label: "Categories",
+        value: 0,
+      },
     };
   },
   computed: {
-    categoryOptions() {
-      return this.$store.state.account?.comments_category || {};
+    commentsCategoryOptions() {
+      return {
+        0: "Select",
+        ...this.$store.state.account?.comments_category,
+      };
     },
   },
   methods: {
@@ -106,7 +115,7 @@ export default {
         .postComment(
           component.id,
           component.newComment,
-          component.selectedCategory
+          component.comments_category.value
         )
         .then(
           () => {
@@ -117,7 +126,7 @@ export default {
 
             //console.log( response );
             component.newComment = "";
-            component.selectedCategory = "";
+            component.comments_category.value = 0;
             component.close();
             component.$emit("postComment");
           },
