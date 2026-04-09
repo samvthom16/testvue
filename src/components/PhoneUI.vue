@@ -31,32 +31,6 @@
 
     <!-- Main content column -->
     <div class='flex-1 flex flex-col min-w-0'>
-      <PhoneHeader
-        :title='title'
-        :colors='colors'
-        :scrolled='scrolled'
-        :move_sticky_up='move_sticky_up'
-        :stickytitle_classes='stickytitle_classes'
-      >
-        <template v-for="(index, name) in $slots" v-slot:[name]>
-          <slot :name="name" />
-        </template>
-      </PhoneHeader>
-
-      <PhoneTitle
-        :hide_maintitle='hide_maintitle'
-        :maintitle_classes='maintitle_classes'
-        :title='title'
-        :colors='colors'
-        :scrolled='scrolled'
-        :move_sticky_up='move_sticky_up'
-        :stickytitle_classes='stickytitle_classes'
-      >
-        <template v-for="(index, name) in $slots" v-slot:[name]>
-          <slot :name="name" />
-        </template>
-      </PhoneTitle>
-
       <PhoneProgressBar />
 
       <!-- Desktop page header (hidden on mobile) -->
@@ -87,13 +61,9 @@
 </template>
 
 <script>
-import PhoneHeader from '@/templates/PhoneUI/Header.vue'
-import PhoneTitle from '@/templates/PhoneUI/Title.vue'
 import PhoneFooter from '@/templates/PhoneUI/Footer.vue'
 import PhoneProgressBar from '@/templates/PhoneUI/ProgressBar.vue'
 import Icon from '@/components/Icon.vue'
-
-import Helper from '@/lib/Helper.js'
 
 import {ref} from 'vue'
 
@@ -103,16 +73,12 @@ export default{
     title: String,
   },
   components: {
-    PhoneHeader,
-    PhoneTitle,
     PhoneProgressBar,
     PhoneFooter,
     Icon,
   },
   data(){
     return {
-      scrolled  : false,
-      move_sticky_up : false,
       navItems: [
         { route: { name: 'Home' },     icon: 'Home',    name: 'Dashboard', allowedRoutes: ['Home'] },
         { route: { name: 'Members' },  icon: 'Members', name: 'Members', allowedRoutes: ['Members', 'SingleMember'] },
@@ -125,20 +91,8 @@ export default{
   },
   setup( props ){
 
-    const maintitle_classes = ref( null );
-    maintitle_classes.value = props.configUI && props.configUI.maintitle_classes ? props.configUI.maintitle_classes : ""
-
-    const stickytitle_classes = ref( null );
-    stickytitle_classes.value = props.configUI && props.configUI.stickytitle_classes ? props.configUI.stickytitle_classes : ""
-
     const body_classes = ref( null );
     body_classes.value = props.configUI && props.configUI.body_classes ? props.configUI.body_classes : ""
-
-    const colors = ref( null );
-    colors.value = props.configUI && props.configUI.colors ? props.configUI.colors : "bg-white text-purple"
-
-    const hide_maintitle = ref( null )
-    hide_maintitle.value = props.configUI && props.configUI.hide_maintitle ? props.configUI.hide_maintitle : false
 
     const hide_footer = ref( null )
     hide_footer.value = props.configUI && props.configUI.hide_footer ? props.configUI.hide_footer : false
@@ -147,43 +101,10 @@ export default{
     hide_desktop_header.value = props.configUI && props.configUI.hide_desktop_header ? props.configUI.hide_desktop_header : false
 
     return{
-      maintitle_classes,
-      stickytitle_classes,
       body_classes,
-      hide_maintitle,
       hide_footer,
       hide_desktop_header,
-      colors
     }
-  },
-  mounted(){
-
-    var component = this;
-
-    const {debounceEvent} = Helper()
-
-    window.addEventListener('scroll', function(){
-      debounceEvent( () => {
-        if( window.scrollY > 34 ){
-          component.scrolled = true;
-        }
-        else{
-          component.scrolled = false;
-        }
-      }, 10 );
-    } );
-
-    var $input = this.$el.querySelector( '.maintitle input[type=text]' );
-    if( $input ){
-      $input.addEventListener('focus', () => {
-        component.move_sticky_up = true
-      } );
-      $input.addEventListener('blur', () => {
-        component.move_sticky_up = false
-      } );
-    }
-
-
   }
 }
 </script>

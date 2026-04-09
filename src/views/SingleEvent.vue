@@ -58,8 +58,12 @@
 
           <!-- Event identity -->
           <div class="flex items-start gap-5">
-            <div class="shrink-0 w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center">
-              <Icon type="Event" class="w-7 h-7 text-white" />
+            <div
+              class="shrink-0 w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center"
+            >
+              <span class="text-white font-bold text-2xl select-none tracking-wide">
+                {{ getEventInitial(post) }}
+              </span>
             </div>
             <div>
               <h1
@@ -79,116 +83,53 @@
 
         </div>
 
-        <!-- ── BODY: 2-col on desktop ────────────────────── -->
-        <div class="md:grid md:grid-cols-[300px_1fr]">
+        <!-- ── BODY ──────────────────────────────────────── -->
+        <div class="px-4 md:px-8 py-5">
 
-          <!-- LEFT PANEL ──────────────────────────────────── -->
-          <div class="md:sticky md:top-0 md:h-screen md:overflow-y-auto md:border-r md:border-lightgray">
-
-            <!-- Attendance stat -->
-            <div class="p-5 border-b border-lightgray">
-              <p class="text-xs font-semibold text-gray uppercase tracking-wider mb-3">Attendance</p>
-              <div class="flex items-center gap-4">
-                <div class="relative w-16 h-16 shrink-0">
-                  <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
-                    <circle cx="32" cy="32" r="26" fill="none" stroke="#F0EBF1" stroke-width="7"/>
-                    <circle
-                      cx="32" cy="32" r="26" fill="none"
-                      stroke="#89558d" stroke-width="7"
-                      stroke-linecap="round"
-                      :stroke-dasharray="`${(post.attendants_percentage || 0) * 1.634} 163.4`"
-                    />
-                  </svg>
-                  <span class="absolute inset-0 flex items-center justify-center text-sm font-bold text-darkblack">
-                    {{ post.attendants_percentage || 0 }}%
-                  </span>
-                </div>
-                <div>
-                  <p class="text-2xl font-bold text-darkblack leading-none">{{ totalItems }}</p>
-                  <p class="text-xs text-gray mt-0.5">members attending</p>
-                </div>
-              </div>
+          <!-- Meta pills row -->
+          <div class="flex flex-wrap items-center gap-2 mb-5">
+            <div v-if="getEventType(post)" class="flex items-center gap-1.5 px-3 py-1.5 bg-lightergray rounded-full">
+              <Icon type="Group" class="w-3.5 h-3.5 text-purple" />
+              <span class="text-xs font-medium text-darkblack">{{ getEventType(post) }}</span>
             </div>
-
-            <!-- Meta fields -->
-            <div class="bg-lightergray p-4 space-y-2 md:bg-white md:p-5">
-              <div
-                v-if="getEventType(post)"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#F5F0F6">
-                  <Icon type="Group" class="w-3.5 h-3.5" style="color:#89558d" />
-                </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Event Type</p>
-                  <p class="text-sm font-medium text-darkblack">{{ getEventType(post) }}</p>
-                </div>
-              </div>
-              <div
-                v-if="post.date_gmt"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#EAF4FA">
-                  <Icon type="Clock" class="w-3.5 h-3.5" style="color:#006491" />
-                </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Date</p>
-                  <p class="text-sm font-medium text-darkblack">{{ getDate(post) }}</p>
-                </div>
-              </div>
-              <div
-                v-if="post.content?.rendered"
-                class="flex items-start gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style="background:#FFF5EC">
-                  <Icon type="Status" class="w-3.5 h-3.5" style="color:#DB6933" />
-                </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Description</p>
-                  <div class="text-sm font-medium text-darkblack leading-relaxed" v-html="post.content.rendered"></div>
-                </div>
-              </div>
+            <div v-if="post.date_gmt" class="flex items-center gap-1.5 px-3 py-1.5 bg-lightergray rounded-full">
+              <Icon type="Clock" class="w-3.5 h-3.5 text-lightblue" />
+              <span class="text-xs font-medium text-darkblack">{{ getDate(post) }}</span>
             </div>
-
+            <div v-if="post.attendants_percentage != null" class="flex items-center gap-1.5 px-3 py-1.5 bg-lightergray rounded-full">
+              <Icon type="Members" class="w-3.5 h-3.5 text-purple" />
+              <span class="text-xs font-medium text-darkblack">{{ post.attendants_percentage || 0 }}% attended</span>
+            </div>
           </div>
 
-          <!-- RIGHT PANEL: attendees ───────────────────────── -->
-          <div class="px-4 md:px-8 py-5">
+          <SearchField @searching="onSearch" />
 
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-base font-semibold text-darkblack">Attendees</h2>
-            </div>
-
-            <SearchField @searching="onSearch" />
-
-            <div class="mt-3">
-              <MembersDropdown :totalItems="totalItems" @selectItem="selectDropdownItem" />
-            </div>
-
-            <OrbitPosts
-              :params="params"
-              :key="params.unique_id"
-              @totalChanged="totalChanged"
-              @onAttendanceChange="onAttendanceChange"
-            >
-              <template v-slot:loadingAnimation>
-                <ListWithImageAnimation :total="8" />
-              </template>
-              <template v-slot:nextPageAnimation>
-                <PaginationLoaderAnimation />
-              </template>
-              <template v-slot:whenempty>
-                <div class="flex flex-col items-center justify-center py-16 text-center">
-                  <div class="w-12 h-12 rounded-full bg-lightergray flex items-center justify-center mb-3">
-                    <Icon type="Members" class="w-5 h-5 text-gray" />
-                  </div>
-                  <p class="text-sm font-medium text-darkgray">No members found</p>
-                  <p class="text-xs text-gray mt-1">Try adjusting your search or filters</p>
-                </div>
-              </template>
-            </OrbitPosts>
-
+          <div class="mt-3">
+            <MembersDropdown :totalItems="totalItems" @selectItem="selectDropdownItem" />
           </div>
+
+          <OrbitPosts
+            :params="params"
+            :key="params.unique_id"
+            @totalChanged="totalChanged"
+            @onAttendanceChange="onAttendanceChange"
+          >
+            <template v-slot:loadingAnimation>
+              <ListWithImageAnimation :total="8" />
+            </template>
+            <template v-slot:nextPageAnimation>
+              <PaginationLoaderAnimation />
+            </template>
+            <template v-slot:whenempty>
+              <div class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-12 h-12 rounded-full bg-lightergray flex items-center justify-center mb-3">
+                  <Icon type="Members" class="w-5 h-5 text-gray" />
+                </div>
+                <p class="text-sm font-medium text-darkgray">No members found</p>
+                <p class="text-xs text-gray mt-1">Try adjusting your search or filters</p>
+              </div>
+            </template>
+          </OrbitPosts>
 
         </div>
 
@@ -314,6 +255,11 @@ export default {
       );
     },
 
+    getEventInitial(post) {
+      const title = post.title?.rendered?.replace(/<[^>]+>/g, '').trim();
+      return title ? title[0].toUpperCase() : 'E';
+    },
+
     getEditLink() {
       return Util.getPostEditLink(this.post);
     },
@@ -330,7 +276,9 @@ export default {
   setup() {
     const route = useRoute();
     const post_id = route.params.id;
-    return MembersHelper("MemberListWithSwitch", post_id);
+    const helper = MembersHelper("MemberListWithSwitch", post_id);
+    helper.params.value.per_page = 20;
+    return helper;
   },
 };
 </script>

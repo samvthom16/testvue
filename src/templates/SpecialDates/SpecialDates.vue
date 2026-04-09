@@ -23,10 +23,10 @@
 
         <!-- Event Details -->
         <div class="flex-1">
-          <h3 class="text-lg leading-tight">
+          <p class="text-sm font-medium text-darkblack leading-tight">
             {{ item.member_name }}
-          </h3>
-          <p class="text-darkgray">
+          </p>
+          <p class="text-xs text-darkgray mt-0.5">
             {{ getSubTitle(item) }}
           </p>
         </div>

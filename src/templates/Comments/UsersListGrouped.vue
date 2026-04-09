@@ -27,16 +27,12 @@
               class="text-xs text-gray-500"
               v-html="group.member?.title?.rendered || ''"
             ></span>
-            <span
-              v-if="group.count > 1"
-              class="text-xs bg-gray-100 text-gray-400 rounded-full px-1.5 py-0.5 leading-none"
-            >{{ group.count }}</span>
             <span class="text-xs text-gray-400">
               · {{ group.timeAgo }} by
               <span class="uppercase tracking-wide text-gray-400/70">{{ group.user }}</span>
             </span>
           </div>
-          <div class="mt-1 text-sm font-medium text-darkblack leading-snug line-clamp-2">
+          <div class="mt-1 text-sm font-medium text-darkblack leading-snug whitespace-pre-line">
             {{ group.latestComment }}
           </div>
         </div>
