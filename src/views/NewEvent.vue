@@ -63,6 +63,28 @@
           </div>
         </section>
 
+        <!-- Access & Permissions -->
+        <section v-if="groupOptions.length">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-4">Access &amp; Permissions</h2>
+          <div class="mb-5">
+            <label class="block font-medium text-darkblack text-sm mb-2">Limit Access</label>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="option in groupOptions"
+                :key="option.value"
+                type="button"
+                @click="toggleGroup(option.value)"
+                class="px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors"
+                :class="selectedGroups.includes(option.value)
+                  ? 'bg-purple text-white'
+                  : 'bg-lightergray text-darkgray hover:bg-lightgray'"
+              >
+                {{ option.label }}
+              </button>
+            </div>
+          </div>
+        </section>
+
         <!-- Submit -->
         <button
           type="submit"
@@ -91,13 +113,14 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref, watch, onMounted } from "vue";
 import PhoneUI from "@/components/PhoneUI.vue";
 import Icon from "@/components/Icon.vue";
 import TextField from "@/components/TextField.vue";
 import TextAreaField from "@/components/TextAreaField.vue";
 import DropDownField from "@/components/DropDownField.vue";
 import router from "@/router";
+import API from "@/api";
 import PostEdit from "@/lib/PostEdit";
 
 export default {
@@ -115,6 +138,32 @@ export default {
       { event_type: "Event Type", location: "Location" }
     );
 
+    const groupOptions = ref([]);
+    const selectedGroups = ref([]);
+
+    const getUserGroups = async () => {
+      try {
+        const response = await API.requestSettings();
+        groupOptions.value = Object.entries(response?.data?.group || {}).map(
+          ([id, name]) => ({ label: name, value: id })
+        );
+      } catch (error) {
+        console.error("Error fetching groups", error);
+      }
+    };
+
+    const toggleGroup = (value) => {
+      const idx = selectedGroups.value.indexOf(value);
+      if (idx === -1) selectedGroups.value.push(value);
+      else selectedGroups.value.splice(idx, 1);
+    };
+
+    watch(post, (newPost) => {
+      if (newPost.group && Array.isArray(newPost.group)) {
+        selectedGroups.value = [...newPost.group];
+      }
+    });
+
     const textFields = computed(() =>
       fields.value.filter((f) => f.component === "TextField")
     );
@@ -127,7 +176,7 @@ export default {
 
     const submit = (ev) => {
       if (ev && ev.preventDefault) ev.preventDefault();
-      createOrUpdatePost({ featured_media: post.featured_media });
+      createOrUpdatePost({ featured_media: post.featured_media, group: selectedGroups.value });
     };
 
     const deleteItem = (post_id) => {
@@ -141,12 +190,19 @@ export default {
       else router.push({ name: "Events" });
     };
 
+    onMounted(async () => {
+      await getUserGroups();
+    });
+
     return {
       post,
       fields,
       textFields,
       textareaFields,
       dropdownFields,
+      groupOptions,
+      selectedGroups,
+      toggleGroup,
       submit,
       deleteItem,
       goBack,
