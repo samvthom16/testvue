@@ -22,18 +22,13 @@
 
         <!-- Right column -->
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span
-              class="text-xs text-gray"
-              v-html="group.member?.title?.rendered || ''"
-            ></span>
-            <span class="text-xs text-gray">
-              · {{ group.timeAgo }} by
-              <span class="uppercase tracking-wide text-gray">{{ group.user }}</span>
-            </span>
-          </div>
-          <div class="mt-1 text-sm font-medium text-darkblack leading-snug whitespace-pre-line">
-            {{ group.latestComment }}
+          <div
+            class="text-sm font-medium text-darkblack leading-snug"
+            v-html="group.member?.title?.rendered || ''"
+          ></div>
+          <div class="mt-0.5 text-xs text-gray">
+            {{ group.timeAgo }} · by
+            <span class="uppercase tracking-wide">{{ group.user }}</span>
           </div>
         </div>
       </div>

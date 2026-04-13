@@ -57,9 +57,18 @@
               </div>
               <span class="flex-1 text-left text-sm font-medium text-darkblack">
                 <template v-if="isProcessing">{{ isSubscribed ? 'Disabling...' : 'Enabling...' }}</template>
-                <template v-else-if="successMessage">{{ successMessage }}</template>
-                <template v-else>{{ isSubscribed ? 'Disable Notifications' : 'Enable Notifications' }}</template>
+                <template v-else>{{ isSubscribed ? 'Notifications Enabled' : 'Enable Notifications' }}</template>
               </span>
+              <!-- Toggle -->
+              <div
+                class="relative w-11 h-6 rounded-full transition-colors duration-200 shrink-0"
+                :class="isSubscribed ? 'bg-purple' : 'bg-lightgray'"
+              >
+                <div
+                  class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
+                  :class="isSubscribed ? 'translate-x-5' : 'translate-x-0'"
+                ></div>
+              </div>
             </button>
           </div>
         </div>

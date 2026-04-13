@@ -93,6 +93,10 @@ src/
 - `Home.vue` → Dashboard with `StatsBar`, Coming Up section, comments grouped by member, activity timeline.
 - Comments templates redesigned with round avatars and gradient monograms.
 
+### Session 18 — Dashboard Comments UI + Profile Toggle
+- `UsersListGrouped.vue`: removed comment message body; member name now on line 1 (`text-sm font-medium`), line 2 shows time · by username.
+- `Profile.vue`: replaced notifications button with an iOS-style toggle switch; label reads "Notifications Enabled" / "Enable Notifications" based on `isSubscribed`; processing states preserved.
+
 ### Sessions 9–10 — Polish sweep
 - Removed mobile phone chrome (no more device frame).
 - Consistent `PhoneUI` usage across all views; `Gradients.js` utility extracted.
