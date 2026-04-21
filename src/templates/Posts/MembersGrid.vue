@@ -36,10 +36,10 @@
           <p class="text-xs text-darkgray mt-0.5">{{ getLastSeen(post) }}</p>
           <!-- Extra field chips -->
           <div class="flex flex-wrap gap-1 mt-1.5" v-if="hasExtra(post)">
-            <span v-if="post.gender"       class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ post.gender }}</span>
-            <span v-if="post.member_status" class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ post.member_status }}</span>
-            <span v-if="post.location"     class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ post.location }}</span>
-            <span v-if="post.profession"   class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ post.profession }}</span>
+            <span v-if="post.gender"        class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('gender', post.gender) }}</span>
+            <span v-if="post.member_status" class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
+            <span v-if="post.location"      class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('location', post.location) }}</span>
+            <span v-if="post.profession"    class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('profession', post.profession) }}</span>
           </div>
         </div>
 
@@ -108,22 +108,22 @@
 
             <!-- Gender -->
             <td class="py-3.5 px-5 text-sm text-darkblack whitespace-nowrap">
-              {{ formatField(post.gender) }}
+              {{ resolveField('gender', post.gender) }}
             </td>
 
             <!-- Profile Type -->
             <td class="py-3.5 px-5 text-sm text-darkblack whitespace-nowrap">
-              {{ formatField(post.member_status) }}
+              {{ resolveField('member_status', post.member_status) }}
             </td>
 
             <!-- Location -->
             <td class="py-3.5 px-5 text-sm text-darkblack whitespace-nowrap">
-              {{ formatField(post.location) }}
+              {{ resolveField('location', post.location) }}
             </td>
 
             <!-- Profession -->
             <td class="py-3.5 px-5 text-sm text-darkblack whitespace-nowrap">
-              {{ formatField(post.profession) }}
+              {{ resolveField('profession', post.profession) }}
             </td>
 
             <!-- Last seen -->
@@ -189,11 +189,21 @@ export default {
       return post.gender || post.member_status || post.location || post.profession;
     },
 
-    formatField(value) {
+    getTermName(field, term_id) {
+      const settings = store.state.account;
+      if (settings && settings[field] && settings[field][term_id]) {
+        return settings[field][term_id];
+      }
+      return '';
+    },
+
+    resolveField(field, value) {
       if (!value) return '—';
-      if (Array.isArray(value)) return value.length ? value.join(', ') : '—';
-      if (typeof value === 'number') return '—';
-      return value;
+      if (Array.isArray(value)) {
+        const names = value.map(id => this.getTermName(field, id)).filter(Boolean);
+        return names.length ? names.join(', ') : '—';
+      }
+      return this.getTermName(field, value) || '—';
     },
 
     cachePost(post) {
