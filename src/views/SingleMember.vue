@@ -107,7 +107,7 @@
                   class="flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
                 >
                   <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.age.bg }">
-                    <Icon type="Clock" class="w-3 h-3" :style="{ color: META_PALETTES.age.color }" />
+                    <Icon type="Clock" class="!w-3.5 !h-3.5" :style="{ color: META_PALETTES.age.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Age</p>
