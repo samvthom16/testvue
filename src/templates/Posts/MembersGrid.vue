@@ -161,6 +161,7 @@ export default {
   name: "MembersGrid",
   props: {
     posts: Array,
+    total: Number,
   },
   mounted() {
     if (!Object.keys(store.state.account).length) {

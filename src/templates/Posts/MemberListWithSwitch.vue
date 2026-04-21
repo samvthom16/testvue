@@ -53,6 +53,7 @@ export default {
   name: "MemberListWithSwitch",
   props: {
     posts: Array,
+    total: Number,
   },
   components: {
     Switch,

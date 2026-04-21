@@ -24,7 +24,8 @@ import AvatarsStackedAnimation from '@/templates/Animation/AvatarsStacked.vue'
 export default{
   props: {
     posts: Array,
-    status: String
+    status: String,
+    total: Number,
   },
   components: {
     PostTitle,
