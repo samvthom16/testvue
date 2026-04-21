@@ -57,6 +57,11 @@ const routes = [
     component: Login,
   },
   {
+    path: "/add-workspace",
+    name: "AddWorkspace",
+    component: Login,
+  },
+  {
     path: "/logout",
     name: "Logout",
     component: Logout,
