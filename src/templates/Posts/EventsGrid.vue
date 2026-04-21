@@ -137,6 +137,7 @@ export default {
   name: "EventsGrid",
   props: {
     posts: Array,
+    total: Number,
   },
   methods: {
     getPostLink: (post) => Util.getPostLink(post),

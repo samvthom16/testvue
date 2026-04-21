@@ -14,7 +14,8 @@ import PostFeaturedImage from '@/templates/Post/FeaturedImage.vue'
 export default{
   props: {
     posts: Array,
-    status: String
+    status: String,
+    total: Number,
   },
   components:{
     PostFeaturedImage

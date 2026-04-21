@@ -43,6 +43,7 @@ import CategoryHelper from "@/lib/CategoryHelper";
 export default {
   props: {
     posts: Array,
+    total: Number,
   },
   emits: ['edit-item'],
   components: {

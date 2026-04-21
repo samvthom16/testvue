@@ -11,7 +11,7 @@
             :class="{ 'text-purple': item.allowedRoutes.includes($route.name) }"
           />
           <p
-            class='text-xs pt-1 uppercase tracking-widest text-darkgray'
+            class='text-xs pt-1 text-darkgray font-medium'
             :class="{ 'text-purple': item.allowedRoutes.includes($route.name) }"
           >
             {{ item.name }}
@@ -28,7 +28,7 @@
             :class="{ 'text-purple': isMoreActive }"
           />
           <p
-            class='text-xs pt-1 uppercase tracking-widest text-darkgray'
+            class='text-xs pt-1 text-darkgray font-medium'
             :class="{ 'text-purple': isMoreActive }"
           >
             More

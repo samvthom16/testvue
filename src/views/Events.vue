@@ -90,12 +90,16 @@ export default {
   setup() {
     const totalItems = ref(0);
 
+    const currentYear = new Date().getFullYear();
+
     const params = ref({
       unique_id: 1,
       per_page: 10,
       post_type: "inpursuit-events",
       pagination: 1,
       search: "",
+      after:  `${currentYear - 1}-12-31T23:59:59`,
+      before: `${currentYear}-12-31T23:59:59`,
     });
 
     const onSearch = (searchText) => {
@@ -104,12 +108,21 @@ export default {
     };
 
     const selectDropdownItem = (data) => {
-      params.value[data.name] = data.value;
-
-      if (data.name === "orderby" && data.value === "title") params.value.order = "asc";
-      if (data.name === "orderby" && data.value === "id")    params.value.order = "desc";
-      if (data.name === "event_type" && data.value === "all") params.value.event_type = "";
-      if (data.name === "status" && data.value === "all")     params.value.status = "publish,draft";
+      if (data.name === "year") {
+        if (data.value) {
+          params.value.after  = `${data.value - 1}-12-31T23:59:59`;
+          params.value.before = `${data.value}-12-31T23:59:59`;
+        } else {
+          delete params.value.after;
+          delete params.value.before;
+        }
+      } else {
+        params.value[data.name] = data.value;
+        if (data.name === "orderby" && data.value === "title") params.value.order = "asc";
+        if (data.name === "orderby" && data.value === "id")    params.value.order = "desc";
+        if (data.name === "event_type" && data.value === "all") params.value.event_type = "";
+        if (data.name === "status" && data.value === "all")     params.value.status = "publish,draft";
+      }
 
       params.value.unique_id++;
     };

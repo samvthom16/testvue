@@ -50,6 +50,7 @@ import Util from "@/lib/Util.js";
 export default {
   props: {
     posts: Array,
+    total: Number,
   },
   components: {
     PostTitle,

@@ -14,10 +14,10 @@
       <div v-if="post.id">
 
         <!-- ── HERO ────────────────────────────────────────── -->
-        <div class="bg-white px-5 md:px-8 pt-5 pb-10 border-b border-lightgray">
+        <div class="bg-white border-b border-lightgray">
 
-          <!-- Top row: back + 3-dot menu -->
-          <div class="flex items-center justify-between mb-6">
+          <!-- Back + menu -->
+          <div class="flex items-center justify-between px-4 md:px-8 pt-5 pb-4">
             <button
               @click="$router.back()"
               class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors"
@@ -25,8 +25,6 @@
               <Icon type="Back" class="w-5 h-5" />
               <span class="text-sm font-medium">Back</span>
             </button>
-
-            <!-- 3-dot menu trigger -->
             <button
               @click="showActionsMenu = true"
               class="p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
@@ -35,146 +33,123 @@
             </button>
           </div>
 
-          <!-- Avatar + name -->
-          <div class="flex items-center gap-5">
-            <div
-              class="shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-full ring-4 ring-lightgray overflow-hidden flex items-center justify-center"
-              :style="isDefaultImage ? { background: monogramBg } : {}"
-            >
-              <img v-if="!isDefaultImage" class="w-full h-full object-cover" :src="post.featured_image" />
-              <span v-else class="text-2xl font-bold text-white select-none tracking-wide">{{ monogram }}</span>
-            </div>
-            <div>
-              <h1
-                class="text-2xl md:text-3xl font-bold text-darkblack tracking-tight leading-tight"
-                v-html="post.title?.rendered"
-              ></h1>
-              <div class="flex flex-wrap items-center gap-2 mt-2">
-                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-lightergray text-darkblack">
-                  <span class="w-1.5 h-1.5 rounded-full" :class="post.status === 'publish' ? 'bg-green' : 'bg-gray'"></span>
-                  {{ post.status === 'publish' ? 'Active' : 'Archived' }}
-                </span>
-                <span v-if="getStatus(post)" class="text-darkgray text-xs font-medium">{{ getStatus(post) }}</span>
-                <span class="text-gray text-xs">#M-{{ post.id }}</span>
+          <!-- Identity -->
+          <div class="px-5 md:px-8 pb-6">
+            <div class="flex items-center gap-4">
+              <div
+                class="shrink-0 w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center shadow-sm"
+                :style="isDefaultImage ? { background: monogramBg } : {}"
+              >
+                <img v-if="!isDefaultImage" class="w-full h-full object-cover" :src="post.featured_image" />
+                <span v-else class="text-2xl font-bold text-white select-none tracking-wide">{{ monogram }}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h1 class="text-xl font-bold text-darkblack tracking-tight leading-tight" v-html="post.title?.rendered"></h1>
+                <div class="flex flex-wrap items-center gap-2 mt-1.5">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-lightergray text-darkblack">
+                    <span class="w-1.5 h-1.5 rounded-full" :class="post.status === 'publish' ? 'bg-green' : 'bg-gray'"></span>
+                    {{ post.status === 'publish' ? 'Active' : 'Archived' }}
+                  </span>
+                  <span v-if="getStatus(post)" class="text-darkgray text-xs font-medium">{{ getStatus(post) }}</span>
+                  <span class="text-gray text-xs">#M-{{ post.id }}</span>
+                </div>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
 
         <!-- ── BODY: 2-col on desktop ─────────────────────── -->
-        <div class="md:grid md:grid-cols-[300px_1fr]">
+        <div class="md:grid md:grid-cols-[280px_1fr]">
 
-          <!-- LEFT PANEL: actions + meta ─────────────────── -->
+          <!-- LEFT PANEL: meta list ──────────────────────── -->
           <div class="md:sticky md:top-0 md:h-screen md:overflow-y-auto md:border-r md:border-lightgray">
+            <div class="p-4 md:p-5">
+              <div class="bg-white border border-lightgray rounded-2xl overflow-hidden divide-y divide-lightgray">
 
-            <!-- Actions -->
-            <div v-if="post.phone" class="p-4 flex gap-2 border-b border-lightgray">
-              <button
-                @click="openWhatsapp"
-                class="flex-1 flex flex-col items-center gap-1.5 py-3.5 bg-lightergray hover:bg-lightgray rounded-2xl transition-colors"
-              >
-                <Icon type="Phone" class="w-5 h-5 text-darkblack" />
-                <span class="text-xs font-medium text-darkblack">WhatsApp</span>
-              </button>
-            </div>
+                <div v-if="getLocation(post)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.location.bg }">
+                    <Icon type="Location" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.location.color }" />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray leading-none mb-0.5">Location</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getLocation(post) }}</p>
+                  </div>
+                </div>
 
-            <!-- Meta fields -->
-            <div class="bg-lightergray p-4 space-y-2 md:bg-white md:p-5">
-              <div
-                v-if="getLocation(post)"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.location.bg }">
-                  <Icon type="Location" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.location.color }" />
+                <div v-if="getTermName('gender', post.gender)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.gender.bg }">
+                    <Icon type="Gender" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.gender.color }" />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray leading-none mb-0.5">Gender</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getTermName('gender', post.gender) }}</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Location</p>
-                  <p class="text-sm font-medium text-darkblack">{{ getLocation(post) }}</p>
+
+                <div v-if="post.age" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.age.bg }">
+                    <Icon type="Clock" class="!w-3.5 !h-3.5" :style="{ color: META_PALETTES.age.color }" />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray leading-none mb-0.5">Age</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ post.age }} Years</p>
+                  </div>
                 </div>
-              </div>
-              <div
-                v-if="getGender(post)"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.gender.bg }">
-                  <Icon type="Gender" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.gender.color }" />
+
+                <div v-if="getProfession(post)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.profession.bg }">
+                    <Icon type="Profession" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.profession.color }" />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray leading-none mb-0.5">Profession</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getProfession(post) }}</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Gender & Age</p>
-                  <p class="text-sm font-medium text-darkblack">{{ getGender(post) }}</p>
+
+                <div v-if="getGroup(post)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.group.bg }">
+                    <Icon type="Group" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.group.color }" />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray leading-none mb-0.5">Group</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getGroup(post) }}</p>
+                  </div>
                 </div>
-              </div>
-              <div
-                v-if="getProfession(post)"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.profession.bg }">
-                  <Icon type="Profession" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.profession.color }" />
+
+                <div v-if="post.phone" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.phone.bg }">
+                    <Icon type="Phone" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.phone.color }" />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray leading-none mb-0.5">Phone</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ post.phone }}</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Profession</p>
-                  <p class="text-sm font-medium text-darkblack">{{ getProfession(post) }}</p>
-                </div>
-              </div>
-              <div
-                v-if="getGroup(post)"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.group.bg }">
-                  <Icon type="Group" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.group.color }" />
-                </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Group</p>
-                  <p class="text-sm font-medium text-darkblack">{{ getGroup(post) }}</p>
-                </div>
-              </div>
-              <div
-                v-if="post.phone"
-                class="flex items-center gap-3 px-4 py-3 bg-white md:bg-lightergray rounded-xl"
-              >
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.phone.bg }">
-                  <Icon type="Phone" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.phone.color }" />
-                </div>
-                <div>
-                  <p class="text-xs text-gray leading-none mb-0.5">Phone</p>
-                  <p class="text-sm font-medium text-darkblack">{{ post.phone }}</p>
-                </div>
+
               </div>
             </div>
-
           </div>
 
           <!-- RIGHT PANEL: tabs + activity ────────────────── -->
           <div class="px-4 md:px-8 py-5">
 
             <!-- Tab bar -->
-            <div class="border-b border-lightgray mb-4">
-              <div class="flex items-end gap-6">
-                <button
-                  @click="activeTab = 'event'"
-                  class="pb-3 text-sm font-medium transition-colors"
-                  :class="activeTab === 'event'
-                    ? 'text-darkblack border-b-2 border-darkblack -mb-px'
-                    : 'text-gray hover:text-darkgray'"
-                >Events</button>
-                <button
-                  @click="activeTab = 'comment'"
-                  class="pb-3 text-sm font-medium transition-colors"
-                  :class="activeTab === 'comment'
-                    ? 'text-darkblack border-b-2 border-darkblack -mb-px'
-                    : 'text-gray hover:text-darkgray'"
-                >Comments</button>
-                <div class="flex-1"></div>
-                <button
-                  v-if="activeTab === 'comment'"
-                  @click="showCommentModal = true"
-                  class="pb-3 inline-flex items-center gap-1 text-xs font-medium text-purple"
-                >
-                  <Icon type="Plus" class="w-3 h-3" />
-                  Add Note
-                </button>
-              </div>
+            <div class="flex items-center gap-1 bg-lightergray rounded-xl p-1 mb-5">
+              <button
+                @click="activeTab = 'event'"
+                class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
+                :class="activeTab === 'event'
+                  ? 'bg-white text-darkblack shadow-sm'
+                  : 'text-gray hover:text-darkgray'"
+              >Events</button>
+              <button
+                @click="activeTab = 'comment'"
+                class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
+                :class="activeTab === 'comment'
+                  ? 'bg-white text-darkblack shadow-sm'
+                  : 'text-gray hover:text-darkgray'"
+              >Comments</button>
             </div>
 
             <HistoryList
@@ -200,15 +175,26 @@
 
       </div>
 
+      <!-- ── ADD NOTE FAB ───────────────────────────────────── -->
+      <Teleport to="body">
+        <Transition name="fab">
+          <button
+            v-if="post.id && activeTab === 'comment'"
+            @click="showCommentModal = true"
+            class="fixed bottom-24 right-5 z-40 bg-purple text-white h-11 px-4 rounded-2xl flex items-center gap-2 shadow-lg hover:bg-lightpurple transition-colors"
+          >
+            <Icon type="Plus" class="w-4 h-4" />
+            <span class="text-sm font-semibold">New Note</span>
+          </button>
+        </Transition>
+      </Teleport>
+
       <!-- ── ACTIONS BOTTOM SHEET ─────────────────────────── -->
       <Teleport to="body">
         <Transition name="sheet">
           <div v-if="showActionsMenu" class="fixed inset-0 z-50 flex flex-col justify-end">
-            <!-- Backdrop -->
             <div class="absolute inset-0 bg-black/40" @click="showActionsMenu = false"></div>
-            <!-- Sheet -->
             <div class="relative bg-white rounded-t-3xl pb-10 shadow-2xl w-full max-w-lg mx-auto">
-              <!-- Drag handle -->
               <div class="flex justify-center pt-3 pb-1">
                 <div class="w-10 h-1 rounded-full bg-lightgray"></div>
               </div>
@@ -264,6 +250,7 @@ import { getGradient, getInitials } from "@/lib/Gradients";
 const META_PALETTES = {
   location:   { bg: '#FFF5EC', color: '#DB6933' },
   gender:     { bg: '#F5F0F6', color: '#89558d' },
+  age:        { bg: '#EEF2FF', color: '#4338CA' },
   profession: { bg: '#EAF4FA', color: '#006491' },
   group:      { bg: '#FEF2F4', color: '#E16075' },
   phone:      { bg: '#EEF2F8', color: '#006491' },
@@ -373,6 +360,16 @@ export default {
 </script>
 
 <style scoped>
+.fab-enter-active,
+.fab-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fab-enter-from,
+.fab-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
 .sheet-enter-active,
 .sheet-leave-active {
   transition: opacity 0.25s ease;

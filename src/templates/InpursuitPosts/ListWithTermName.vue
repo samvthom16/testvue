@@ -43,6 +43,7 @@ import OrbitComments from "@/lib/OrbitComments.vue";
 export default {
   props: {
     posts: Array,
+    total: Number,
   },
   emits: ['edit-item'],
   components: {

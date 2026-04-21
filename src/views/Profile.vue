@@ -73,6 +73,15 @@
           </div>
         </div>
 
+        <!-- Workspace -->
+        <div v-if="accountUrl">
+          <p class="text-xs font-semibold text-gray uppercase tracking-widest mb-3">Workspace</p>
+          <div class="bg-white border border-lightgray rounded-2xl px-4 py-3.5">
+            <p class="text-xs text-gray mb-0.5">Account URL</p>
+            <p class="text-sm font-medium text-darkblack break-all">{{ accountUrl }}</p>
+          </div>
+        </div>
+
         <!-- Logout -->
         <div>
           <p class="text-xs font-semibold text-gray uppercase tracking-widest mb-3">Account</p>
@@ -103,6 +112,7 @@ import PhoneUI from "@/components/PhoneUI.vue";
 import Icon from "@/components/Icon.vue";
 import { usePushNotifications } from "@/lib/usePushNotifications";
 import { getGradient, getInitials } from "@/lib/Gradients";
+import store from "@/store";
 
 export default {
   name: "Profile",
@@ -143,6 +153,8 @@ export default {
     const { isSubscribed, isProcessing, successMessage, isSupported, toggleNotifications } =
       usePushNotifications();
 
+    const accountUrl = computed(() => store.state.settings?.account_url || '');
+
     return {
       newTeamMember,
       monogram,
@@ -152,6 +164,7 @@ export default {
       successMessage,
       isSupported,
       toggleNotifications,
+      accountUrl,
     };
   },
 };

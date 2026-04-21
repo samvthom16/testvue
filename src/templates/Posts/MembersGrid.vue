@@ -32,15 +32,12 @@
               class="shrink-0 w-1.5 h-1.5 rounded-full"
               :class="post.status === 'publish' ? 'bg-green' : 'bg-lightgray'"
             ></span>
+            <span class="flex-1"></span>
+            <span v-if="post.member_status" class="shrink-0 bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
           </div>
-          <p class="text-xs text-darkgray mt-0.5">{{ getLastSeen(post) }}</p>
-          <!-- Extra field chips -->
-          <div class="flex flex-wrap gap-1 mt-1.5" v-if="hasExtra(post)">
-            <span v-if="post.gender"        class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('gender', post.gender) }}</span>
-            <span v-if="post.member_status" class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
-            <span v-if="post.location"      class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('location', post.location) }}</span>
-            <span v-if="post.profession"    class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('profession', post.profession) }}</span>
-          </div>
+          <p class="text-xs text-darkgray mt-0.5">
+            {{ getLastSeen(post) }}<template v-if="resolveField('location', post.location) !== '—'"> · {{ resolveField('location', post.location) }}</template>
+          </p>
         </div>
 
         <svg class="w-4 h-4 text-lightgray shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -161,6 +158,7 @@ export default {
   name: "MembersGrid",
   props: {
     posts: Array,
+    total: Number,
   },
   mounted() {
     if (!Object.keys(store.state.account).length) {

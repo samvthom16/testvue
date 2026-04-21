@@ -1,20 +1,27 @@
 <template>
-  <ul
-    class="whitespace-nowrap pb-4 mb-2 overflow-auto"
-  >
-    <li
-      class="inline-block mr-2"
-      v-for="(dropdownButton, field_name) in dropdownButtons"
-      :key="dropdownButton"
-    >
-      <ButtonPopupModal
-        :field_name="field_name"
-        :field="dropdownButton"
-        @selectItem="selectItem"
-      />
-    </li>
-  </ul>
+  <div class="relative mb-2">
+    <ul class="whitespace-nowrap pb-4 overflow-x-auto scrollbar-hide">
+      <li
+        class="inline-block mr-2"
+        v-for="(dropdownButton, field_name) in dropdownButtons"
+        :key="dropdownButton"
+      >
+        <ButtonPopupModal
+          :field_name="field_name"
+          :field="dropdownButton"
+          @selectItem="selectItem"
+        />
+      </li>
+    </ul>
+    <!-- Right fade -->
+    <div class="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white to-transparent"></div>
+  </div>
 </template>
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 
 <script>
 import ButtonPopupModal from "@/components/ButtonPopupModal.vue";
