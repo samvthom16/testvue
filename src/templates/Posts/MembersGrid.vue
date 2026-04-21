@@ -190,7 +190,7 @@ export default {
     },
 
     getTermName(field, term_id) {
-      const settings = store.state.account;
+      const settings = this.$store.state.account;
       if (settings && settings[field] && settings[field][term_id]) {
         return settings[field][term_id];
       }
