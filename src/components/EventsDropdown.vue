@@ -55,6 +55,7 @@ export default {
   props: {
     totalItems: Number,
   },
+  emits: ['selectItem'],
   components: {
     ButtonPopupModal,
     Modal,
