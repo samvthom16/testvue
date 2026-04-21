@@ -158,31 +158,29 @@
           <div class="px-4 md:px-8 py-5">
 
             <!-- Tab bar -->
-            <div class="flex items-center gap-1 bg-lightergray rounded-xl p-1 mb-5">
+            <div class="flex items-center gap-2 mb-5">
+              <div class="flex items-center gap-1 bg-lightergray rounded-xl p-1 flex-1">
+                <button
+                  @click="activeTab = 'event'"
+                  class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
+                  :class="activeTab === 'event'
+                    ? 'bg-white text-darkblack shadow-sm'
+                    : 'text-gray hover:text-darkgray'"
+                >Events</button>
+                <button
+                  @click="activeTab = 'comment'"
+                  class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
+                  :class="activeTab === 'comment'
+                    ? 'bg-white text-darkblack shadow-sm'
+                    : 'text-gray hover:text-darkgray'"
+                >Comments</button>
+              </div>
               <button
-                @click="activeTab = 'event'"
-                class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
-                :class="activeTab === 'event'
-                  ? 'bg-white text-darkblack shadow-sm'
-                  : 'text-gray hover:text-darkgray'"
-              >Events</button>
-              <button
-                @click="activeTab = 'comment'"
-                class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
-                :class="activeTab === 'comment'
-                  ? 'bg-white text-darkblack shadow-sm'
-                  : 'text-gray hover:text-darkgray'"
-              >Comments</button>
-            </div>
-
-            <!-- Add note -->
-            <div v-if="activeTab === 'comment'" class="flex justify-end mb-3">
-              <button
+                v-if="activeTab === 'comment'"
                 @click="showCommentModal = true"
-                class="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-purple px-3 py-2 rounded-xl hover:bg-lightpurple transition-colors"
+                class="shrink-0 w-10 h-10 flex items-center justify-center bg-purple text-white rounded-xl hover:bg-lightpurple transition-colors"
               >
-                <Icon type="Plus" class="w-3 h-3" />
-                Add Note
+                <Icon type="Plus" class="w-4 h-4" />
               </button>
             </div>
 

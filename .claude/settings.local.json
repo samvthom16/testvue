@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(grep -r templates/ /c/Users/LH Media/ClaudeCode/inPursuit/src --include=*.vue --include=*.js)",
+      "Bash(for comp:*)",
+      "Bash(do echo:*)",
+      "Bash(grep -r \"AddEvent\\\\|CircularProgressBar\\\\|BaseProgress\" /c/Users/LH Media/ClaudeCode/inPursuit/src --include=*.vue --include=*.js)",
+      "Bash(grep -r import.*from.*components /c/Users/LH Media/ClaudeCode/inPursuit/src --include=*.vue --include=*.js)",
+      "Bash(grep -rn \"EventTags\\\\|FilterTags\\\\|HeaderMenu\\\\|HistoryItem\\\\|ProgressBarItem\\\\|SettingItem\\\\|UserTags\" /c/Users/LH Media/ClaudeCode/inPursuit/src --include=*.vue --include=*.js)",
+      "Bash(grep -r \"PhoneUI/Header\\\\|PhoneUI/Title\\\\|Header.vue\\\\|Title.vue\" /c/Users/LH Media/ClaudeCode/inPursuit/src --include=*.vue --include=*.js)",
+      "Bash(xargs basename:*)",
+      "Bash(ls -1 /c/Users/LH Media/ClaudeCode/inPursuit/src/views/*.vue)",
+      "Bash(xargs -n1 basename)",
+      "Bash(ls -1 *.vue)",
+      "Bash(for f:*)",
+      "Read(//c/Users/LH Media/ClaudeCode/inPursuit/**)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

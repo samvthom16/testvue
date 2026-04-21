@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-09 (Session 14)
+> Last updated: 2026-04-21 (Session 21)
 
 ---
 
@@ -92,6 +92,26 @@ src/
 ### Session 8 — Dashboard + Comments
 - `Home.vue` → Dashboard with `StatsBar`, Coming Up section, comments grouped by member, activity timeline.
 - Comments templates redesigned with round avatars and gradient monograms.
+
+### Session 21 — Design Sweep: Skeletons, Events Filter, Profile Cache, SingleMember Redesign
+
+- **`HistoryList.vue`**: skeleton loaders (`HistoryEventListAnimation`, `HistoryCommentListAnimation`) per tab; `per_page: 10`; event rows now show `text`, `author_name`, and event type pill.
+- **`EventsGrid.vue`**: `border-l-4` left accent stripe per row using sequential palette index from `account.event_type` keys (purple/blue/orange palette, no green).
+- **`EventsDropdown.vue`**: year filter — fetches `_fields=date` on mount, extracts unique years sorted descending; labels "This Year", "Last Year", bare year for older, "All Time". `emits: ['selectItem']` added.
+- **`Events.vue`**: default params filter to current year via `after`/`before` ISO8601; `selectDropdownItem` handles year switching.
+- **`Profile.vue`**: `staleTime: 5min` + `initialData` from localStorage for instant re-render; `watch(data)` persists fresh data; Workspace section added.
+- **`StatsBar.vue`**: full rewrite — horizontal layout, coloured icon badge per stat card (Members=purple, Events=blue, Comments=orange, Special Events=indigo).
+- **`SingleMember.vue`**: full redesign — neutral `bg-lightergray` hero band, avatar overlapping with `ring-4 ring-white shadow-md rounded-2xl`, 2-col meta grid with icon badges, pill segmented tab control, Gender + Age split into separate cards, Clock icon with `!w-3.5 !h-3.5`. "Add Note" button moved inline with tab bar as a `w-10 h-10` icon-only purple square that appears when Comments tab is active.
+- **`PhoneUI/Footer.vue`**: removed `uppercase tracking-widest`; added `font-medium` to nav labels.
+- **Home.vue**: renamed title to "Home"; comments `per_page: 5`, activity events `per_page: 5`.
+- **Vue warnings resolved**: `emits: ['selectItem']` on EventsDropdown, `emits: ['totalChanged']` on OrbitPosts, `total: Number` prop added to 8 fragment-root templates.
+
+### Session 20 — Members Meta Labels + Mobile Nav Polish
+- **`MembersGrid.vue`**: replaced raw `formatField()` with `resolveField(field, value)` + `getTermName()` that look up term IDs against `store.state.account`; covers gender, member_status, location, profession on both mobile chips and desktop table.
+- **`MembersGrid.vue`**: added `mounted()` hook to call `getAccountSettings` if not yet loaded — Members page was the only view not triggering this fetch, causing all labels to show as `—`.
+- **`PhoneUI/ProgressBar.vue`**: grey track bar now only visible when `processing` is true; transparent at rest (layout height preserved).
+- **`PhoneUI.vue`**: changed `.footer-list li` from `flex-auto` to `flex-1` so all bottom nav items share equal width regardless of label length.
+- **`PhoneUI/Footer.vue`**: renamed "Dashboard" → "Home" in primary nav items.
 
 ### Session 18 — Dashboard Comments UI + Profile Toggle
 - `UsersListGrouped.vue`: removed comment message body; member name now on line 1 (`text-sm font-medium`), line 2 shows time · by username.
