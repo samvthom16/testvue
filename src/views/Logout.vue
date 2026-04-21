@@ -3,14 +3,19 @@ import { unsubscribeFromNotifications } from '@/lib/usePushNotifications'
 
 export default {
   name: 'Logout',
-  mounted(){
+  mounted() {
     unsubscribeFromNotifications().catch(() => {})
 
-    // FLUSH LOCAL SETTINGS FROM THE BROWSER
-    this.$store.commit( 'flushLocalSettings' );
+    // Remove the active workspace; flushLocalSettings switches to the next
+    // workspace if one exists, or clears credentials if none remain
+    this.$store.commit('flushLocalSettings')
 
-    // REDIRECT TO LOGIN PAGE
-    this.$router.push( '/login' );
-  }
+    if (this.$store.state.workspaces.length > 0) {
+      // Another workspace was made active — reload to start fresh session
+      window.location.href = '/'
+    } else {
+      this.$router.push('/login')
+    }
+  },
 }
 </script>

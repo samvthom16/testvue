@@ -3,7 +3,8 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import API from '@/api'
 
-export function useLoginFlow() {
+export function useLoginFlow(options = {}) {
+  const { addMode = false } = options
   const router = useRouter()
   const store = useStore()
 
@@ -168,13 +169,22 @@ export function useLoginFlow() {
 
   const afterAuthentication = (response) => {
     if (response.data?.password && response.data?.user) {
-      store.commit('saveLocalSettings', {
+      const credentials = {
         id: response.data.user.ID,
         username: response.data.user.user_login,
         password: response.data.password,
         account_url: getAccountURL(),
-      })
-      router.push('/members')
+      }
+
+      if (addMode) {
+        // Save to workspaces array without switching the active session
+        store.commit('addWorkspace', credentials)
+        router.push('/profile')
+      } else {
+        store.commit('saveLocalSettings', credentials)
+        store.commit('addWorkspace', credentials)
+        router.push('/members')
+      }
     }
   }
 
@@ -207,5 +217,6 @@ export function useLoginFlow() {
     openPreviousForm,
     focusInput,
     submit,
+    addMode,
   }
 }

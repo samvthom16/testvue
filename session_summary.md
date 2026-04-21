@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-21 (Session 22)
+> Last updated: 2026-04-21 (Session 23)
 
 ---
 
@@ -92,6 +92,17 @@ src/
 ### Session 8 — Dashboard + Comments
 - `Home.vue` → Dashboard with `StatsBar`, Coming Up section, comments grouped by member, activity timeline.
 - Comments templates redesigned with round avatars and gradient monograms.
+
+### Session 23 — Multi-Workspace Account Switching
+
+- **`store/index.js`**: added `workspaces[]` state; new mutations `addWorkspace`, `switchWorkspace`; updated `flushLocalSettings` to remove only the active workspace and auto-switch to the next one if available; auto-migration of legacy `inpursuit_settings` into `inpursuit_workspaces` array on first load.
+- **`lib/useLoginFlow.js`**: accepts `options.addMode`; in add mode saves credentials to the workspaces array without replacing the active session, then redirects to `/profile` instead of `/members`.
+- **`router/index.js`**: added `/add-workspace` route (reuses `Login.vue`, named `AddWorkspace`).
+- **`views/Login.vue`**: detects `AddWorkspace` route name and passes `addMode: true` to the composable; adjusted step titles/subtitles for add mode; Back button on step 0 in add mode navigates to `/profile`.
+- **`views/Profile.vue`**: replaced static workspace URL display with `<WorkspaceSwitcher />` component.
+- **`views/Logout.vue`**: after `flushLocalSettings`, reloads to `/` if another workspace is now active, otherwise redirects to `/login`.
+- **`components/WorkspaceSwitcher.vue`** (new): lists all saved workspaces; each row shows the first letter of the domain as the icon (purple when active, gray otherwise), the hostname, full URL, and an Active badge or Switch button; "Add Workspace" dashed link at the bottom.
+- **`components/Icon.vue`**: added `Globe` icon type (kept for future use).
 
 ### Session 22 — SingleMember Redesign, Members List Polish, Dropdown Typography Fix
 

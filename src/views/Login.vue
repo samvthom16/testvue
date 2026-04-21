@@ -6,9 +6,9 @@
       <!-- Page header -->
       <div class="mb-6">
         <button
-          v-if="currentStep !== 0"
+          v-if="currentStep !== 0 || addMode"
           type="button"
-          @click="openPreviousForm"
+          @click="handleBack"
           class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors mb-4"
         >
           <Icon type="Back" class="w-5 h-5" />
@@ -85,6 +85,7 @@
 
 <script>
 import { onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import PhoneUI from "@/components/PhoneUI.vue";
 import Icon from "@/components/Icon.vue";
 import { useLoginFlow } from "@/lib/useLoginFlow";
@@ -94,14 +95,24 @@ export default {
   components: { PhoneUI, Icon },
   setup() {
     const configUI = { hide_footer: true, hide_sidebar: true, hide_desktop_header: true, body_classes: 'flex items-center justify-center' };
-    const login = useLoginFlow();
+    const route = useRoute();
+    const router = useRouter();
+    const isAddMode = route.name === 'AddWorkspace';
+    const login = useLoginFlow({ addMode: isAddMode });
 
     const stepTitle = computed(() => {
+      if (isAddMode) {
+        const titles = ['Add Workspace', 'Verify Your Identity', 'Enter Your OTP'];
+        return titles[login.currentStep.value] ?? 'Add Workspace';
+      }
       const titles = ['Welcome Back', 'Verify Your Identity', 'Enter Your OTP'];
       return titles[login.currentStep.value] ?? 'Sign In';
     });
 
     const stepSubtitle = computed(() => {
+      if (isAddMode && login.currentStep.value === 0) {
+        return 'Enter the URL of the workspace you want to add.';
+      }
       const subtitles = [
         'Enter your account URL to get started.',
         'Enter the email address linked to your account.',
@@ -115,9 +126,18 @@ export default {
       return sections[login.currentStep.value] ?? '';
     });
 
+    // Back on step 0 in addMode goes back to profile
+    const handleBack = () => {
+      if (isAddMode && login.currentStep.value === 0) {
+        router.push('/profile');
+      } else {
+        login.openPreviousForm();
+      }
+    };
+
     onMounted(() => login.focusInput("account_url"));
 
-    return { configUI, stepTitle, stepSubtitle, stepSection, ...login };
+    return { configUI, stepTitle, stepSubtitle, stepSection, handleBack, ...login };
   },
 };
 </script>
