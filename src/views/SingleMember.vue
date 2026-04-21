@@ -14,12 +14,10 @@
       <div v-if="post.id">
 
         <!-- ── HERO ────────────────────────────────────────── -->
-        <div class="relative">
-          <!-- Neutral top band -->
-          <div class="h-24 w-full bg-lightergray"></div>
+        <div class="bg-white border-b border-lightgray">
 
           <!-- Back + menu -->
-          <div class="absolute top-0 left-0 right-0 flex items-center justify-between px-4 pt-4">
+          <div class="flex items-center justify-between px-4 md:px-8 pt-5 pb-4">
             <button
               @click="$router.back()"
               class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors"
@@ -29,127 +27,106 @@
             </button>
             <button
               @click="showActionsMenu = true"
-              class="p-2 rounded-full hover:bg-lightgray transition-colors text-darkgray hover:text-darkblack"
+              class="p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
             >
               <Icon type="Ellipsis" class="w-5 h-5 rotate-90" />
             </button>
           </div>
 
-          <!-- Avatar + name row -->
-          <div class="px-5 pb-5 bg-white border-b border-lightgray">
-            <div class="flex items-end gap-4 -mt-10 mb-3">
+          <!-- Identity -->
+          <div class="px-5 md:px-8 pb-6">
+            <div class="flex items-center gap-4">
               <div
-                class="shrink-0 w-20 h-20 rounded-2xl ring-4 ring-white overflow-hidden flex items-center justify-center shadow-md"
+                class="shrink-0 w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center shadow-sm"
                 :style="isDefaultImage ? { background: monogramBg } : {}"
               >
                 <img v-if="!isDefaultImage" class="w-full h-full object-cover" :src="post.featured_image" />
                 <span v-else class="text-2xl font-bold text-white select-none tracking-wide">{{ monogram }}</span>
               </div>
-              <!-- Action buttons (top right of avatar row) -->
-              <div class="flex gap-2 ml-auto">
-                <button
-                  v-if="post.phone"
-                  @click="openWhatsapp"
-                  class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-colors"
-                  style="background: #25D366"
-                >
-                  <Icon type="Phone" class="w-4 h-4" />
-                  WhatsApp
-                </button>
+              <div class="flex-1 min-w-0">
+                <h1 class="text-xl font-bold text-darkblack tracking-tight leading-tight" v-html="post.title?.rendered"></h1>
+                <div class="flex flex-wrap items-center gap-2 mt-1.5">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-lightergray text-darkblack">
+                    <span class="w-1.5 h-1.5 rounded-full" :class="post.status === 'publish' ? 'bg-green' : 'bg-gray'"></span>
+                    {{ post.status === 'publish' ? 'Active' : 'Archived' }}
+                  </span>
+                  <span v-if="getStatus(post)" class="text-darkgray text-xs font-medium">{{ getStatus(post) }}</span>
+                  <span class="text-gray text-xs">#M-{{ post.id }}</span>
+                </div>
               </div>
             </div>
 
-            <h1 class="text-xl font-bold text-darkblack tracking-tight leading-tight" v-html="post.title?.rendered"></h1>
-            <div class="flex flex-wrap items-center gap-2 mt-1.5">
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-lightergray text-darkblack">
-                <span class="w-1.5 h-1.5 rounded-full" :class="post.status === 'publish' ? 'bg-green' : 'bg-gray'"></span>
-                {{ post.status === 'publish' ? 'Active' : 'Archived' }}
-              </span>
-              <span v-if="getStatus(post)" class="text-darkgray text-xs font-medium">{{ getStatus(post) }}</span>
-              <span class="text-gray text-xs">#M-{{ post.id }}</span>
-            </div>
           </div>
         </div>
 
         <!-- ── BODY: 2-col on desktop ─────────────────────── -->
-        <div class="md:grid md:grid-cols-[300px_1fr]">
+        <div class="md:grid md:grid-cols-[280px_1fr]">
 
-          <!-- LEFT PANEL: meta grid ──────────────────────── -->
+          <!-- LEFT PANEL: meta list ──────────────────────── -->
           <div class="md:sticky md:top-0 md:h-screen md:overflow-y-auto md:border-r md:border-lightgray">
             <div class="p-4 md:p-5">
-              <div class="grid grid-cols-2 gap-2">
-                <div
-                  v-if="getLocation(post)"
-                  class="flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
-                >
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.location.bg }">
+              <div class="bg-white border border-lightgray rounded-2xl overflow-hidden divide-y divide-lightgray">
+
+                <div v-if="getLocation(post)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.location.bg }">
                     <Icon type="Location" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.location.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Location</p>
-                    <p class="text-xs font-semibold text-darkblack truncate">{{ getLocation(post) }}</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getLocation(post) }}</p>
                   </div>
                 </div>
-                <div
-                  v-if="getTermName('gender', post.gender)"
-                  class="flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
-                >
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.gender.bg }">
+
+                <div v-if="getTermName('gender', post.gender)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.gender.bg }">
                     <Icon type="Gender" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.gender.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Gender</p>
-                    <p class="text-xs font-semibold text-darkblack truncate">{{ getTermName('gender', post.gender) }}</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getTermName('gender', post.gender) }}</p>
                   </div>
                 </div>
-                <div
-                  v-if="post.age"
-                  class="flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
-                >
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.age.bg }">
+
+                <div v-if="post.age" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.age.bg }">
                     <Icon type="Clock" class="!w-3.5 !h-3.5" :style="{ color: META_PALETTES.age.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Age</p>
-                    <p class="text-xs font-semibold text-darkblack truncate">{{ post.age }} Years</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ post.age }} Years</p>
                   </div>
                 </div>
-                <div
-                  v-if="getProfession(post)"
-                  class="flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
-                >
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.profession.bg }">
+
+                <div v-if="getProfession(post)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.profession.bg }">
                     <Icon type="Profession" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.profession.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Profession</p>
-                    <p class="text-xs font-semibold text-darkblack truncate">{{ getProfession(post) }}</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getProfession(post) }}</p>
                   </div>
                 </div>
-                <div
-                  v-if="getGroup(post)"
-                  class="flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
-                >
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.group.bg }">
+
+                <div v-if="getGroup(post)" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.group.bg }">
                     <Icon type="Group" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.group.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Group</p>
-                    <p class="text-xs font-semibold text-darkblack truncate">{{ getGroup(post) }}</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ getGroup(post) }}</p>
                   </div>
                 </div>
-                <div
-                  v-if="post.phone"
-                  class="col-span-2 flex items-center gap-2.5 px-3 py-3 bg-white border border-lightgray rounded-xl"
-                >
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.phone.bg }">
+
+                <div v-if="post.phone" class="flex items-center gap-3 px-4 py-3">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: META_PALETTES.phone.bg }">
                     <Icon type="Phone" class="w-3.5 h-3.5" :style="{ color: META_PALETTES.phone.color }" />
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs text-gray leading-none mb-0.5">Phone</p>
-                    <p class="text-xs font-semibold text-darkblack truncate">{{ post.phone }}</p>
+                    <p class="text-sm font-semibold text-darkblack truncate">{{ post.phone }}</p>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -158,30 +135,21 @@
           <div class="px-4 md:px-8 py-5">
 
             <!-- Tab bar -->
-            <div class="flex items-center gap-2 mb-5">
-              <div class="flex items-center gap-1 bg-lightergray rounded-xl p-1 flex-1">
-                <button
-                  @click="activeTab = 'event'"
-                  class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
-                  :class="activeTab === 'event'
-                    ? 'bg-white text-darkblack shadow-sm'
-                    : 'text-gray hover:text-darkgray'"
-                >Events</button>
-                <button
-                  @click="activeTab = 'comment'"
-                  class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
-                  :class="activeTab === 'comment'
-                    ? 'bg-white text-darkblack shadow-sm'
-                    : 'text-gray hover:text-darkgray'"
-                >Comments</button>
-              </div>
+            <div class="flex items-center gap-1 bg-lightergray rounded-xl p-1 mb-5">
               <button
-                v-if="activeTab === 'comment'"
-                @click="showCommentModal = true"
-                class="shrink-0 w-10 h-10 flex items-center justify-center bg-purple text-white rounded-xl hover:bg-lightpurple transition-colors"
-              >
-                <Icon type="Plus" class="w-4 h-4" />
-              </button>
+                @click="activeTab = 'event'"
+                class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
+                :class="activeTab === 'event'
+                  ? 'bg-white text-darkblack shadow-sm'
+                  : 'text-gray hover:text-darkgray'"
+              >Events</button>
+              <button
+                @click="activeTab = 'comment'"
+                class="flex-1 py-2 text-sm font-medium rounded-lg transition-all"
+                :class="activeTab === 'comment'
+                  ? 'bg-white text-darkblack shadow-sm'
+                  : 'text-gray hover:text-darkgray'"
+              >Comments</button>
             </div>
 
             <HistoryList
@@ -206,6 +174,20 @@
         </div>
 
       </div>
+
+      <!-- ── ADD NOTE FAB ───────────────────────────────────── -->
+      <Teleport to="body">
+        <Transition name="fab">
+          <button
+            v-if="post.id && activeTab === 'comment'"
+            @click="showCommentModal = true"
+            class="fixed bottom-24 right-5 z-40 bg-purple text-white h-11 px-4 rounded-2xl flex items-center gap-2 shadow-lg hover:bg-lightpurple transition-colors"
+          >
+            <Icon type="Plus" class="w-4 h-4" />
+            <span class="text-sm font-semibold">New Note</span>
+          </button>
+        </Transition>
+      </Teleport>
 
       <!-- ── ACTIONS BOTTOM SHEET ─────────────────────────── -->
       <Teleport to="body">
@@ -378,6 +360,16 @@ export default {
 </script>
 
 <style scoped>
+.fab-enter-active,
+.fab-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fab-enter-from,
+.fab-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
 .sheet-enter-active,
 .sheet-leave-active {
   transition: opacity 0.25s ease;

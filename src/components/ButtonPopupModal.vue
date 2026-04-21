@@ -21,10 +21,10 @@
 
   <Modal @close="close()" :showModal="showModal">
     <template v-slot:modaltitle>
-      <h4 class="font-semibold" v-html="field.popupTitle"></h4>
+      <h4 class="text-sm font-semibold text-darkblack" v-html="field.popupTitle"></h4>
     </template>
     <template v-slot:modalcontent>
-      <ul class="dropdown-list text-md">
+      <ul class="dropdown-list">
         <li
           v-for="(dropdownItem, key) in field.items"
           :key="dropdownItem"
@@ -98,6 +98,6 @@ export default {
   @apply my-2 px-4 bg-lightergray rounded-lg divide-y divide-lightgray bg-white;
 }
 .dropdown-list li {
-  @apply py-3 cursor-pointer relative;
+  @apply py-3 cursor-pointer relative text-sm text-darkblack;
 }
 </style>

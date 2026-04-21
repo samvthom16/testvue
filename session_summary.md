@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-21 (Session 21)
+> Last updated: 2026-04-21 (Session 22)
 
 ---
 
@@ -92,6 +92,13 @@ src/
 ### Session 8 — Dashboard + Comments
 - `Home.vue` → Dashboard with `StatsBar`, Coming Up section, comments grouped by member, activity timeline.
 - Comments templates redesigned with round avatars and gradient monograms.
+
+### Session 22 — SingleMember Redesign, Members List Polish, Dropdown Typography Fix
+
+- **`SingleMember.vue`**: full redesign — white hero section (matches `SingleEvent` pattern), avatar inline beside name/status row (no more overlapping `bg-lightergray` band), WhatsApp button removed, meta panel converted from 2-col card grid to a single bordered `rounded-2xl` card with full-width `divide-y` list rows and larger value text (`text-sm`). "Add Note" button replaced with a `Teleport`-based FAB (`rounded-2xl`, "New Note" label) that appears only when Comments tab is active, with scale+opacity enter/leave transition.
+- **`MembersGrid.vue`**: reduced mobile row from 3 lines to 2 — status chip (e.g. "Regular") moved inline with name on line 1 (right-aligned via `flex-1` spacer); active/archived dot placed immediately after name; line 2 remains "Last seen · Location".
+- **`MemberListWithSwitch.vue`**: added `truncate` to name div — long names were pushing the attendance switch off-screen on mobile.
+- **`ButtonPopupModal.vue`**: fixed `text-md` (invalid Tailwind, caused browser-default font fallback) → removed; added `text-sm text-darkblack` to `.dropdown-list li`; modal title now uses `text-sm font-semibold text-darkblack`.
 
 ### Session 21 — Design Sweep: Skeletons, Events Filter, Profile Cache, SingleMember Redesign
 

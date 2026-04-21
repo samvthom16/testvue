@@ -22,7 +22,7 @@
       </div>
 
       <!-- Name -->
-      <div class="flex-1 min-w-0 font-semibold text-darkblack text-sm" v-html="user.title.rendered"></div>
+      <div class="flex-1 min-w-0 font-semibold text-darkblack text-sm truncate" v-html="user.title.rendered"></div>
 
       <!-- Toggle -->
       <div class="shrink-0">

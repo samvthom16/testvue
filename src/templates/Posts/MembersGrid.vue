@@ -32,13 +32,12 @@
               class="shrink-0 w-1.5 h-1.5 rounded-full"
               :class="post.status === 'publish' ? 'bg-green' : 'bg-lightgray'"
             ></span>
+            <span class="flex-1"></span>
+            <span v-if="post.member_status" class="shrink-0 bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
           </div>
           <p class="text-xs text-darkgray mt-0.5">
             {{ getLastSeen(post) }}<template v-if="resolveField('location', post.location) !== '—'"> · {{ resolveField('location', post.location) }}</template>
           </p>
-          <div class="mt-1.5" v-if="post.member_status">
-            <span class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
-          </div>
         </div>
 
         <svg class="w-4 h-4 text-lightgray shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
