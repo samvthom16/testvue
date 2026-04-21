@@ -1,13 +1,13 @@
 <template>
   <PhoneUI
-    title="Dashboard"
+    title="Home"
     :configUI="{ hide_desktop_header: true }"
   >
     <template v-slot:phonebody>
 
       <!-- Page header -->
       <div class="mb-5">
-        <h1 class="text-2xl font-bold text-darkblack">Dashboard</h1>
+        <h1 class="text-2xl font-bold text-darkblack">Home</h1>
         <p class="text-sm text-darkgray mt-0.5">An overview of your members, activity, and upcoming events.</p>
       </div>
 
@@ -28,7 +28,7 @@
 
       <!-- 4. Comments grouped by member -->
       <div class="border-t border-lightgray pt-5 mb-5">
-        <OrbitComments :params="{ per_page: 15, style: 'UsersListGrouped' }">
+        <OrbitComments :params="{ per_page: 5, style: 'UsersListGrouped' }">
           <template v-slot:title>
             <MainTitle title="Comments" :route="{ name: 'Comments' }" />
           </template>

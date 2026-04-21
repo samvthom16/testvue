@@ -33,13 +33,11 @@
               :class="post.status === 'publish' ? 'bg-green' : 'bg-lightgray'"
             ></span>
           </div>
-          <p class="text-xs text-darkgray mt-0.5">{{ getLastSeen(post) }}</p>
-          <!-- Extra field chips -->
-          <div class="flex flex-wrap gap-1 mt-1.5" v-if="hasExtra(post)">
-            <span v-if="post.gender"        class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('gender', post.gender) }}</span>
-            <span v-if="post.member_status" class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
-            <span v-if="post.location"      class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('location', post.location) }}</span>
-            <span v-if="post.profession"    class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('profession', post.profession) }}</span>
+          <p class="text-xs text-darkgray mt-0.5">
+            {{ getLastSeen(post) }}<template v-if="resolveField('location', post.location) !== '—'"> · {{ resolveField('location', post.location) }}</template>
+          </p>
+          <div class="mt-1.5" v-if="post.member_status">
+            <span class="inline-block bg-lightergray text-darkgray text-xs px-2 py-0.5 rounded-full">{{ resolveField('member_status', post.member_status) }}</span>
           </div>
         </div>
 
