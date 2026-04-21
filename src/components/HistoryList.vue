@@ -20,7 +20,14 @@
           <!-- Content -->
           <div class="flex-1 pb-5 min-w-0">
             <p class="font-semibold text-darkblack text-sm leading-snug" v-html="item.title?.rendered"></p>
-            <p class="text-xs text-gray mt-0.5">{{ formatDate(item.date) }}</p>
+            <div class="flex flex-wrap items-center gap-2 mt-1">
+              <p class="text-xs text-gray">{{ formatDate(item.date) }}</p>
+              <span
+                v-if="getEventTypeName(item)"
+                class="text-xs font-medium px-2 py-0.5 rounded-full"
+                :style="eventTypePill(item)"
+              >{{ getEventTypeName(item) }}</span>
+            </div>
           </div>
         </div>
 
@@ -176,6 +183,31 @@ export default {
   },
   methods: {
     formatDate: (dateString) => Util.timeAgo(dateString),
+
+    getEventTypeName(item) {
+      const settings = store.state?.account;
+      if (settings?.event_type && item.event_type) {
+        return settings.event_type[item.event_type] || '';
+      }
+      return '';
+    },
+
+    eventTypePill(item) {
+      const palettes = [
+        { bg: '#F5F0F6', color: '#89558d' },
+        { bg: '#EAF4FA', color: '#006491' },
+        { bg: '#FFF5EC', color: '#DB6933' },
+        { bg: '#EEF2FF', color: '#4338CA' },
+        { bg: '#E0F2FE', color: '#0369a1' },
+        { bg: '#FFFBEB', color: '#B45309' },
+        { bg: '#F5F3FF', color: '#7C3AED' },
+        { bg: '#FEF3EE', color: '#C2410C' },
+      ];
+      const keys = Object.keys(store.state?.account?.event_type || {});
+      const idx = keys.indexOf(String(item.event_type));
+      const p = palettes[(idx === -1 ? Number(item.event_type) : idx) % palettes.length];
+      return { background: p.bg, color: p.color };
+    },
     pillStyle(term_id) {
       const palettes = [
         { bg: '#F5F0F6', color: '#89558d' },
