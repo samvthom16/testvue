@@ -97,7 +97,7 @@ export default {
       try {
         const [datesRes, eventsRes] = await Promise.all([
           API.requestSpecialDates({ per_page: 1 }),
-          API.requestPosts("inpursuit-events", { per_page: 8 }),
+          API.requestPosts("inpursuit-events", { per_page: 5 }),
         ]);
         hasUpcoming.value = (parseInt(datesRes.headers["x-wp-total"]) || 0) > 0;
         activityItems.value = (eventsRes.data || []).map((e) => ({

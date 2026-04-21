@@ -4,7 +4,7 @@
       v-for="stat in statList"
       :key="stat.label"
       :to="stat.route"
-      class="bg-white rounded-2xl px-4 py-4 border border-lightgray flex flex-col gap-3 active:bg-lightergray transition-colors"
+      class="bg-white rounded-2xl px-4 py-3.5 border border-lightgray flex items-center gap-3 active:bg-lightergray transition-colors"
     >
       <!-- Icon badge -->
       <div
@@ -15,16 +15,16 @@
           <path stroke-linecap="round" stroke-linejoin="round" :d="stat.iconPath" />
         </svg>
       </div>
-      <!-- Number -->
-      <div>
-        <div class="text-2xl font-bold text-darkblack leading-none">
+      <!-- Number + label -->
+      <div class="min-w-0">
+        <div class="text-xl font-bold text-darkblack leading-none">
           <span
             v-if="stat.value === null"
-            class="inline-block w-10 h-6 bg-lightgray rounded animate-pulse"
+            class="inline-block w-8 h-5 bg-lightgray rounded animate-pulse"
           ></span>
           <span v-else>{{ stat.value }}</span>
         </div>
-        <div class="text-xs text-gray mt-1">{{ stat.label }}</div>
+        <div class="text-xs text-gray mt-0.5 truncate">{{ stat.label }}</div>
       </div>
     </router-link>
   </div>
