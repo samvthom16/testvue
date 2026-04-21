@@ -162,6 +162,11 @@ export default {
   props: {
     posts: Array,
   },
+  mounted() {
+    if (!Object.keys(store.state.account).length) {
+      store.commit('getAccountSettings');
+    }
+  },
   methods: {
     getPostLink: (post) => Util.getPostLink(post),
 

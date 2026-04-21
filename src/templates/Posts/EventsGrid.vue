@@ -5,7 +5,8 @@
     <li v-for="post in posts" :key="post.id">
       <router-link
         :to="getPostLink(post)"
-        class="flex items-center gap-4 px-4 py-3.5 border-b border-lightgray active:bg-lightergray transition-colors"
+        class="flex items-center gap-4 px-4 py-3.5 border-b border-lightgray active:bg-lightergray transition-colors border-l-4"
+        :style="{ borderLeftColor: getBadgeColor(post) }"
       >
         <!-- Icon badge -->
         <div
@@ -54,7 +55,8 @@
         <tr
           v-for="post in posts"
           :key="post.id"
-          class="hover:bg-lightergray transition-colors group"
+          class="hover:bg-lightergray transition-colors group border-l-4"
+          :style="{ borderLeftColor: getBadgeColor(post) }"
         >
           <!-- Event name -->
           <td class="py-3.5 px-5">
@@ -121,14 +123,14 @@ import Util from "@/lib/Util.js";
 import store from "@/store";
 
 const TYPE_PALETTES = [
-  { bg: '#F5F0F6', color: '#89558d' },
-  { bg: '#EAF4FA', color: '#006491' },
-  { bg: '#FFF5EC', color: '#DB6933' },
-  { bg: '#ECFDF5', color: '#16a34a' },
-  { bg: '#FEF2F4', color: '#E16075' },
-  { bg: '#EEF2F8', color: '#0369a1' },
-  { bg: '#FEF3EE', color: '#c2410c' },
-  { bg: '#F3F0F5', color: '#9E81A0' },
+  { bg: '#F5F0F6', color: '#89558d' },   // purple
+  { bg: '#EAF4FA', color: '#006491' },   // blue
+  { bg: '#FFF5EC', color: '#DB6933' },   // orange
+  { bg: '#EEF2FF', color: '#4338CA' },   // indigo
+  { bg: '#E0F2FE', color: '#0369a1' },   // sky blue
+  { bg: '#FFFBEB', color: '#B45309' },   // amber
+  { bg: '#F5F3FF', color: '#7C3AED' },   // violet
+  { bg: '#FEF3EE', color: '#C2410C' },   // deep orange
 ];
 
 export default {
@@ -151,7 +153,9 @@ export default {
     _paletteForPost(post) {
       const type = post.event_type;
       if (!type) return TYPE_PALETTES[0];
-      return TYPE_PALETTES[Number(type) % TYPE_PALETTES.length];
+      const keys = Object.keys(store.state?.account?.event_type || {});
+      const idx = keys.indexOf(String(type));
+      return TYPE_PALETTES[(idx === -1 ? Number(type) : idx) % TYPE_PALETTES.length];
     },
 
     getBadgeBg(post)    { return this._paletteForPost(post).bg; },

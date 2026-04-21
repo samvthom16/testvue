@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useQuery } from "vue-query";
 import API from "@/api";
 import PhoneUI from "@/components/PhoneUI.vue";
@@ -112,8 +112,20 @@ export default {
   },
 
   setup() {
+    const CACHE_KEY = "profile_cache";
+
     const getProfile = () => API.requestProfile();
-    const { data } = useQuery("profileQuery", getProfile);
+    const { data } = useQuery("profileQuery", getProfile, {
+      staleTime: 5 * 60 * 1000,
+      initialData: () => {
+        const raw = localStorage.getItem(CACHE_KEY);
+        return raw ? { data: JSON.parse(raw) } : undefined;
+      },
+    });
+
+    watch(data, (val) => {
+      if (val?.data) localStorage.setItem(CACHE_KEY, JSON.stringify(val.data));
+    });
 
     const newTeamMember = computed(() =>
       data.value ? data.value.data : ref({ id: 0 })
