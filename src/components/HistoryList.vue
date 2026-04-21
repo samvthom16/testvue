@@ -65,7 +65,8 @@
       </li>
     </ul>
     <PaginationLoaderAnimation v-if="isFetchingNextPage" />
-    <ItemAnimation v-if="$store.state.processing && !items.length" />
+    <HistoryEventListAnimation v-if="status === 'loading' && type === 'event'" />
+    <HistoryCommentListAnimation v-if="status === 'loading' && type === 'comment'" />
 
     <!-- Empty state -->
     <div
@@ -89,14 +90,16 @@ import Helper from "@/lib/Helper";
 import OrbitQuery from "@/lib/OrbitQuery";
 import { computed, onMounted, onUnmounted } from "vue";
 import Icon from "@/components/Icon.vue";
-import ItemAnimation from "@/components/ItemAnimation.vue";
 import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
+import HistoryEventListAnimation from "@/templates/Animation/HistoryEventList.vue";
+import HistoryCommentListAnimation from "@/templates/Animation/HistoryCommentList.vue";
 
 export default {
   name: "HistoryList",
   components: {
     PaginationLoaderAnimation,
-    ItemAnimation,
+    HistoryEventListAnimation,
+    HistoryCommentListAnimation,
     Icon,
   },
   props: {
@@ -106,7 +109,7 @@ export default {
   },
   setup(props, context) {
     const params = computed(() => {
-      const p = { id: props.id };
+      const p = { id: props.id, per_page: 10 };
       if (props.type) p.type = props.type;
       return p;
     });
