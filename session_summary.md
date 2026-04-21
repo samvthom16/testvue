@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-21 (Session 23)
+> Last updated: 2026-04-21 (Session 24)
 
 ---
 
@@ -92,6 +92,10 @@ src/
 ### Session 8 — Dashboard + Comments
 - `Home.vue` → Dashboard with `StatsBar`, Coming Up section, comments grouped by member, activity timeline.
 - Comments templates redesigned with round avatars and gradient monograms.
+
+### Session 24 — Attendance Switch Mobile Fix
+
+- **`templates/Posts/MemberListWithSwitch.vue`**: added explicit `w-[50px]` to the toggle wrapper div — on Mobile Safari, `flex-basis` set via CSS custom properties inside the `Switch` component failed to resolve, causing the switch to overflow the row bounds on iPhone.
 
 ### Session 23 — Multi-Workspace Account Switching
 
