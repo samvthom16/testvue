@@ -20,13 +20,20 @@
           <!-- Content -->
           <div class="flex-1 pb-5 min-w-0">
             <p class="font-semibold text-darkblack text-sm leading-snug" v-html="item.title?.rendered"></p>
-            <div class="flex flex-wrap items-center gap-2 mt-1">
+            <p v-if="item.text" class="text-xs text-darkgray mt-1.5 leading-relaxed">{{ item.text }}</p>
+            <div class="flex flex-wrap items-center gap-2 mt-1.5">
               <p class="text-xs text-gray">{{ formatDate(item.date) }}</p>
-              <span
-                v-if="getEventTypeName(item)"
-                class="text-xs font-medium px-2 py-0.5 rounded-full"
-                :style="eventTypePill(item)"
-              >{{ getEventTypeName(item) }}</span>
+              <template v-if="item.author_name">
+                <span class="text-xs text-gray/50">·</span>
+                <span class="text-xs text-gray">by {{ item.author_name }}</span>
+              </template>
+              <template v-if="getEventTypeName(item)">
+                <span class="text-xs text-gray/50">·</span>
+                <span
+                  class="text-xs font-medium px-2 py-0.5 rounded-full"
+                  :style="eventTypePill(item)"
+                >{{ getEventTypeName(item) }}</span>
+              </template>
             </div>
           </div>
         </div>
