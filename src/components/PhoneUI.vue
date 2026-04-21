@@ -126,7 +126,7 @@ export default{
   @apply items-center flex;
 }
 .header-list li, .footer-list li{
-  @apply flex-auto;
+  @apply flex-1;
 }
 
 #phone-footer{

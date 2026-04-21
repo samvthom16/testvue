@@ -108,7 +108,7 @@ export default {
     const showMore = ref(false)
 
     const primaryItems = [
-      { route: { name: 'Home' },    icon: 'Home',    name: 'Dashboard', allowedRoutes: ['Home'] },
+      { route: { name: 'Home' },    icon: 'Home',    name: 'Home',      allowedRoutes: ['Home'] },
       { route: { name: 'Members' }, icon: 'Members', name: 'Members',   allowedRoutes: ['Members', 'SingleMember'] },
       { route: { name: 'Events' },  icon: 'Event',   name: 'Events',    allowedRoutes: ['Events', 'SingleEvent'] },
       { route: { name: 'Profile' }, icon: 'Profile', name: 'Profile',   allowedRoutes: ['Profile'] },
