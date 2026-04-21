@@ -6,6 +6,8 @@
     :class="{
       'opacity-50 cursor-not-allowed': isFieldDisabled(field.items),
       'opacity-100 cursor-pointer': !isFieldDisabled(field.items),
+      'border-purple text-purple': field.badgeText,
+      'border-gray text-black': !field.badgeText,
     }"
   >
     {{
@@ -83,15 +85,14 @@ export default {
 
 <style scoped>
 .badge {
-  @apply bg-lightpurple rounded-full text-purple font-bold text-xs py-1 px-2.5;
-  --tw-bg-opacity: 0.5;
-  padding: 4px 8px;
+  @apply bg-purple rounded-full text-white font-bold;
+  padding: 3px 8px;
   font-size: 10px;
-  margin-left: 2px;
+  margin-left: 4px;
 }
 
 .button-popup-modal {
-  @apply text-xs text-black border border-gray py-1.5 px-4 rounded-full bg-white;
+  @apply text-xs border py-1.5 px-4 rounded-full bg-white transition-colors;
 }
 .dropdown-list {
   @apply my-2 px-4 bg-lightergray rounded-lg divide-y divide-lightgray bg-white;

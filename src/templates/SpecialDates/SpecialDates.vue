@@ -7,7 +7,8 @@
       >
         <!-- Thumbnail -->
         <div
-          class="w-12 h-12 flex-shrink-0 rounded-full bg-lightorange flex items-center justify-center font-bold text-xl"
+          class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-sm"
+          :style="item.featured_image ? {} : { background: getGradient(item.member_name) }"
         >
           <img
             v-if="item.featured_image"
@@ -15,17 +16,17 @@
             alt="Thumbnail"
             class="w-full h-full rounded-full object-cover"
           />
-          <template v-else>
-            {{ item.member_name.charAt(0).toUpperCase() }}
-          </template>
+          <span v-else class="text-white tracking-wide select-none">
+            {{ getInitials(item.member_name) }}
+          </span>
         </div>
 
         <!-- Event Details -->
         <div class="flex-1">
-          <h3 class="text-lg leading-tight">
+          <p class="text-sm font-medium text-darkblack leading-tight">
             {{ item.member_name }}
-          </h3>
-          <p class="text-darkgray">
+          </p>
+          <p class="text-xs text-darkgray mt-0.5">
             {{ getSubTitle(item) }}
           </p>
         </div>
@@ -35,6 +36,8 @@
 </template>
 
 <script>
+import { getGradient, getInitials } from "@/lib/Gradients";
+
 export default {
   props: {
     items: {
@@ -43,6 +46,12 @@ export default {
     },
   },
   methods: {
+    getInitials(name) {
+      return getInitials(name);
+    },
+    getGradient(name) {
+      return getGradient(name);
+    },
     getSubTitle: (event) => {
       let dateStr = "";
 

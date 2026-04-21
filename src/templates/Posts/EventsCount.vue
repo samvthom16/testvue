@@ -1,7 +1,5 @@
 <template>
-  <div class="flex -space-x-2 items-center mt-4 mb-1">
-    <div class="text-sm text-gray">{{ total }} Events</div>
-  </div>
+  <p class="text-xs text-gray mt-0.5">{{ total }} events</p>
 </template>
 <script>
 import Util from '@/lib/Util'

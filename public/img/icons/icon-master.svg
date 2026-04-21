@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#89558d"/>
+  <!-- "i" dot -->
+  <circle cx="256" cy="150" r="64" fill="white"/>
+  <!-- Orange accent on dot -->
+  <circle cx="298" cy="114" r="26" fill="#DB6933"/>
+  <!-- "i" body -->
+  <rect x="204" y="244" width="104" height="222" rx="20" fill="white"/>
+</svg>

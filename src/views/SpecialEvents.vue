@@ -1,6 +1,13 @@
 <template>
-  <PhoneUI title="Special Events">
+  <PhoneUI title="Special Events" :configUI="{ hide_desktop_header: true }">
     <template v-slot:phonebody>
+
+      <!-- Page header -->
+      <div class="mb-5">
+        <h1 class="text-2xl font-bold text-darkblack">Special Events</h1>
+        <p class="text-sm text-darkgray mt-0.5">Upcoming birthdays, anniversaries, and special dates.</p>
+      </div>
+
       <OrbitDates :params="params">
         <template v-slot:loadingAnimation>
           <ListWithImageAnimation :total="10" />

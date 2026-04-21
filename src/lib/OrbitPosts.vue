@@ -23,9 +23,12 @@ import PostImagesSlider from "@/templates/Posts/PostImagesSlider.vue";
 import EventList from "@/templates/Posts/EventList.vue";
 import AvatarsStacked from "@/templates/Posts/AvatarsStacked.vue";
 import EventsCount from "@/templates/Posts/EventsCount.vue";
+import MembersCount from "@/templates/Posts/MembersCount.vue";
 import ListWithImage from "@/templates/Posts/ListWithImage.vue";
 import PostsListWithTermName from "@/templates/Posts/ListWithTermName.vue";
 import MemberListWithSwitch from "@/templates/Posts/MemberListWithSwitch.vue";
+import MembersGrid from "@/templates/Posts/MembersGrid.vue";
+import EventsGrid from "@/templates/Posts/EventsGrid.vue";
 import InpursuitListWithTermName from "@/templates/InpursuitPosts/ListWithTermName.vue";
 
 import API from "@/api";
@@ -45,7 +48,10 @@ export default {
     ListWithImage,
     PostsListWithTermName,
     MemberListWithSwitch,
+    MembersGrid,
+    EventsGrid,
     EventsCount,
+    MembersCount,
     InpursuitListWithTermName,
   },
   setup(props, context) {

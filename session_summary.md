@@ -1,5 +1,5 @@
 # InPursuit — Session Summary
-> Last updated: 2026-04-08 (Session 4)
+> Last updated: 2026-04-09 (Session 14)
 
 ---
 
@@ -71,29 +71,75 @@ src/
 
 ---
 
-## Work Done (Sessions 1–4)
+## Session History (condensed)
 
-### Session 1 — Code Refactoring (`refactor/code-cleanup`)
-- **Login composable:** Extracted all login logic into `useLoginFlow.js`; `Login.vue` reduced from 278 → 14 lines. Deleted dead files `LoginForm.vue` and `LoginFormWithSteps.vue`.
-- **OrbitPosts merge:** `OrbitPosts.vue` now accepts `apiType` prop, absorbing `OrbitInpursuitPosts.vue` (deleted). `resolvedStyle` computed handles naming collision.
-- **withProcessing helper:** Added to `PostEdit.js` + `FormEdit.js` to eliminate repeated `setProcessing` boilerplate. Fixed mutation bug in `FormEdit.js` (was mutating `data.value` directly).
+### Sessions 1–4 — Foundation
+- **S1:** Extracted login into `useLoginFlow.js`; merged `OrbitInpursuitPosts` into `OrbitPosts` via `apiType` prop; added `withProcessing` helper.
+- **S2:** Added responsive desktop layout to `PhoneUI.vue` (fixed sidebar + page header bar).
+- **S3:** Web push notifications — custom SW (`sw.js`), `usePushNotifications.js` composable, toggle in `Profile.vue`.
+- **S4:** Auth audit; fixed missing auth headers on `requestHistory()`.
 
-### Session 2 — Desktop Layout
-- Added responsive desktop layout to `PhoneUI.vue`: fixed left sidebar (224px, purple) + white page header bar replacing mobile header/title.
-- `Footer.vue`, `Header.vue`, `Title.vue` all get `md:hidden` — desktop sidebar/header takes over.
-- CSS override in `PhoneUI.vue` recolors `text-white` icons to purple on the white desktop bar — no view files touched.
+### Sessions 5–6 — Design foundation (`fresh-design` branch)
+- Redesigned `PhoneUI` shell (light sidebar, white mobile header, active nav pill).
+- New `MembersGrid` template with monogram avatars, desktop table, status dots.
+- `SingleMember` fully rebuilt — custom layout, purple hero, sticky glass top bar, tabbed activity panel.
 
-### Session 3 — Web Push Notifications
-- Created `src/sw.js`: custom Workbox service worker with `push` event listener.
-- Created `src/lib/usePushNotifications.js`: fetches VAPID key, subscribes via `pushManager`, POSTs to `/push/subscribe` with auth. Exposes `isSubscribed`, `isProcessing`, `successMessage`, `toggleNotifications()`.
-- `Profile.vue`: notification toggle UI with loading/success states.
-- `Logout.vue`: fire-and-forget unsubscribe before credential flush.
-- `vite.config.js`: switched to `injectManifest` strategy to support custom SW.
+### Session 7 — Events + HistoryList
+- `SingleMember` + `SingleEvent` gained full nav shell (desktop sidebar + mobile bottom nav).
+- `HistoryList` redesigned: dot timeline for events, monogram cards for comments; fixed category normalisation bug.
+- New `EventsGrid` template; `SingleEvent` rebuilt with hero, pill chips, attendees section.
 
-### Session 4 — Auth Audit
-- Audited all API calls for missing auth headers.
-- **Bug fixed:** `requestHistory()` was missing `headers: this.getAuthHeaders()` → 401 on history tab in `SingleMember`. Fixed in `api.js`.
-- Intentionally unauthenticated calls (pre-login): plugin validate, OTP send, authentication, VAPID public key fetch.
+### Session 8 — Dashboard + Comments
+- `Home.vue` → Dashboard with `StatsBar`, Coming Up section, comments grouped by member, activity timeline.
+- Comments templates redesigned with round avatars and gradient monograms.
+
+### Session 18 — Dashboard Comments UI + Profile Toggle
+- `UsersListGrouped.vue`: removed comment message body; member name now on line 1 (`text-sm font-medium`), line 2 shows time · by username.
+- `Profile.vue`: replaced notifications button with an iOS-style toggle switch; label reads "Notifications Enabled" / "Enable Notifications" based on `isSubscribed`; processing states preserved.
+
+### Sessions 9–10 — Polish sweep
+- Removed mobile phone chrome (no more device frame).
+- Consistent `PhoneUI` usage across all views; `Gradients.js` utility extracted.
+- Design refactor sweep: color tokens, spacing, typography, button styles aligned across all views.
+
+### Session 11 — Team, Analytics, Forms
+- `Team.vue` + `Analytics.vue` redesigned to match Members/Events language.
+- `SingleTeamMember` rebuilt with hero section.
+- All form views (`NewMember`, `NewEvent`, `NewCategory`, `NewCommentsCategory`) use shared pattern: non-sticky header, sectioned fields, 2-col desktop grid, full-width submit button, Danger Zone.
+- Field components redesigned: `DropDownField`, `TextAreaField`, `CheckboxGroupField` (pill toggles).
+
+### Session 12 — Categories, Nav, Icons
+- `Categories` + `CommentsCategory` list rows redesigned with icon badges and count sub-queries.
+- New `MembersCount.vue` template for inline member counts in category rows.
+- Mobile bottom nav overhauled: 4 primary items + **More** drawer (bottom sheet with overflow items).
+- `Profile` icon fixed (was showing gear/Settings icon).
+- `← Settings` back links added to `Categories` and `CommentsCategory`.
+
+### Session 15 — NewTeamMember Redesign
+
+- **`NewTeamMember.vue` fully redesigned** to match the `NewEvent`/`NewMember` form pattern: `PhoneUI` with `hide_desktop_header`, non-sticky page header (back button + h1 + subtitle), sectioned form with uppercase tracking-wider labels, 2-col desktop grid.
+- Replaced old-style raw inputs + `BackButton` header slot with `TextField`-styled inputs bound directly to `data[slug]` via `FormEdit` (WP users, not posts — `PostEdit` not applicable here).
+- Group checkboxes replaced with pill-toggle buttons matching `CheckboxGroupField` pattern; loaded from `API.requestSettings()` on mount.
+- Validation errors moved to a reactive `errors` ref; inline red error text per field.
+- Full-width purple submit + Danger Zone (editor-only, edit mode only) consistent with all other form views.
+
+### Session 14 — Dead Code Removal + Team Page Polish
+
+- **Dead code sweep:** removed 14 stale files — Vite scaffold cluster (`HelloWorld`, `TheWelcome`, `WelcomeItem`, `AboutView`, `HomeView`), superseded PhoneUI templates (`Header.vue`, `Title.vue`), orphaned animation template (`MemberAvatars.vue`), and unused components (`HeaderMenu`, `EventTags`, `FilterTags`, `UserTags`, `ProgressBarItem`, `SettingItem`).
+- **`Team.vue` loading skeleton:** new `templates/Animation/TeamList.vue` skeleton matches the actual row layout exactly — circular monogram placeholder, name + email lines at varied widths, status pill stub, action button placeholder.
+- **`Team.vue` caching:** migrated from manual `ref + API.requestUsers()` to `useQuery("teamMembers", ...)` (vue-query), consistent with the rest of the app. Cached data returns instantly on revisit; skeleton only shows on first load.
+
+### Session 13 — Settings Modals + Skeleton Loader
+- Add/edit for all category types (groups, genders, locations, professions, event-types, status) and comment types now happens in an inline modal on the listing page — no separate route navigation.
+- `Posts/ListWithTermName.vue` + `InpursuitPosts/ListWithTermName.vue`: edit pencil button changed from `router-link` to `$emit('edit-item', post)`; `@edit-item` handler on `<OrbitPosts>` propagates via `v-bind="$attrs"` to the template.
+- `Categories.vue` + `CommentsCategory.vue`: all three "new" entry points (header button, empty-state CTA, FAB) now open a `<Teleport>`-based modal; modal handles create, update, and Danger Zone delete; list refreshes by bumping `params.unique_id`.
+- New `CategoryList.vue` skeleton animation matches the actual `ListWithTermName` row exactly (icon badge, varied-width name line, count stub, edit button placeholder); replaces the old generic `ListWithImage` / `SimpleList` skeletons in both views.
+
+---
+
+## Member Post Fields (confirmed)
+
+Direct properties on the post object: `post.gender`, `post.location`, `post.member_status`, `post.profession`, `post.group` (array), `post.phone`, `post.age`. Use `formatField()` to guard against raw IDs and empty arrays.
 
 ---
 
@@ -104,12 +150,9 @@ src/
 | Medium | `getAccountSettings` in Vuex makes async API call inside a mutation — move to action |
 | Medium | `btoa(username:password)` duplicated in `api.js` and `store/index.js` |
 | Medium | `selectDropdownItem()` near-identical in `Members.vue`, `Events.vue`, `Comments.vue` |
-| Medium | `btoa()` used on credentials before sending AND in Basic Auth header — only header should use it |
-| Low | `SingleMember.vue` mixes Options API (`data()`) and Composition API (`setup()`) |
 | Low | `Helper.js` (17 lines, just `debounceEvent()`) should merge into `Util.js` |
 | Low | Dead/commented-out code in `Util.js` and `Home.vue` |
 | Low | `==` instead of `===` in 10+ files — enable ESLint `eqeqeq` |
-| Low | `NewMember.vue` uses `:key="field"` (object ref) — should be `:key="field.id"` |
 
 ---
 

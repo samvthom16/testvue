@@ -1,8 +1,9 @@
 <template>
-  <ul role="list" class="divide-y divide-lightgray">
-    <li class="py-3 sm:py-4" v-for="post in posts" :key="post">
+  <!-- Mobile list -->
+  <ul role="list" class="divide-y divide-lightgray md:hidden">
+    <li class="py-4" v-for="post in posts" :key="post">
       <div class="flex items-center space-x-4">
-        <div class="flex-shrink-1">
+        <div class="flex-shrink-0">
           <PostFeaturedImage :post="post" />
         </div>
         <div class="flex-1 min-w-0">
@@ -12,6 +13,31 @@
       </div>
     </li>
   </ul>
+
+  <!-- Desktop table -->
+  <div class="hidden md:block rounded-xl border border-lightgray overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-lightergray">
+        <tr>
+          <th class="text-left py-3 px-5 text-xs font-semibold text-gray uppercase tracking-wider">Member Name</th>
+          <th class="text-left py-3 px-5 text-xs font-semibold text-gray uppercase tracking-wider">Last Seen</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-lightgray">
+        <tr v-for="post in posts" :key="post.id" class="hover:bg-lightergray transition-colors">
+          <td class="py-3 px-5">
+            <div class="flex items-center gap-3">
+              <PostFeaturedImage :post="post" />
+              <PostTitle :post="post" />
+            </div>
+          </td>
+          <td class="py-3 px-5">
+            <SubTitle :title="getSubTitle(post)" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>

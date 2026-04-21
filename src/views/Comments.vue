@@ -1,6 +1,15 @@
 <template>
-  <PhoneUI title="Comments">
+  <PhoneUI title="Comments" :configUI="{ hide_desktop_header: true }">
     <template v-slot:phonebody>
+
+      <!-- Page header -->
+      <div class="mb-5">
+        <h1 class="text-2xl font-bold text-darkblack">Comments</h1>
+        <p class="text-sm text-darkgray mt-0.5">View and manage member notes and comments.</p>
+      </div>
+
+      <SearchField @searching="onSearch" class="mb-4" />
+
       <div v-if="isLoadingDropdown" class="flex flex-wrap">
         <div
           v-for="(dropdownButton, index) in dropdownButtons"
@@ -40,16 +49,11 @@
         </template>
 
         <template v-slot:whenempty>
-          <div class="text-xs text-red border border-red p-2 mt-4">
-            No Comments found for this query
-          </div>
+          <div class="text-xs text-darkgray py-4">No comments found for this query.</div>
         </template>
       </OrbitComments>
     </template>
 
-    <template v-slot:mainttitle_footer>
-      <SearchField @searching="onSearch" />
-    </template>
   </PhoneUI>
 </template>
 

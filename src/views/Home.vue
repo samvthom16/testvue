@@ -1,78 +1,55 @@
 <template>
   <PhoneUI
-    title="Home"
-    :configUI="{
-      maintitle_classes: 'hidden',
-      stickytitle_classes: 'opacity-100',
-    }"
+    title="Dashboard"
+    :configUI="{ hide_desktop_header: true }"
   >
     <template v-slot:phonebody>
-      <OrbitPosts
-        :params="{
-          per_page: 10,
-          post_type: 'inpursuit-members',
-          style: 'PostImagesSlider',
-        }"
-      >
-        <template v-slot:title>
-          <MainTitle
-            title="Members"
-            icon="Members"
-            :route="{ name: 'Members' }"
-          />
-        </template>
-        <template v-slot:loadingAnimation>
-          <MemberAvatarsAnimation />
-        </template>
-      </OrbitPosts>
 
-      <div class="-ml-4 -mr-4 p-4 pt-6 bg-lightergray mb-6">
-        <OrbitComments :params="{ per_page: 5, style: 'UsersList' }">
-          <template v-slot:title>
-            <MainTitle
-              title="Comments"
-              icon="Comment"
-              :route="{ name: 'Comments' }"
-            />
-          </template>
-          <template v-slot:loadingAnimation>
-            <ListWithImageAnimation />
-          </template>
-        </OrbitComments>
+      <!-- Page header -->
+      <div class="mb-5">
+        <h1 class="text-2xl font-bold text-darkblack">Dashboard</h1>
+        <p class="text-sm text-darkgray mt-0.5">An overview of your members, activity, and upcoming events.</p>
       </div>
 
-      <OrbitPosts
-        :params="{
-          per_page: 3,
-          post_type: 'inpursuit-events',
-          style: 'EventList',
-        }"
-      >
-        <template v-slot:title>
-          <MainTitle title="Events" icon="Event" :route="{ name: 'Events' }" />
-        </template>
-        <template v-slot:loadingAnimation>
-          <SimpleListAnimation />
-        </template>
-      </OrbitPosts>
-      <div class="-ml-4 -mr-4 p-4 pt-6 bg-lightergray mb-6">
-        <OrbitDates
-          :params="{
-            per_page: '5',
-            style: 'SpecialDates',
-          }"
-        >
+      <!-- 1. Stats Bar -->
+      <StatsBar />
+
+      <!-- 2. Upcoming Special Events -->
+      <div v-if="hasUpcoming" class="border-t border-lightgray pt-5 mb-5">
+        <OrbitDates :params="{ per_page: 3, style: 'SpecialDates' }">
           <template v-slot:title>
-            <MainTitle
-              title="Special Events"
-              :route="{ name: 'SpecialEvents' }"
-            />
+            <MainTitle title="Coming Up" :route="{ name: 'SpecialEvents' }" />
           </template>
           <template v-slot:loadingAnimation>
             <SimpleListAnimation />
           </template>
         </OrbitDates>
       </div>
+
+      <!-- 4. Comments grouped by member -->
+      <div class="border-t border-lightgray pt-5 mb-5">
+        <OrbitComments :params="{ per_page: 15, style: 'UsersListGrouped' }">
+          <template v-slot:title>
+            <MainTitle title="Comments" :route="{ name: 'Comments' }" />
+          </template>
+          <template v-slot:loadingAnimation>
+            <ListWithImageAnimation />
+          </template>
+          <template v-slot:whenempty>
+            <div class="text-xs text-darkgray py-2">No comments yet.</div>
+          </template>
+        </OrbitComments>
+      </div>
+
+      <!-- 6. Recent Activity (events) -->
+      <div class="border-t border-lightgray pt-5 mb-5">
+        <MainTitle title="Recent Activity" :route="{ name: 'Events' }" />
+        <div v-if="activityLoading" class="py-4">
+          <SimpleListAnimation />
+        </div>
+        <ActivityTimeline v-else :items="activityItems" />
+      </div>
+
       <div class="mb-8"></div>
     </template>
   </PhoneUI>
@@ -80,102 +57,68 @@
 
 <script>
 import PhoneUI from "@/components/PhoneUI.vue";
-
 import MainTitle from "@/templates/Misc/MainTitle.vue";
+import StatsBar from "@/templates/Misc/StatsBar.vue";
+import ActivityTimeline from "@/templates/Posts/ActivityTimeline.vue";
 
-import Util from "@/lib/Util.js";
-import OrbitPosts from "@/lib/OrbitPosts.vue";
 import OrbitComments from "@/lib/OrbitComments.vue";
+import OrbitDates from "@/lib/OrbitDates.vue";
+
+import ListWithImageAnimation from "@/templates/Animation/ListWithImage.vue";
+import SimpleListAnimation from "@/templates/Animation/SimpleList.vue";
 
 import API from "@/api.js";
 import store from "@/store";
 import router from "@/router";
 
-import ListWithImageAnimation from "@/templates/Animation/ListWithImage.vue";
-import MemberAvatarsAnimation from "@/templates/Animation/MemberAvatars.vue";
-import SimpleListAnimation from "@/templates/Animation/SimpleList.vue";
-
 import { ref } from "vue";
-import OrbitDates from "@/lib/OrbitDates.vue";
 
 export default {
   name: "Home",
   components: {
     PhoneUI,
-    OrbitPosts,
-    OrbitComments,
-    MemberAvatarsAnimation,
-    SimpleListAnimation,
-    ListWithImageAnimation,
     MainTitle,
+    StatsBar,
+    ActivityTimeline,
+    OrbitComments,
     OrbitDates,
+    ListWithImageAnimation,
+    SimpleListAnimation,
   },
   setup() {
-    //const members = ref( null )
-
-    //const updates = ref( null )
-
-    const comments = ref(null);
-
-    //store.commit( 'getLocalSettings' )
-
     if (!store.state.settings || !store.state.settings.account_url)
       router.push("/login");
 
-    const fetchComments = () => {
-      API.requestComments({
-        per_page: 5,
-      }).then((response) => {
-        store.commit("setProcessing", false);
-        comments.value = response.data;
-      });
-    };
+    const hasUpcoming    = ref(false);
+    const activityItems  = ref([]);
+    const activityLoading = ref(true);
 
-    /*
-    const fetchLatestMembers = () => {
-      API.requestPosts( 'inpursuit-members', {
-        'per_page'  : 10,
-        'orderby' : 'id',
-        'order'   : 'desc'
-      } ).then(
-      ( response ) => {
-        store.commit( 'setProcessing', false )
-        members.value = response.data
-      } )
-    }
-
-    const fetchLatestUpdates = () => {
-      API.requestHistory( {
-        'per_page'  : 10,
-      } ).then(
-      ( response ) => {
-        store.commit( 'setProcessing', false )
-        updates.value = response.data
-      } )
-    }
-    */
-
-    const init = () => {
-      // ENABLE THE LOADER
-      store.commit("setProcessing", true);
-
-      fetchComments();
-
-      //fetchLatestMembers()
-      //fetchLatestUpdates()
+    const init = async () => {
+      try {
+        const [datesRes, eventsRes] = await Promise.all([
+          API.requestSpecialDates({ per_page: 1 }),
+          API.requestPosts("inpursuit-events", { per_page: 8 }),
+        ]);
+        hasUpcoming.value = (parseInt(datesRes.headers["x-wp-total"]) || 0) > 0;
+        activityItems.value = (eventsRes.data || []).map((e) => ({
+          ...e,
+          _type: "event",
+          _date: e.date,
+        }));
+      } catch (e) {
+        // silently fail
+      } finally {
+        activityLoading.value = false;
+      }
     };
 
     init();
 
     return {
-      comments,
-      //members,
-      //updates
+      hasUpcoming,
+      activityItems,
+      activityLoading,
     };
-  },
-  methods: {
-    getPostLink: (post) => Util.getPostLink(post),
-    formatDate: (datestring) => Util.timeAgo(datestring),
   },
 };
 </script>

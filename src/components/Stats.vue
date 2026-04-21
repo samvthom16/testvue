@@ -1,36 +1,50 @@
 <template>
-  <div class="text-sm text-black font-semibold">AVERAGE COUNT</div>
+  <!-- Skeleton -->
+  <div v-if="!stats.length" class="grid grid-cols-2 gap-3">
+    <div
+      v-for="i in 4"
+      :key="i"
+      class="bg-lightergray rounded-2xl p-4 animate-pulse h-24"
+    ></div>
+  </div>
 
-  <div class="mb-4 text-base focus:outline-none sm:text-sm w-full  bg-lightergray rounded-lg drop-shadow-sm my-2 divide-y divide-lightgray">
-    <div class='p-4' v-for='stat in stats' :key='stat'>
-      <div class='relative'>
-        <div class='text-darkgray text-sm'>{{ stat.label }}</div>
-        <div class='absolute right-0 top-0 text-md text-darkorange font-bold'>{{ stat.growth }}</div>
-      </div>
-      <div class='font-bold text-4xl'>{{ stat.total }}</div>
+  <!-- Stat cards -->
+  <div v-else class="grid grid-cols-2 gap-3">
+    <div
+      v-for="stat in stats"
+      :key="stat.label"
+      class="bg-white border border-lightgray rounded-2xl p-4"
+    >
+      <p class="text-xs font-medium text-gray uppercase tracking-wider mb-2">{{ stat.label }}</p>
+      <p class="text-3xl font-bold text-darkblack leading-none">{{ stat.total }}</p>
+      <p v-if="stat.growth" class="text-xs font-medium mt-2" :class="isPositive(stat.growth) ? 'text-green' : 'text-gray'">
+        {{ stat.growth }}
+      </p>
     </div>
   </div>
 </template>
+
 <script>
+import { ref } from "vue";
+import API from "@/api";
 
-import {ref} from 'vue'
-
-import API from '@/api'
-
-export default{
+export default {
   props: {
-    period: Number
+    period: Number,
   },
-  setup( props ){
+  setup(props) {
+    const stats = ref([]);
 
-    const stats = ref( [] )
+    API.requestAnalytics({ period: props.period }).then(
+      (response) => (stats.value = response.data)
+    );
 
-    API.requestAnalytics( { period: props.period } ).then( ( response ) => stats.value = response.data )
+    const isPositive = (growth) => {
+      const num = parseFloat(growth);
+      return !isNaN(num) && num >= 0;
+    };
 
-    return {
-      stats
-    }
-
-  }
-}
+    return { stats, isPositive };
+  },
+};
 </script>

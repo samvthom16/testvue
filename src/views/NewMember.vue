@@ -1,155 +1,188 @@
 <template>
-  <PhoneUI
-    :configUI="configUI"
-    :title="
-      $route.query && $route.query.id ? 'Update Member' : 'Create a Member'
-    "
-  >
-    <template v-slot:headericon>
-      <BackButton :defaultRoute="{ name: 'Members' }" />
-    </template>
-    <template v-slot:headerright>
-      <button
-        class="text-white text-sm"
-        @click="submit"
-        v-html="$route.query && $route.query.id ? 'Update' : 'Create'"
-      ></button>
-    </template>
+  <PhoneUI :configUI="{ hide_desktop_header: true }">
     <template v-slot:phonebody>
-      <form class="" @submit="submit">
-        <div
-          class="relative border border-black bg-gray w-36 h-36 mx-auto my-10 rounded-full"
+
+      <!-- Page header -->
+      <div class="mb-6">
+        <button
+          type="button"
+          @click="goBack"
+          class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors mb-4"
         >
-          <input
-            ref="featured"
-            type="file"
-            @change="chooseUserProfile"
-            class="hidden"
-          />
-          <img
-            v-if="post.featured_image"
-            :src="post.featured_image"
-            width="100"
-            height="100"
-            class="w-full h-full rounded-full object-cover"
-          />
+          <Icon type="Back" class="w-5 h-5" />
+          <span class="text-sm font-medium">Back</span>
+        </button>
+        <h1 class="text-2xl font-bold text-darkblack">
+          {{ $route.query && $route.query.id ? 'Update Member' : 'New Member' }}
+        </h1>
+        <p class="text-sm text-darkgray mt-0.5">
+          {{ $route.query && $route.query.id ? 'Edit this member\'s profile information.' : 'Fill in the details to add a new member.' }}
+        </p>
+      </div>
+
+      <!-- Avatar upload -->
+      <div class="flex flex-col items-center py-6 mb-6 bg-lightergray rounded-2xl">
+        <div class="relative w-24 h-24">
+          <div class="w-24 h-24 rounded-full overflow-hidden bg-white ring-4 ring-white shadow-sm flex items-center justify-center">
+            <img
+              v-if="post.featured_image"
+              :src="post.featured_image"
+              class="w-full h-full object-cover"
+            />
+            <Icon v-else type="Members" class="w-10 h-10 text-lightgray" />
+          </div>
           <button
             type="button"
-            @click="$refs.featured.click"
-            class="text-xs bg-orange p-2 px-4 rounded-full absolute border left-1/2 transform -translate-x-1/2 -bottom-2"
+            @click="$refs.featured.click()"
+            class="absolute -bottom-1 -right-1 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center shadow-md hover:bg-lightpurple transition-colors"
           >
-            Upload
+            <Icon type="Plus" class="w-4 h-4" />
           </button>
-
           <div
-            class="p-4 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            :class="{ hidden: !imageUploadFlag }"
+            v-if="imageUploadFlag"
+            class="absolute inset-0 rounded-full bg-black/30 flex items-center justify-center"
           >
-            <Icon type="CircularLoader" class="mx-auto h-8 w-8" />
+            <Icon type="CircularLoader" class="w-6 h-6 text-white" />
           </div>
         </div>
+        <input ref="featured" type="file" @change="chooseUserProfile" class="hidden" />
+        <p class="mt-3 text-xs text-gray">Tap + to upload a photo</p>
+      </div>
 
-        <component
-          v-for="field in fields"
-          :is="field.component"
-          :key="field"
-          :field="field"
-          v-model="field.value"
+      <!-- Form -->
+      <form @submit.prevent="submit" class="space-y-8">
+
+        <!-- Personal Information -->
+        <section v-if="personalFields.length">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-4">Personal Information</h2>
+          <div class="md:grid md:grid-cols-2 md:gap-x-6">
+            <component
+              v-for="field in personalFields"
+              :is="field.component"
+              :key="field.id"
+              :field="field"
+              v-model="field.value"
+            />
+          </div>
+        </section>
+
+        <!-- Special Dates -->
+        <section v-if="dateFields.length">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-4">Special Dates</h2>
+          <div class="md:grid md:grid-cols-2 md:gap-x-6">
+            <component
+              v-for="field in dateFields"
+              :is="field.component"
+              :key="field.id"
+              :field="field"
+              v-model="field.value"
+            />
+          </div>
+        </section>
+
+        <!-- Profile Details -->
+        <section v-if="dropdownFields.length">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-4">Profile Details</h2>
+          <div class="md:grid md:grid-cols-2 md:gap-x-6">
+            <component
+              v-for="field in dropdownFields"
+              :is="field.component"
+              :key="field.id"
+              :field="field"
+              v-model="field.value"
+            />
+          </div>
+        </section>
+
+        <!-- Group Membership -->
+        <section v-if="checkboxGroupFields.length">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-4">Group Membership</h2>
+          <component
+            v-for="field in checkboxGroupFields"
+            :is="field.component"
+            :key="field.id"
+            :field="field"
+            v-model="field.value"
+          />
+        </section>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="w-full py-3.5 bg-purple text-white rounded-2xl text-sm font-semibold hover:bg-lightpurple transition-colors"
         >
-        </component>
+          {{ $route.query && $route.query.id ? 'Update Member' : 'Create Member' }}
+        </button>
+
+        <!-- Danger zone -->
+        <section v-if="$route.query && $route.query.id">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-3">Danger Zone</h2>
+          <button
+            type="button"
+            @click="deleteItem($route.query.id)"
+            class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-red text-red text-sm font-medium hover:bg-red/5 transition-colors"
+          >
+            <Icon type="Delete" class="w-4 h-4" />
+            Delete this member
+          </button>
+        </section>
+
       </form>
-      <button
-        v-if="$route.query && $route.query.id"
-        @click="deleteItem($route.query.id)"
-        class="border border-red p-2 rounded text-red text-sm"
-      >
-        <Icon type="Delete" class="inline" />
-        Delete this member
-      </button>
+
     </template>
   </PhoneUI>
 </template>
+
 <script>
+import { ref, computed } from "vue";
 import PhoneUI from "@/components/PhoneUI.vue";
-import BackButton from "@/templates/PhoneUI/BackButton.vue";
 import Icon from "@/components/Icon.vue";
 import TextField from "@/components/TextField.vue";
 import DropDownField from "@/components/DropDownField.vue";
-
+import CheckboxGroupField from "@/components/CheckboxGroupField.vue";
 import router from "@/router";
-
 import PostEdit from "@/lib/PostEdit";
 import ImageUtil from "@/lib/ImageUtil";
-import CheckboxGroupField from "@/components/CheckboxGroupField.vue";
-
-import { ref } from "vue";
 
 export default {
   components: {
     PhoneUI,
-    BackButton,
     Icon,
     TextField,
     DropDownField,
     CheckboxGroupField,
   },
-  data() {
-    return {
-      configUI: {
-        hide_footer: true,
-        maintitle_classes: "hidden",
-        stickytitle_classes: "opacity-100",
-      },
-    };
-  },
   setup() {
-    /*
-     * IMAGE UTILITY
-     */
     const { handleImageSelection } = ImageUtil();
-
     const imageUploadFlag = ref(false);
 
-    /*
-     * TAKES THE FOLLOWING PARAMETERS
-     * POST TYPE, TEXTFIELDS, DROPDOWNFIELDS
-     */
     const { fields, post, createOrUpdatePost, deletePost } = PostEdit(
       "inpursuit-members",
-      // TEXTFIELDS
-      {
-        title: "Full Name",
-        email: "Email Address",
-        phone: "Phone",
-        birthday: "Birthday",
-        wedding: "Wedding",
-      },
-      // DROPDOWNFIELDS
-      {
-        gender: "Gender",
-        location: "Location",
-        member_status: "Status",
-        profession: "Profession",
-        // group: "Group",
-      },
+      { title: "Full Name", email: "Email Address", phone: "Phone", birthday: "Birthday", wedding: "Wedding" },
+      { gender: "Gender", location: "Location", member_status: "Status", profession: "Profession" },
+      { featured_image: "", featured_media: 0 },
+      { group: "Group" }
+    );
 
-      // DEFAULT POST
-      {
-        featured_image: "",
-        featured_media: 0,
-      },
-      // CHECKBOXES FIELDS
-      {
-        group: "Group",
-      }
+    const personalFields = computed(() =>
+      fields.value.filter(
+        (f) => (f.component === "TextField" || f.component === "TextAreaField") && f.type !== "date"
+      )
+    );
+    const dateFields = computed(() =>
+      fields.value.filter((f) => f.component === "TextField" && f.type === "date")
+    );
+    const dropdownFields = computed(() =>
+      fields.value.filter((f) => f.component === "DropDownField")
+    );
+    const checkboxGroupFields = computed(() =>
+      fields.value.filter((f) => f.component === "CheckboxGroupField")
     );
 
     const chooseUserProfile = (ev) => {
       handleImageSelection(
         ev,
         (src) => {
-          //console.log( src )
-          //console.log( po)
           post.value.featured_image = src;
           imageUploadFlag.value = true;
         },
@@ -162,15 +195,12 @@ export default {
     };
 
     const submit = (ev) => {
-      ev.preventDefault();
-
-      createOrUpdatePost({
-        featured_media: post.value.featured_media,
-      });
+      if (ev && ev.preventDefault) ev.preventDefault();
+      createOrUpdatePost({ featured_media: post.value.featured_media });
     };
 
     const deleteItem = (post_id) => {
-      if (confirm("Are you sure you want to delete this information?")) {
+      if (confirm("Are you sure you want to delete this member?")) {
         deletePost(post_id);
       }
     };
@@ -183,6 +213,10 @@ export default {
     return {
       post,
       fields,
+      personalFields,
+      dateFields,
+      dropdownFields,
+      checkboxGroupFields,
       submit,
       deleteItem,
       goBack,

@@ -1,274 +1,246 @@
 <template>
-
-  <PhoneUI :configUI='configUI' :title='getHeaderTitle()'>
-    <template v-slot:headericon>
-      <BackButton :defaultRoute='{ name: "Events" }' />
-      <!--router-link :to="{ name: 'Events' }">
-        <Icon type='Back' />
-      </router-link-->
-    </template>
-    <template v-slot:headerright>
-      <router-link :to="getEditLink()" v-if='post.id'>
-        <Icon type='Edit' class='inline' />
-      </router-link>
-    </template>
+  <PhoneUI :configUI="{ hide_desktop_header: true, body_classes: '!p-0' }">
     <template v-slot:phonebody>
-      <div class="bg-lightergray pb-6 justify-center items-center mx-auto relative borde -my-12 pt-20 rounded-sm">
-        <div class='absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-full'>
-          <CircularProgressBar
-            :key='post.attendants_percentage'
-            :contentProgress="post.attendants_percentage"
-            :size="120"
-            :border-width="8"
-            :border-bg-width="9"
-            class="
-              shadow
-              h-28
-              w-28
-              mx-auto
-              border-white
-              rounded-full
-              overflow-hidden
-              border-8"
-          ></CircularProgressBar>
-        </div>
 
-        <div class="mt-8 px-2">
-          <h1 class="text-2xl text-center font-semibold" v-if="post.title">
-            {{ post.title.rendered }}
-          </h1>
-          <div class="text-center mt-3">
-            <EventTags :event="post" />
+      <div v-if="post.id">
+
+        <!-- ── HERO ──────────────────────────────────────── -->
+        <div class="bg-white px-5 md:px-8 pt-5 pb-10 border-b border-lightgray">
+
+          <!-- Top row: back + 3-dot -->
+          <div class="flex items-center justify-between mb-6">
+            <button
+              @click="$router.back()"
+              class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors"
+            >
+              <Icon type="Back" class="w-5 h-5" />
+              <span class="text-sm font-medium">Back</span>
+            </button>
+            <button
+              @click="showActionsMenu = true"
+              class="p-2 rounded-full hover:bg-lightergray transition-colors text-darkgray hover:text-darkblack"
+            >
+              <Icon type="Ellipsis" class="w-5 h-5 rotate-90" />
+            </button>
           </div>
-          <div class='max-w-sm text-sm text-black p-2 mx-auto mt-4' v-if='post.content' v-html='post.content.rendered'></div>
+
+          <!-- Event identity -->
+          <div class="flex items-start gap-5">
+            <div
+              class="shrink-0 w-16 h-16 rounded-2xl bg-lightergray flex items-center justify-center"
+            >
+              <span class="text-darkblack font-bold text-2xl select-none tracking-wide">
+                {{ getEventInitial(post) }}
+              </span>
+            </div>
+            <div>
+              <h1
+                class="text-2xl md:text-3xl font-bold text-darkblack tracking-tight leading-tight"
+                v-html="post.title?.rendered"
+              ></h1>
+              <div class="flex flex-wrap items-center gap-2 mt-2">
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-lightergray text-darkblack">
+                  <span class="w-1.5 h-1.5 rounded-full" :class="post.status === 'publish' ? 'bg-green' : 'bg-gray'"></span>
+                  {{ post.status === 'publish' ? 'Active' : 'Archived' }}
+                </span>
+                <span v-if="getEventType(post)" class="text-darkgray text-xs font-medium">{{ getEventType(post) }}</span>
+                <span class="text-gray text-xs">{{ getDate(post) }}</span>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        <!-- ── BODY ──────────────────────────────────────── -->
+        <div class="px-4 md:px-8 py-5">
+
+          <!-- Meta pills row -->
+          <div class="flex flex-wrap items-center gap-2 mb-5">
+            <div v-if="getEventType(post)" class="flex items-center gap-1.5 px-3 py-1.5 bg-lightergray rounded-full">
+              <Icon type="Group" class="w-3.5 h-3.5 text-purple" />
+              <span class="text-xs font-medium text-darkblack">{{ getEventType(post) }}</span>
+            </div>
+            <div v-if="post.date_gmt" class="flex items-center gap-1.5 px-3 py-1.5 bg-lightergray rounded-full">
+              <Icon type="Clock" class="w-3.5 h-3.5 text-lightblue" />
+              <span class="text-xs font-medium text-darkblack">{{ getDate(post) }}</span>
+            </div>
+            <div v-if="post.attendants_percentage != null" class="flex items-center gap-1.5 px-3 py-1.5 bg-lightergray rounded-full">
+              <Icon type="Members" class="w-3.5 h-3.5 text-purple" />
+              <span class="text-xs font-medium text-darkblack">{{ post.attendants_percentage || 0 }}% attended</span>
+            </div>
+          </div>
+
+          <SearchField @searching="onSearch" />
+
+          <div class="mt-3">
+            <MembersDropdown :totalItems="totalItems" @selectItem="selectDropdownItem" />
+          </div>
+
+          <OrbitPosts
+            :params="params"
+            :key="params.unique_id"
+            @totalChanged="totalChanged"
+            @onAttendanceChange="onAttendanceChange"
+          >
+            <template v-slot:loadingAnimation>
+              <ListWithImageAnimation :total="8" />
+            </template>
+            <template v-slot:nextPageAnimation>
+              <PaginationLoaderAnimation />
+            </template>
+            <template v-slot:whenempty>
+              <div class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-12 h-12 rounded-full bg-lightergray flex items-center justify-center mb-3">
+                  <Icon type="Members" class="w-5 h-5 text-gray" />
+                </div>
+                <p class="text-sm font-medium text-darkgray">No members found</p>
+                <p class="text-xs text-gray mt-1">Try adjusting your search or filters</p>
+              </div>
+            </template>
+          </OrbitPosts>
+
+        </div>
+
       </div>
 
-
-      <div class="event-details w-full py-20">
-
-        <SearchField @searching='onSearch' />
-
-        <div class='mb-6'></div>
-
-        <MembersDropdown :totalItems='totalItems' @selectItem='selectDropdownItem' />
-
-        <OrbitPosts
-          :params="params"
-          :key='params.unique_id'
-          @totalChanged='totalChanged'
-          @onAttendanceChange='onAttendanceChange'
-        >
-          <template v-slot:loadingAnimation>
-            <ListWithImageAnimation :total='10' />
-          </template>
-          <template v-slot:nextPageAnimation>
-            <PaginationLoaderAnimation />
-          </template>
-          <template v-slot:whenempty>
-            <div class='text-xs text-red border border-red p-2 mt-4'>No members found for this query</div>
-          </template>
-        </OrbitPosts>
-
-
-
+      <!-- Loading state -->
+      <div v-else class="flex-1 flex items-center justify-center py-24">
+        <Icon type="CircularLoader" class="w-8 h-8 text-purple" />
       </div>
 
-
+      <!-- ── ACTIONS BOTTOM SHEET ─────────────────────────── -->
+      <Teleport to="body">
+        <Transition name="sheet">
+          <div v-if="showActionsMenu" class="fixed inset-0 z-50 flex flex-col justify-end">
+            <div class="absolute inset-0 bg-black/40" @click="showActionsMenu = false"></div>
+            <div class="relative bg-white rounded-t-3xl pb-10 shadow-2xl w-full max-w-lg mx-auto">
+              <div class="flex justify-center pt-3 pb-1">
+                <div class="w-10 h-1 rounded-full bg-lightgray"></div>
+              </div>
+              <div class="px-4 pt-2 pb-1">
+                <router-link
+                  :to="getEditLink()"
+                  @click="showActionsMenu = false"
+                  class="flex items-center gap-4 px-2 py-4 text-sm font-medium text-darkblack border-b border-lightgray"
+                >
+                  <Icon type="Edit" class="w-5 h-5 shrink-0 text-darkgray" />
+                  Edit Event
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
 
     </template>
   </PhoneUI>
-
-
-
-
 </template>
 
 <script>
-import Util from '@/lib/Util'
+import PhoneUI from "@/components/PhoneUI.vue";
+import Util from "@/lib/Util";
+import API from "@/api";
+import store from "@/store";
 
-import BackButton from '@/templates/PhoneUI/BackButton.vue';
-import PhoneUI from '@/components/PhoneUI.vue'
-import Icon from '@/components/Icon.vue'
-import SearchField from '@/components/SearchField.vue'
-import MembersDropdown from '@/components/MembersDropdown.vue'
+import Icon from "@/components/Icon.vue";
+import SearchField from "@/components/SearchField.vue";
+import MembersDropdown from "@/components/MembersDropdown.vue";
+import ListWithImageAnimation from "@/templates/Animation/ListWithImage.vue";
+import PaginationLoaderAnimation from "@/templates/Animation/PaginationLoader.vue";
 
-import userMixin from "@/mixins/UserMixin";
-import defaultMixin from "@/mixins/DefaultMixin";
-import paginationMixin from "@/mixins/PaginationMixin";
 import apiMixin from "@/mixins/APIMixin";
+import eventMixin from "@/mixins/EventMixin";
+import userMixin from "@/mixins/UserMixin";
 
-import EventTags from "@/components/EventTags.vue";
-//import UserTags from "@/components/UserTags";
-//import Switch from "@/components/switch";
-// import ProgressBarItem from "@/components/ProgressBarItem.vue";
-import CircularProgressBar from "@/components/CircularProgressBar.vue";
-
-import ListWithImageAnimation from '@/templates/Animation/ListWithImage.vue'
-import PaginationLoaderAnimation from '@/templates/Animation/PaginationLoader.vue'
-
-//import PostFeaturedImage from '@/templates/Post/FeaturedImage'
-//import PostTitle from '@/templates/Post/Title'
-
-import MembersHelper from '@/lib/MembersHelper'
-
-import { useRoute } from 'vue-router'
+import MembersHelper from "@/lib/MembersHelper";
+import { useRoute } from "vue-router";
 
 export default {
   name: "SingleEvent",
   components: {
     PhoneUI,
-    BackButton,
     Icon,
     SearchField,
-    EventTags,
-    //UserTags,
-    //Switch,
     MembersDropdown,
-    CircularProgressBar,
-    //PostFeaturedImage,
-    //PostTitle,
     ListWithImageAnimation,
-    PaginationLoaderAnimation
+    PaginationLoaderAnimation,
   },
-  mixins: [defaultMixin, paginationMixin, apiMixin, userMixin],
+  mixins: [apiMixin, eventMixin, userMixin],
+
   data() {
     return {
-      id      : 0,
-      post    : {},
-      search  : '',
-      configUI: {
-        maintitle_classes : "py-16 hide-svg",
-        hide_maintitle    : true,
-        hide_footer       : true
-      },
-      filterData: {
-        status: 'publish',
-      },
+      post: {},
+      showActionsMenu: false,
     };
   },
-  watch: {
-    search() {
-      var component = this;
-      component.debounceEvent(function () {
-        component.refreshItems();
-        //console.log( component.search );
-      });
-    },
-  },
-  mounted() {
-    var post_id = this.$route.params.id;
 
-    if (post_id) {
-      this.id = parseInt(post_id);
+  mounted() {
+    const post_id = this.$route.params.id;
+    if (post_id) this.id = parseInt(post_id);
+
+    if (!store.state.account || !Object.keys(store.state.account).length) {
+      store.commit("getAccountSettings");
     }
-    // CHECK IF POST INFORMATION HAS BEEN PASSED IN THE ROUTE
-    if (this.$route.params.post != undefined) {
+
+    if (this.$route.params.post) {
       this.post = JSON.parse(this.$route.params.post);
     } else {
-      this.getPost();
+      this.fetchPost();
     }
   },
+
   methods: {
-
-    getHeaderTitle(){
-      var component = this;
-      if( component.post && component.post.title && component.post.title.rendered ) {
-        return component.post.title.rendered;
-      }
-      return 'Event';
-    },
-
-    /* INHERITED FROM PAGINATION MIXIN */
-
-    getAPI() {
-      var post_id = this.$route.params.id;
-
-      var params = Object.assign( this.filterData, {
-        event_id: post_id,
-      } )
-
-      return this.requestUsers(this.page, this.search, params );
-    },
-
-    /*
-     * FUNCTION THAT IS FIRED FIRST AS SOON AS ALL THE DEFAULT INITILIZATION IS OVER
-     * TRIGGERED FROM THE DEFAULT MIXIN
-     */
-    getPost() {
-      var component = this;
-
-      // SET PROCESSING
-      component.$store.commit("setProcessing", true);
-
-      component.requestEvent(component.id).then(
-        (response) => {
-          component.post = response.data;
-          // RESET PROCESSING
-          component.$store.commit("setProcessing", false);
-        },
-        (error) => {
-          component.$store.commit("notifyError", error);
-        }
+    fetchPost() {
+      const post_id = this.$route.params.id;
+      this.requestEvent(post_id).then(
+        (res) => { this.post = res.data; },
+        (err) => { store.commit("notifyError", err); }
       );
     },
 
-    getPageTitle() {
-      var title = "InPursuit - Single Event";
-      return title;
+    getEventInitial(post) {
+      const title = post.title?.rendered?.replace(/<[^>]+>/g, '').trim();
+      return title ? title[0].toUpperCase() : 'E';
     },
 
-    getEditLink(){
-      return Util.getPostEditLink( this.post )
+    getEditLink() {
+      return Util.getPostEditLink(this.post);
     },
 
-    searching( searchText ){
-      this.search = searchText;
-    },
-
-
-
-    selectDropdownItem( data ){
-
-      this.filterData[ data.name ] = data.value
-
-      if( data.name == 'orderby' && data.value == 'title' ) this.filterData.order = 'asc'
-      if( data.name == 'orderby' && data.value == 'id' ) this.filterData.order = 'desc'
-
-      if( data.name == 'member_status' && data.value == 'all' ) this.filterData.member_status = ''
-
-      this.refreshItems()
-    },
-
-    // UPDATE IN ATTENDANCE DATABASE
-    onAttendanceChange( data ) {
-
-      var post_id = this.$route.params.id;
-
-      var isAttended = data.flag;
-
-      var user = data.user;
-
-      this.updateAttendance(user.id, post_id, isAttended).then(
-        () => this.getPost(),
-        (error) => {
-          console.log("" + error);
-        }
+    onAttendanceChange(data) {
+      const post_id = this.$route.params.id;
+      this.updateAttendance(data.user.id, post_id, data.flag).then(
+        () => this.fetchPost(),
+        (err) => console.log("" + err)
       );
-
-
     },
-
   },
-  setup(){
-    const route = useRoute()
-    var post_id = route.params.id;
-    return MembersHelper( 'MemberListWithSwitch', post_id )
-  }
+
+  setup() {
+    const route = useRoute();
+    const post_id = route.params.id;
+    const helper = MembersHelper("MemberListWithSwitch", post_id);
+    helper.params.value.per_page = 20;
+    return helper;
+  },
 };
 </script>
-<style>
-  .event-details #search{
-    @apply border border-gray;
-  }
+
+<style scoped>
+.sheet-enter-active,
+.sheet-leave-active {
+  transition: opacity 0.25s ease;
+}
+.sheet-enter-active .relative,
+.sheet-leave-active .relative {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.sheet-enter-from,
+.sheet-leave-to {
+  opacity: 0;
+}
+.sheet-enter-from .relative,
+.sheet-leave-to .relative {
+  transform: translateY(100%);
+}
 </style>

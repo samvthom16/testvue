@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Logout from "@/views/Logout.vue";
-import Members from "@/views/Members.vue";
+import Members from "@/views/MembersNew.vue";
 import SingleMember from "@/views/SingleMember.vue";
 import Profile from "@/views/Profile.vue";
 import Events from "@/views/Events.vue";
@@ -15,7 +14,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: () => import("@/views/Home.vue"),
   },
   {
     path: "/test",
@@ -66,6 +65,11 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("@/views/Settings.vue"),
   },
   {
     path: "/members",

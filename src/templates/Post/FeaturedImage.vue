@@ -4,7 +4,7 @@
     class="p-0.5 inline-block"
   >
     <img
-      class="bg-lightgray w-12 h-12 object-cover rounded-full inline-block ring-white ring-2"
+      class="bg-lightgray w-14 h-14 object-cover rounded-2xl inline-block"
       :src="post.featured_image"
       :alt="post.title.rendered"
       v-if='post.title && post.title.rendered'

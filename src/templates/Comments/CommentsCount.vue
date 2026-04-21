@@ -1,7 +1,5 @@
 <template>
-  <div class="mt-4 mb-1">
-    <div class="text-sm text-gray">{{ total }} Comments</div>
-  </div>
+  <p class="text-xs text-gray mt-0.5">{{ total }} comments</p>
 </template>
 <script>
 export default {

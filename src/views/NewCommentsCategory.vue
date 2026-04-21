@@ -1,108 +1,111 @@
 <template>
-  <PhoneUI
-    :configUI="configUI"
-    :title="$route.query && $route.query.id ? 'Edit Term' : 'Create Term'"
-  >
-    <template v-slot:headericon>
-      <BackButton :defaultRoute="{ name: 'Team' }" />
-    </template>
-    <template v-slot:headerright>
-      <button
-        class="text-white text-sm"
-        @click="submit"
-        v-html="$route.query && $route.query.id ? 'Update' : 'Create'"
-      ></button>
-    </template>
+  <PhoneUI :configUI="{ hide_desktop_header: true }">
     <template v-slot:phonebody>
-      <form class="" @submit="submit">
-        <div class="mb-5" v-for="(field, slug) in fields" :key="field">
-          <label class="block font-semibold text-black">{{
-            field.label
-          }}</label>
-          <input
-            type="text"
-            v-model.trim="data[slug]"
-            class="inline-block w-full p-2 border-2 border-solid border-black rounded mb-1 mt-2 outline-none focus:border-red"
-          />
-          <span
-            v-if="field['errorMsg']"
-            class="py-1 inline-block text-purple text-sm font-medium"
-            >{{ field["errorMsg"] }}</span
+
+      <!-- Page header -->
+      <div class="mb-6">
+        <button
+          type="button"
+          @click="goBack"
+          class="flex items-center gap-1.5 text-darkgray hover:text-darkblack transition-colors mb-4"
+        >
+          <Icon type="Back" class="w-5 h-5" />
+          <span class="text-sm font-medium">Back</span>
+        </button>
+        <h1 class="text-2xl font-bold text-darkblack">
+          {{ $route.query && $route.query.id ? 'Edit Comment Type' : 'New Comment Type' }}
+        </h1>
+        <p class="text-sm text-darkgray mt-0.5">
+          {{ $route.query && $route.query.id ? 'Update this comment type.' : 'Add a new comment type to the list.' }}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form @submit.prevent="submit" class="space-y-8">
+
+        <section>
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-4">Details</h2>
+          <div v-for="(field, slug) in fields" :key="slug" class="mb-5">
+            <label class="block font-medium text-darkblack text-sm mb-1.5">{{ field.label }}</label>
+            <input
+              type="text"
+              v-model.trim="data[slug]"
+              :placeholder="field.label"
+              class="w-full p-3 border border-lightgray rounded-xl bg-lightergray outline-none text-darkblack placeholder-gray focus:border-purple focus:bg-white transition-colors"
+            />
+            <p v-if="field.errorMsg" class="mt-1 text-xs text-red">{{ field.errorMsg }}</p>
+          </div>
+        </section>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="w-full py-3.5 bg-purple text-white rounded-2xl text-sm font-semibold hover:bg-lightpurple transition-colors"
+        >
+          {{ $route.query && $route.query.id ? 'Update Comment Type' : 'Create Comment Type' }}
+        </button>
+
+        <!-- Danger zone -->
+        <section v-if="$route.query && $route.query.id">
+          <h2 class="text-xs font-semibold text-gray uppercase tracking-wider mb-3">Danger Zone</h2>
+          <button
+            type="button"
+            @click="handleDelete"
+            class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-red text-red text-sm font-medium hover:bg-red/5 transition-colors"
           >
-        </div>
+            <Icon type="Delete" class="w-4 h-4" />
+            Delete Comment Type
+          </button>
+        </section>
+
       </form>
-      <button
-        @click="handleDelete"
-        v-if="$route.query && $route.query.id"
-        class="border border-red p-2 rounded text-red text-sm"
-      >
-        <Icon type="Delete" class="inline" />
-        Delete Term
-      </button>
+
     </template>
   </PhoneUI>
 </template>
+
 <script>
-import API from "@/api";
 import { ref } from "vue";
 import router from "@/router";
+import API from "@/api";
 import FormEdit from "@/lib/FormEdit";
 import Icon from "@/components/Icon.vue";
 import PhoneUI from "@/components/PhoneUI.vue";
-import BackButton from "@/templates/PhoneUI/BackButton.vue";
 
 export default {
   components: {
     Icon,
     PhoneUI,
-    BackButton,
-  },
-  data() {
-    return {
-      configUI: {
-        hide_footer: true,
-        maintitle_classes: "hidden",
-        stickytitle_classes: "opacity-100",
-      },
-    };
   },
   setup() {
     const fields = ref({
-      name: {
-        label: "Name",
-        type: "text",
-        errorMsg: "",
-      },
+      name: { label: "Name", type: "text", errorMsg: "" },
     });
 
     const requestAPI = (params) => {
-      // FOR UPDATE ONLY
       if (params?.term_id) {
         params.id = params.term_id;
         delete params["term_id"];
       }
-
       return API.requestInpursuitPosts("comments-category", params);
     };
+
     const afterUpdate = () => router.replace({ name: "CommentsCategory" });
-
-    const handleDelete = () => {
-      data.value = {
-        ...data.value,
-        ...(data.value?.term_id ? { id: data.value?.term_id } : {}),
-      };
-
-      deleteData();
-    };
 
     const { deleteData, createOrUpdateData, data } = FormEdit(
       requestAPI,
       afterUpdate,
       afterUpdate,
-      {
-        name: "",
-      }
+      { name: "" }
     );
+
+    const handleDelete = () => {
+      data.value = {
+        ...data.value,
+        ...(data.value?.term_id ? { id: data.value.term_id } : {}),
+      };
+      deleteData();
+    };
 
     const resetErrors = () => {
       fields.value.name.errorMsg = "";
@@ -110,31 +113,26 @@ export default {
 
     const handleSubmissionError = () => {
       resetErrors();
-
-      let totalErrors = 0;
-
-      const { name } = data.value;
-
-      if (!name) {
+      if (!data.value.name) {
         fields.value.name.errorMsg = "Cannot be empty";
-        totalErrors++;
+        return false;
       }
-
-      if (!totalErrors) return true;
-
-      return false;
+      return true;
     };
 
     const submit = (ev) => {
-      if (!handleSubmissionError()) return false;
+      if (!handleSubmissionError()) return;
       createOrUpdateData(ev);
     };
+
+    const goBack = () => router.replace({ name: "CommentsCategory" });
 
     return {
       data,
       fields,
       submit,
       handleDelete,
+      goBack,
     };
   },
 };

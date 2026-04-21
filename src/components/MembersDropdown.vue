@@ -1,6 +1,6 @@
 <template>
   <ul
-    class="whitespace-nowrap border-b border-lightgray pb-4 mb-2 overflow-auto"
+    class="whitespace-nowrap pb-4 mb-2 overflow-auto"
   >
     <li
       class="inline-block mr-2"
