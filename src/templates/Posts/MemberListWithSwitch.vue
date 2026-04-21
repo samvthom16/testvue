@@ -25,7 +25,7 @@
       <div class="flex-1 min-w-0 font-semibold text-darkblack text-sm truncate" v-html="user.title.rendered"></div>
 
       <!-- Toggle -->
-      <div class="shrink-0">
+      <div class="shrink-0 w-[50px]">
         <Switch
           v-model:checked="user.attended"
           @click="onAttendanceChange($event, user)"
