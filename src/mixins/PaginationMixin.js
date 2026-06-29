@@ -70,6 +70,9 @@ export default {
     */
     scroll(){
       var component = this;
+      if ( this._scrollHandler ) {
+        window.removeEventListener( 'scroll', this._scrollHandler );
+      }
       this._scrollHandler = () => {
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight > document.documentElement.offsetHeight-100;
         if ( bottomOfWindow && !component.$store.state.processing && component.page < component.totalPages ) {

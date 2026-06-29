@@ -162,7 +162,7 @@ export default {
   },
   mounted() {
     if (!Object.keys(store.state.account).length) {
-      store.commit('getAccountSettings');
+      store.dispatch('getAccountSettings');
     }
   },
   methods: {

@@ -34,7 +34,7 @@ export default{
   },
   setup(){
 
-    store.commit( 'getAccountSettings' );
+    store.dispatch( 'getAccountSettings' );
 
   },
 
