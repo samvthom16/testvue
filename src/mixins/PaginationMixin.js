@@ -36,10 +36,6 @@ export default {
 
       component.getAPI().then( ( response ) => {
 
-        //component.$store.commit( 'notifyError', response.data.length );
-
-        //console.log( response.data );
-
         component.totalItems = parseInt( response.headers['x-wp-total'] );
         component.totalPages = parseInt( response.headers['x-wp-totalpages'] );
 
@@ -52,6 +48,7 @@ export default {
         component.$store.commit( 'setProcessing', false );
       }, ( error ) => {
 
+        component.$store.commit( 'setProcessing', false );
         component.throwError( error );
 
       } );
@@ -73,13 +70,21 @@ export default {
     */
     scroll(){
       var component = this;
-      window.onscroll = () => {
+      this._scrollHandler = () => {
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight > document.documentElement.offsetHeight-100;
         if ( bottomOfWindow && !component.$store.state.processing && component.page < component.totalPages ) {
           component.page++;
           component.getItems();
         }
-      }
+      };
+      window.addEventListener( 'scroll', this._scrollHandler );
+    }
+  },
+
+  beforeUnmount(){
+    if ( this._scrollHandler ) {
+      window.removeEventListener( 'scroll', this._scrollHandler );
+      this._scrollHandler = null;
     }
   }
 };

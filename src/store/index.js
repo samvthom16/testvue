@@ -102,27 +102,11 @@ export default createStore({
       return state.cachedMember;
     },
     clearCachedMember(state) {
-      state.cachedMember = [];
+      state.cachedMember = {};
     },
 
-    /*
-     * THIS FUNCTION MAKES A SERVER REQUEST TO GET ALL
-     * THE ACCOUNT SETTINGS
-     * IMPORTANT FUNCTION CALL THAT IS CALLED ONCE FOR EVERY BROWSER RELOAD
-     * THIS FUNCTION SHOULD BE CALLED BEFORE PULLING ANY OTHER DATA
-     */
-    getAccountSettings(state) {
-      var url = state.settings.account_url + "/wp-json/inpursuit/v1/settings";
-
-      authRequest(state, url).then(
-        (response) => {
-          return (state.account = response.data);
-        },
-        (error) => {
-          state.error = "" + error;
-        }
-      );
-      return state.account;
+    setAccount(state, data) {
+      state.account = data;
     },
     setProcessing(state, flag) {
       state.processing = flag;
@@ -153,8 +137,14 @@ export default createStore({
     switchWorkspace(context, account_url) {
       context.commit("switchWorkspace", account_url);
     },
-    getAccountSettings(context, url) {
-      context.commit("getAccountSettings", url);
+    async getAccountSettings(context) {
+      const url = context.state.settings.account_url + "/wp-json/inpursuit/v1/settings";
+      try {
+        const response = await authRequest(context.state, url);
+        context.commit("setAccount", response.data);
+      } catch (error) {
+        context.commit("notifyError", String(error));
+      }
     },
     setProcessing(context, flag) {
       context.commit("setProcessing", flag);
