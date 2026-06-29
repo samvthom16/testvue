@@ -179,7 +179,7 @@ export default {
     if (post_id) this.id = parseInt(post_id);
 
     if (!store.state.account || !Object.keys(store.state.account).length) {
-      store.commit("getAccountSettings");
+      store.dispatch("getAccountSettings");
     }
 
     if (this.$route.params.post) {

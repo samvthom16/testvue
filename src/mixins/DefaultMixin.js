@@ -40,7 +40,7 @@ export default {
       }
     },
     setupAccountSettings(){
-      this.$store.commit( 'getAccountSettings' );
+      this.$store.dispatch( 'getAccountSettings' );
     },
     getPostLink( post ){
 			var route = {

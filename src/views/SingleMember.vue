@@ -324,7 +324,7 @@ export default {
 
     onMounted(() => {
       if (!Object.keys(store.state.account).length) {
-        store.commit("getAccountSettings");
+        store.dispatch("getAccountSettings");
       }
       if (!post.value.id) {
         setPostFromServer();
