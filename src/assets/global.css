@@ -1,3 +1,7 @@
+input, textarea, select {
+  font-size: 16px;
+}
+
 .fluentProgressBar-normal {
  	background-color: #0078d4;
   	height: 4px;
